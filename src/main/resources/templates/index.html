@@ -1,0 +1,144 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+
+<th:block th:replace="head"
+></th:block>
+
+<body>
+<th:block th:replace="Header">
+
+</th:block>
+
+<th:block th:fragment="index">
+
+
+    <th:block layout:fragment="landing">
+        <div class="jumbotron">
+            <h1 class="display-4">Each review is special</h1>
+            <p class="lead">
+                We bridge the gap between customers and companies and provide transparency.
+            </p>
+            <hr class="my-4">
+            <p>Read reviews. Write reviews. Find companies.</p>
+            <p class="lead">
+                <a class="btn btn-primary btn-lg" href="/categories" role="button">Explore</a>
+            </p>
+        </div>
+        <br>
+
+        <h2 class="text-center text-nowrap">Here's what people say...</h2>
+
+        <div class="container">
+            <div class="row ">
+                <div class="col-sm">
+
+                    <div class="media m-5">
+                        <a class="pr-3" href="/companies/profile/{id}">
+                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
+                        </a>
+                        <div class="media-body">
+                            <h5 class="mt-0">Company name</h5>
+
+                            <div class="media mt-3">
+
+                                <div class="media-body">
+
+                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
+                                    </h5>
+                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
+                                    necessitatibus.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="media m-5">
+                        <a class="pr-3" href="/companies/profile/{id}">
+                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
+                        </a>
+                        <div class="media-body">
+                            <h5 class="mt-0">Company name</h5>
+
+                            <div class="media mt-3">
+
+                                <div class="media-body">
+
+                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
+                                    </h5>
+                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
+                                    necessitatibus.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                </div>
+                <div class="col-sm ">
+
+                    <div class="media m-5">
+                        <a class="pr-3" href="/companies/profile/{id}">
+                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
+                        </a>
+                        <div class="media-body">
+                            <h5 class="mt-0">Company name</h5>
+
+                            <div class="media mt-3">
+
+                                <div class="media-body">
+
+                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
+                                    </h5>
+                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
+                                    necessitatibus.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                    <div class="media m-5">
+                        <a class="pr-3" href="/companies/profile/{id}">
+                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
+                        </a>
+                        <div class="media-body">
+                            <h5 class="mt-0">Company name</h5>
+
+                            <div class="media mt-3">
+
+                                <div class="media-body">
+
+                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
+                                    </h5>
+                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
+                                    necessitatibus.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </th:block>
+
+
+</th:block>
+
+<th:block th:replace="Footer">
+
+</th:block>
+</body>
+</html>

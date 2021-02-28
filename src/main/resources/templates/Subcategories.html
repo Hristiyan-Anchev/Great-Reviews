@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="head"></th:block>
+
+<body>
+
+<th:block th:replace="Header"></th:block>
+
+<div class="d-flex flex-column  align-items-center  m-5 min-vh-100">
+    <div class="container">
+        <h2 class="m-5">Compare the best companies on Great Reviews! </h2>
+        <div class="row ">
+            <div class="col-sm">
+                <th:block th:replace="Categories :: categories"></th:block>
+            </div>
+
+            <div class="col-sm">
+                <small class="text-muted ">Choose a subcategory</small>
+                <div class="list-group list-group-flush">
+                    <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
+                    <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
+                    <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
+                    <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
+                    <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
+                    <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
+                    <a href="#" class="list-group-item list-group-item-action">Cras justo odio</a>
+
+                </div>
+
+            </div>
+
+
+
+
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+<th:block th:replace="Footer"></th:block>
+</body>
+</html>

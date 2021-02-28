@@ -1,0 +1,89 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+
+<th:block th:replace="head"
+></th:block>
+
+<body>
+<th:block th:replace="Header">
+
+</th:block>
+
+
+<div class=" container min-vh-100">
+    <h2 class="m-5 text-center">Register</h2>
+
+<!--todo-->
+<!--    use is-valid or is-invalid class on inputs-->
+
+    <form class="d-flex flex-column justify-content-center align-items-center m-5">
+
+        <div class="col-md-4 mb-3">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter a valid email address
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Username contains invalid characters
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="dob">Date of birth</label>
+            <input type="date" class="form-control" name="birthDate" id="dob" placeholder="Date of birth" value="" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Invalid birth date
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+
+            <div class="invalid-feedback">
+                Invalid password
+            </div>
+
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="confirmPassword">Confirm password</label>
+            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Password" value="" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">Invalid password</div>
+        </div>
+
+
+        <button class="btn btn-primary" type="submit">Register</button>
+    </form>
+
+
+</div>
+
+<th:block th:replace="Footer">
+
+</th:block>
+</body>
+</html>

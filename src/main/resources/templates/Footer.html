@@ -1,0 +1,57 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <th:block th:include="head">
+
+    </th:block>
+<body>
+<th:block th:fragment="footer">
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container-fluid">
+    <div class="row">
+
+    <ul class="nav flex-column m-5 col-md-2" >
+        <li class="nav-item ">
+            <a class="nav-link" href="/">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item ">
+            <a class="nav-link" href="/categories">Categories<span class="sr-only">(current)</span></a>
+        </li>
+
+        <li class="nav-item ">
+            <a class="nav-link" href="/blog">Blog<span class="sr-only">(current)</span></a>
+        </li>
+
+
+
+    </ul>
+
+        <ul class="nav flex-column m-5 col-md-2">
+            <li class="nav-item ">
+                <a class="nav-link" href="/users/login">Login<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link" href="/users/register">Register<span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link" href="/enterprise">For Companies<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+
+    <span class="text-dark text-center align-self-center col-md-2 text-nowrap">Copyright Great Reviews 2021 ©</span>
+
+        <ul class="nav flex-column m-5 col-md-2 align-self-center">
+            <li class="nav-item ">
+                <a class="nav-link" href="/about">About<span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+    </div>
+
+    </div>
+</footer>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="head"></th:block>
+
+<body>
+
+<th:block th:replace="Header"></th:block>
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container">
+        <h1 class="display-4">We share our experience</h1>
+        <p class="lead">Great Reviews's blog</p>
+        <p><a href="/blog" class="text-primary">&lt; Go back</a></p>
+    </div>
+</div>
+
+
+<div class="d-flex flex-column  align-items-center">
+    <div class="container  flex-column align-items-center justify-content-around" >
+        <h1 class="m-5 text-center display-4"> Post title goes here </h1>
+        <p class="text-muted text-center" style="font-size: .8rem">01/01/2021</p>
+
+        <p class="m-5 p-5 text-center font-weight-lighter " style="line-height: 2rem; font-size: 1.3rem">
+
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab animi asperiores atque commodi consectetur consequatur culpa cumque doloribus eligendi esse expedita facilis ipsam ipsum iure libero minima mollitia nostrum obcaecati optio praesentium quod ratione repellat repudiandae rerum sequi sint tenetur velit veritatis vero, voluptatibus! Accusamus animi architecto atque aut autem deleniti, facilis fuga maiores necessitatibus nihil numquam odio pariatur praesentium provident quaerat quis quo sequi soluta sunt tempora. A aperiam architecto at corporis cumque doloremque eveniet ex expedita facere facilis fugit harum hic iusto laborum magnam molestias officia perferendis porro repellat rerum similique ut, velit, veritatis, voluptate voluptatem. Error, repellendus!
+
+        </p>
+
+        <p class="text-muted m-5 text-right">By: John Doe</p>
+
+
+
+    </div>
+    <br/>
+    <br/>
+    <hr/>
+
+
+</div>
+
+
+<th:block th:replace="Blog::moreposts"></th:block>
+
+
+<th:block th:replace="Footer"></th:block>
+</body>
+</html>
