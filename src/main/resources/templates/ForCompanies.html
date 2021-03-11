@@ -8,70 +8,29 @@
 ></th:block>
 
 <body>
-<th:block th:replace="Header">
-
+<th:block th:replace="CompaniesHeader">
 </th:block>
 
 
-<div class=" container min-vh-100">
-    <h2 class="m-5 text-center">Register</h2>
+<div class="container-fluid min-vh-100 mt-5">
+
+
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to our enterprise world!</h1>
+        <p class="lead">Please register or log in to gain access to the full features</p>
+        <hr class="my-4">
+        <p>Grow your brand trust now!</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" href="/users/login" role="button">Login</a>
+            <a class="btn btn-primary btn-lg" href="/users/register" role="button">Register</a>
+        </p>
+    </div>
 
     <!--todo-->
-    <form class="d-flex flex-column justify-content-center align-items-center m-5">
-
-        <div class="col-md-4 mb-3">
-            <label for="validationServer01">Email</label>
-            <input type="email" class="form-control is-valid" id="validationServer01" placeholder="Email" value="" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label for="validationServer02">Username</label>
-            <input type="password" class="form-control is-invalid" id="validationServer02" placeholder="Password" value="" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback"> invalid</div>
-        </div>
-        <div class="col-md-4 mb-3">
-            <label for="validationServer02">Date of birth</label>
-            <input type="date" class="form-control is-invalid" id="validationServer02" placeholder="Password" value="" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback"> invalid</div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <label for="validationServer02">Password</label>
-            <input type="password" class="form-control is-invalid" id="validationServer02" placeholder="Password" value="" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback"> invalid</div>
-        </div>
-
-        <div class="col-md-4 mb-3">
-            <label for="validationServer02">Confirm password</label>
-            <input type="password" class="form-control is-invalid" id="validationServer02" placeholder="Password" value="" required>
-            <div class="valid-feedback">
-                Looks good!
-            </div>
-            <div class="invalid-feedback"> invalid</div>
-        </div>
-
-
-
-
-        <button class="btn btn-primary" type="submit">Submit form</button>
-    </form>
-
 
 </div>
 
 <th:block th:replace="Footer">
-
 </th:block>
 </body>
 </html>

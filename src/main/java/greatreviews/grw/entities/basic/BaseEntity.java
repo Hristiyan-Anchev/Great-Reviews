@@ -9,10 +9,14 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public abstract class BaseEntity {
+
+    public BaseEntity(){
+        this.created = LocalDateTime.now();
+        this.isDeleted = false;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

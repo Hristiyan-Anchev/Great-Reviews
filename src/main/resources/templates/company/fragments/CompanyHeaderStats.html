@@ -1,0 +1,63 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      >
+
+
+<body>
+<th:block  th:fragment="companyHeader">
+    <div class="jumbotron jumbotron-fluid bg-light ">
+        <div class="container d-flex ">
+            <h1 th:text="${currentCompany.name} ?: ${currentCompany.website.substring(4)} " class="display-4 ">Acme Corporation</h1>
+        </div>
+
+        <!--        main info-->
+        <div class="container d-flex flex-wrap">
+            <img src="https://via.placeholder.com/150" alt="" class="img-thumbnail">
+            <div class="container d-flex flex-column w-25 m-0">
+                <p class="lead">Reviews 985  •  Rating 4.9</p>
+                <span class="d-flex">
+                    <div class="m-2">
+                        <i class="far fa-comment"></i>
+                    </div>
+
+                        <div class="m-2">
+                        <i class="far fa-comment"></i>
+                    </div>
+
+                        <div class="m-2">
+                        <i class="far fa-comment"></i>
+                    </div>
+
+                        <div class="m-2">
+                        <i class="far fa-comment"></i>
+                    </div>
+
+                        <div class="m-2">
+                        <i class="far fa-comment"></i>
+                    </div>
+                </span>
+                <h6 th:text="${currentCompany.website}" class="text-muted">www.website.com</h6>
+                <a th:href="|http://${currentCompany.website}|" class="badge badge-dark w-50" target="_blank" rel="noopener noreferrer">Visit website</a>
+            </div>
+
+            <!--            address email phone-->
+
+            <div class="container d-flex flex-column w-25 m-0">
+                <p th:text="${currentCompany.address}" class="lead">Main Street 1</p>
+                <p th:text="${currentCompany.email}" >acme@mail.com</p>
+                <p th:text="${currentCompany.phone}" class="text-muted">555-050-333-4</p>
+            </div>
+
+            <!--  short description-->
+            <span th:text="${currentCompany.shortDescription}" class="m-2 text-center text-wrap">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid at commodi consequatur culpa debitis dolorum eos excepturi facilis molestiae nam omnis sed sunt vel veritatis, voluptate? Assumenda iste laborum nihil!
+            </span>
+
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

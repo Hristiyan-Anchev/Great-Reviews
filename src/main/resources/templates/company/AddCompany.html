@@ -1,0 +1,266 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<th:block th:replace="head"
+></th:block>
+
+<body>
+<th:block th:replace="Header">
+
+</th:block>
+
+
+<div class=" container min-vh-100">
+    <h2 class="m-5 text-center">Add a new company</h2>
+
+    <form class="d-flex flex-column justify-content-center align-items-center m-5"
+          method="POST" action="/companies/add"
+          th:object="${companyBinding}"
+    >
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <small th:if="${#fields.hasErrors()}" th:errors="${companyBinding}" class="text-danger">Backend error
+            message</small>
+
+        <div class="col-md-4 mb-3">
+
+            <label for="email">Company Email</label>
+            <input type="email"
+                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : (${!#fields.hasErrors('email') && !companyBinding.email.isBlank()}  ? 'is-valid' : '')"
+                   class="form-control" name="email" id="email" placeholder="Company email" th:value="*{email}"
+                   required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter a valid email address
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="website">Company Website</label>
+            <input type="text" class="form-control" name="website" id="website" placeholder="Company website"
+                   th:value="*{website}" required
+                   th:classappend="${#fields.hasErrors('website')} ? 'is-invalid' : (${!#fields.hasErrors('website') && !companyBinding.email.isBlank()}  ? 'is-valid' : '')"
+            >
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Website already exists or contains invalid characters
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="address">Company address</label>
+            <input type="text" class="form-control" name="address" id="address" placeholder="Company address(optional)"
+                   th:value="*{address}"
+                   th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : (${!#fields.hasErrors('address') && !companyBinding.email.isBlank()}  ? 'is-valid' : '')"
+            >
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Invalid address
+            </div>
+        </div>
+
+        <small class="text-dark mt-2 mb-2"> Choose one main category, and up to three subcategories</small>
+
+
+        <div class="col-md-4 mb-3">
+            <label for="mainCategory">Main category</label>
+            <select class="form-control" id="mainCategory" name="mainCategory"
+                    th:classappend="${#fields.hasErrors('mainCategory')} ? 'is-invalid' : (${!#fields.hasErrors('mainCategory') && !companyBinding.email.isBlank()}  ? 'is-valid' : '')"
+            >
+                <option value="0">- Main category -</option>
+                <option th:each="c : ${categories}" th:value="${c.id}"
+                        th:selected="${c.id} == *{mainCategory}"
+                        th:text="${c.name}"
+                ></option>
+            </select>
+
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Invalid main category
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="col-md-4 mb-3">
+            <label for="firstSubcategory">Subcategory 1</label>
+            <select class="form-control" id="firstSubcategory" name="firstSubcategory">
+                <option value="0">- select subcategory -</option>
+                <option th:each="sub : ${subcategoriesMap.get(companyBinding.mainCategory)}" th:value="${sub.id}"
+                        th:selected="${sub.id} == *{firstSubcategory}"
+                        th:text="${sub.name}"
+                ></option>
+
+            </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="secondSubcategory">Subcategory 2</label>
+            <select class="form-control" id="secondSubcategory" name="secondSubcategory">
+                <option value="0">- select subcategory -</option>
+                <option th:each="sub : ${subcategoriesMap.get(companyBinding.mainCategory)}" th:value="${sub.id}"
+                        th:selected="${sub.id} == *{secondSubcategory}"
+                        th:text="${sub.name}"
+                ></option>
+            </select>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <label for="thirdSubcategory">Subcategory 3</label>
+            <select class="form-control" id="thirdSubcategory" name="thirdSubcategory">
+                <option value="0">- select subcategory -</option>
+                <option th:each="sub : ${subcategoriesMap.get(companyBinding.mainCategory)}" th:value="${sub.id}"
+                        th:selected="${sub.id} == *{thirdSubcategory}"
+                        th:text="${sub.name}"
+                ></option>
+            </select>
+        </div>
+
+
+        <button class="btn btn-primary" type="submit">Add company!</button>
+    </form>
+
+</div>
+
+<th:block th:replace="Footer">
+
+</th:block>
+
+<script>
+    const subcategorySelectElements = {
+        "sub1": document.getElementById("firstSubcategory"),
+        "sub2": document.getElementById("secondSubcategory"),
+        "sub3": document.getElementById("thirdSubcategory")
+    };
+
+    const previousSelectionIdxMap = {
+        "firstSubcategory": 0,
+        "secondSubcategory": 0,
+        "thirdSubcategory": 0
+    }
+
+    const cleanPreviousSubcategories = () => {
+        Object.keys(subcategorySelectElements).forEach(k => {
+            Array.from(subcategorySelectElements[k].children)
+                .splice(1)
+                .forEach(ch => {
+                    subcategorySelectElements[k].removeChild(ch)
+                });
+        });
+    };
+
+    const cleanPreviousSelectionMappings = () => {
+        Object.keys(previousSelectionIdxMap).forEach(k => {
+            previousSelectionIdxMap[k] = 0;
+        })
+    }
+
+    let allSubcategories = [];
+
+    const mainCategoryChangeHandler = async (evt) => {
+        cleanPreviousSelectionMappings()
+        cleanPreviousSubcategories();
+        allSubcategories = [];
+
+        //go fetch my subcategories ... B17ch
+        const currentValue = evt.currentTarget.value;
+        try {
+            const subcategories = await (await fetch(`/subcategories/get?of=${currentValue}`)).json();
+            allSubcategories = subcategories;
+            console.log(subcategories)
+            //now populate subcategory selects with new values
+            Object.keys(subcategorySelectElements).forEach(k => {
+                const currentSelect = subcategorySelectElements[k];
+
+                allSubcategories.forEach(subCat => {
+                    const newOption = document.createElement("option");
+                    newOption.value = subCat.id;
+                    newOption.text = subCat.name;
+                    currentSelect.appendChild(newOption);
+                })
+            });
+
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const toggleOptionFromSelect = (select, optionIdx, _) => {
+        const currentSelOption = select.options[optionIdx];
+        let currentSelectDisplayState = currentSelOption.style.display;
+
+        if (optionIdx !== 0) {
+            currentSelOption.style.display = currentSelectDisplayState === "" ? "none" : "";
+        }
+
+    }
+
+    const toggleOptions = {
+        "firstSubcategory": (optionIdx) => {
+            //display previously removed subcategories
+            const prevOptionIdx = previousSelectionIdxMap["firstSubcategory"];
+            toggleOptionFromSelect(subcategorySelectElements["sub2"], prevOptionIdx, "secondSubcategory")
+            toggleOptionFromSelect(subcategorySelectElements["sub3"], prevOptionIdx, "thirdSubcategory")
+
+            if (optionIdx !== 0) {
+                //remove currently selected category
+                toggleOptionFromSelect(subcategorySelectElements["sub2"], optionIdx, "secondSubcategory")
+                toggleOptionFromSelect(subcategorySelectElements["sub3"], optionIdx, "thirdSubcategory")
+            }
+        },
+        "secondSubcategory": (optionIdx) => {
+            //display previously removed subcategories
+            const prevOptionIdx = previousSelectionIdxMap["secondSubcategory"];
+            toggleOptionFromSelect(subcategorySelectElements["sub1"], prevOptionIdx, "secondSubcategory")
+            toggleOptionFromSelect(subcategorySelectElements["sub3"], prevOptionIdx, "thirdSubcategory")
+
+            if (optionIdx !== 0) {
+                //remove currently selected category
+                toggleOptionFromSelect(subcategorySelectElements["sub1"], optionIdx, "firstSubcategory")
+                toggleOptionFromSelect(subcategorySelectElements["sub3"], optionIdx, "thirdSubcategory")
+            }
+        },
+        "thirdSubcategory": (optionIdx) => {
+            //display previously removed subcategories
+            const prevOptionIdx = previousSelectionIdxMap["thirdSubcategory"];
+            toggleOptionFromSelect(subcategorySelectElements["sub2"], prevOptionIdx, "secondSubcategory")
+            toggleOptionFromSelect(subcategorySelectElements["sub1"], prevOptionIdx, "thirdSubcategory")
+
+            if (optionIdx !== 0) {
+                //remove currently selected category
+                toggleOptionFromSelect(subcategorySelectElements["sub2"], optionIdx, "secondSubcategory")
+                toggleOptionFromSelect(subcategorySelectElements["sub1"], optionIdx, "firstSubcategory")
+            }
+        },
+    };
+
+    const removeOptionHandler = (evt) => {
+
+        const selectedOptionIdx = evt.currentTarget.options.selectedIndex;
+        const currentTargetId = evt.currentTarget.id;
+
+        //remove items from all selects but the one with the id attr. matching to the above
+        toggleOptions[currentTargetId](selectedOptionIdx);
+
+
+        previousSelectionIdxMap[currentTargetId] = selectedOptionIdx;
+    }
+
+    // adding change event listeners to the select elements
+    document.getElementById("mainCategory").addEventListener("change", mainCategoryChangeHandler)
+    Object.keys(subcategorySelectElements).forEach(k => {
+        subcategorySelectElements[k].addEventListener("change", removeOptionHandler);
+    })
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="head"></th:block>
+
+<body>
+
+<th:block th:replace="Header"></th:block>
+
+<div class="d-flex flex-column  align-items-center  mt-5 min-vh-100">
+    <h3 class="m-5" th:text="|All companies in ${currentSubcategory}|"></h3>
+
+    <div  class="container-fluid d-flex justify-content-center flex-wrap">
+
+        <div
+                th:each="c : *{companies}"
+                class="card m-5" style="width: 18rem;">
+            <img class="card-img-top" src="https://via.placeholder.com/300" alt="Card image cap">
+            <div class="card-body">
+                <h5 th:text="${c.name} ?: *{c.website.substring(4)}" class="card-title">Company name</h5>
+                <p class="card-text">4.4</p>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li th:text="${currentSubcategory}" class="list-group-item">category goes here</li>
+
+            </ul>
+            <div class="card-body ">
+                <a th:href="@{/reviews/company(of=*{c.id})}" class="card-link">Go to reviews</a>
+                <a th:href="|http://*{c.website}|" class="card-link" target="_blank" rel="noopener noreferrer">Visit website</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<th:block th:replace="Footer"></th:block>
+</body>
+
+<script>
+
+
+
+
+</script>
+</html>

@@ -1,0 +1,41 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="head"></th:block>
+
+<body>
+
+<th:block th:replace="Header"></th:block>
+
+
+<!--    company main  statistics-->
+    <th:block  th:replace="company/fragments/CompanyHeaderStats"></th:block>
+
+
+
+<div class="container mt-5 min-vh-100">
+    <!--       write a review or login section -->
+        <th:block th:replace="company/fragments/WriteReviewSection"></th:block>
+
+<!--company reviews section-->
+    <div class="container-fluid d-flex flex-column align-items-center justify-content-center">
+        <th:block th:replace="company/fragments/ReviewCard"></th:block>
+        <th:block th:replace="company/fragments/ReviewCard"></th:block>
+        <th:block th:replace="company/fragments/ReviewCard"></th:block>
+    </div>
+
+
+
+</div>
+
+
+<th:block th:replace="Footer"></th:block>
+</body>
+
+<script>
+
+
+
+
+</script>
+</html>

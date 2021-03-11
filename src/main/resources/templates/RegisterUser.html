@@ -17,13 +17,19 @@
     <h2 class="m-5 text-center">Register</h2>
 
 <!--todo-->
-<!--    use is-valid or is-invalid class on inputs-->
 
-    <form class="d-flex flex-column justify-content-center align-items-center m-5">
 
+    <form class="d-flex flex-column justify-content-center align-items-center m-5"
+        method="POST" action="/users/register"
+    th:object="${userBinding}"
+    >
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <small th:if="${#fields.hasErrors()}" th:errors="${userBinding}" class="text-danger">Backend error message</small>
         <div class="col-md-4 mb-3">
+
             <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" id="email" placeholder="Email" value="" required>
+            <input type="email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : (${!#fields.hasErrors('email') && !userBinding.email.isBlank()}  ? 'is-valid' : '')"  class="form-control" name="email" id="email" placeholder="Email" th:value="*{email}" required>
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -33,7 +39,9 @@
         </div>
         <div class="col-md-4 mb-3">
             <label for="username">Username</label>
-            <input type="text" class="form-control" name="username" id="username" placeholder="Username" value="" required>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" th:value="*{username}" required
+                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : (${!#fields.hasErrors('username') && !userBinding.email.isBlank()}  ? 'is-valid' : '')"
+            >
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -42,20 +50,23 @@
             </div>
         </div>
         <div class="col-md-4 mb-3">
-            <label for="dob">Date of birth</label>
-            <input type="date" class="form-control" name="birthDate" id="dob" placeholder="Date of birth" value="" required>
+            <label for="birthDate">Date of birth</label>
+            <input type="date" class="form-control" name="birthDate" id="birthDate" placeholder="Date of birth" th:value="*{birthDate}" required
+                   th:classappend="${#fields.hasErrors('birthDate')} ? 'is-invalid' : (${!#fields.hasErrors('birthDate') && !userBinding.email.isBlank()}  ? 'is-valid' : '')"
+            >
             <div class="valid-feedback">
                 Looks good!
             </div>
             <div class="invalid-feedback">
                 Invalid birth date
             </div>
-
         </div>
 
         <div class="col-md-4 mb-3">
             <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="" required>
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password" value="" required
+                   th:classappend="${#fields.hasErrors('password')} ? 'is-invalid' : (${!#fields.hasErrors('password') && !userBinding.email.isBlank()}  ? 'is-valid' : '')"
+            >
             <div class="valid-feedback">
                 Looks good!
             </div>
@@ -63,12 +74,14 @@
             <div class="invalid-feedback">
                 Invalid password
             </div>
-
         </div>
+
 
         <div class="col-md-4 mb-3">
             <label for="confirmPassword">Confirm password</label>
-            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Password" value="" required>
+            <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Password" value="" required
+                   th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : (${!#fields.hasErrors('confirmPassword') && !userBinding.email.isBlank()}  ? 'is-valid' : '')"
+            >
             <div class="valid-feedback">
                 Looks good!
             </div>

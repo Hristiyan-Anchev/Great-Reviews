@@ -17,30 +17,22 @@
 
                 <th:block th:fragment="categories">
                     <small class="text-muted mb-5">Choose a category</small>
-                <div class="list-group " >
-                    <a href="#" class="list-group-item list-group-item-action">
-                        Cras justo odio
-                    </a>
-                    <a href="/categories/subcategories" class="list-group-item list-group-item-action active">
-                        Cras justo odio
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action ">
-                        Cras justo odio
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action ">
-                        Cras justo odio
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action ">
-                        Cras justo odio
-                    </a> <a href="#" class="list-group-item list-group-item-action ">
-                    Cras justo odio
-                </a> <a href="#" class="list-group-item list-group-item-action ">
-                    Cras justo odio
-                </a> <a href="#" class="list-group-item list-group-item-action ">
-                    Cras justo odio
-                </a>
+                <ul th:inline="text" class="list-group d-md-flex" >
 
-                </div>
+<!--                    todo fix #hash routing -->
+                    <a     th:each="c : ${categories}"
+                            th:classappend="${activeCategory == c.name ? 'active' : ''}"
+                            th:id="${activeCategory == c.name ? 'activeCategory' : ''}"
+                            th:href="@{/categories/subcategories(of=${c.id})}"
+                            class="list-group-item list-group-item-action d-flex justify-content-between"
+                    >
+                     [[${c.name}]]
+                    </a>
+
+
+
+
+                </ul>
 
                 </th:block>
             </div>
@@ -64,4 +56,9 @@
 
 <th:block th:replace="Footer"></th:block>
 </body>
+
+
+
+
+
 </html>

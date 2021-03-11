@@ -1,0 +1,49 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<body>
+<th:block th:fragment="userControl">
+    <div class="btn-group">
+        <!--/*@thymesVar id="currentUser" type="greatreviews.grw.entities.UserEntity"*/-->
+        <button th:text="${currentUser.username}" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Action
+        </button>
+
+        <div class="dropdown-menu">
+
+
+            <a sec:authorize="isAuthenticated()" class="dropdown-item" href="/companies/add">Add company</a>
+
+            <a sec:authorize="hasRole('ROLE_USER')" class="dropdown-item" href="/users/reviews">My Reviews</a>
+
+            <a sec:authorize="isAuthenticated()" class="dropdown-item" href="/users/settings">Personal settings</a>
+
+<!--            todo if user owns any companies-->
+            <a sec:authorize="hasRole('ROLE_OWNER')" class="dropdown-item" href="/users/companies">Manage companies</a>
+
+<!--            todo if user is an employee-->
+            <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="dropdown-item" href="/employees/controls"
+                th:text="|${currentUser.companyName} settings|"
+            >{COMPANY NAME} settings</a>
+
+<!--            todo if user is admin-->
+            <a sec:authorize="hasRole('ROLE_ADMIN')" class="dropdown-item" href="/users/admin">Admin panel</a>
+
+
+
+            <div class="dropdown-divider"></div>
+            <form class="form-inline" action="/users/logout" method="POST">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="dropdown-item" >Log out</button>
+            </form>
+
+
+
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

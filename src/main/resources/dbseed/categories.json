@@ -1,0 +1,300 @@
+[
+  {
+    "category": "Animals & Pets",
+    "subcategories": [
+      "Animal Health",
+      "Animal Parks & Zoo",
+      "Cats & Dogs",
+      "Horses & Riding",
+      "Pet Services",
+      "Pet Stores"
+    ]
+  },
+  {
+    "category": "Beauty & Well-being",
+    "subcategories": [
+      "Cosmetics & Makeup",
+      "Hair Care & Styling",
+      "Personal Care",
+      "Salons & Clinics",
+      "Tattoos & Piercings",
+      "Wellness & Spa",
+      "Yoga & Meditation"
+    ]
+  },
+  {
+    "category": "Business Services",
+    "subcategories": [
+      "Administration & Services",
+      "Associations & Centers",
+      "HR & Recruiting",
+      "Import & Export",
+      "IT & Communication",
+      "Office Space & Supplies",
+      "Print & Graphic Design",
+      "Research & Development",
+      "Sales & Marketing",
+      "Shipping & Logistics",
+      "Wholesale"
+    ]
+  },
+  {
+    "category": "Construction & Manufacturing",
+    "subcategories": [
+      "Architects & Engineers",
+      "Building Materials",
+      "Chemicals & Plastic",
+      "Construction Services",
+      "Contractors & Consultants",
+      "Factory Equipment",
+      "Garden & Landscaping",
+      "Industrial Supplies",
+      "Manufacturing",
+      "Production Services",
+      "Tools & Equipment"
+    ]
+  },
+  {
+    "category": "Education & Training",
+    "subcategories": [
+      "Colleges & Universities",
+      "Courses & Classes",
+      "Education Services",
+      "Language Learning",
+      "Music & Theater Classes",
+      "School & High School",
+      "Specials Schools",
+      "Vocational Training"
+    ]
+  },
+  {
+    "category": "Electronics & Technology",
+    "subcategories": [
+      "Appliances & Electronics",
+      "Audio & Visual",
+      "Computers & Phones",
+      "Internet & Software",
+      "Repair & Services"
+    ]
+  },
+  {
+    "category": "Events & Entertainment",
+    "subcategories": [
+      "Adult Entertainment",
+      "Children's Entertainment",
+      "Clubbing & Nightlife",
+      "Events & Venues",
+      "Gambling",
+      "Gaming",
+      "Museums & Exibits",
+      "Music & Movies",
+      "Theater & Opera",
+      "Wedding & Party"
+    ]
+  },
+  {
+    "category": "Food, Beverages & Tobacco",
+    "subcategories": [
+      "Agriculture & Produce",
+      "Asian Grocery Stores",
+      "Bakery & Pastry",
+      "Beer & Wine",
+      "Beverages & Liquor",
+      "Candy & Chocolate",
+      "Coffee & Tea",
+      "Food Production",
+      "Fruits & Vegetables",
+      "Grocery Stores & Markets",
+      "Lunch & Catering",
+      "Meat, Seafood & Eggs",
+      "Smoking & Tobacco"
+    ]
+  },
+  {
+    "category": "Health & Medical",
+    "subcategories": [
+      "Clinics",
+      "Dental Services",
+      "Diagnostics & Testing",
+      "Doctors & Surgeons",
+      "Health Equipment",
+      "Hospital & Emergency",
+      "Medical Specialists",
+      "Mental Health",
+      "Pharmacy & Medicine",
+      "Physical Aids",
+      "Pregnancy & Children",
+      "Therapy & Senior Health",
+      "Vision & Hearing"
+    ]
+  },
+  {
+    "category": "Hobbies & Crafts",
+    "subcategories": [
+      "Art & Handicraft",
+      "Astrology & Numerology",
+      "Fishing & Hunting",
+      "Hobbies",
+      "Metal, Stone & Glass Work",
+      "Music & Instruments",
+      "Needlework & Knitting",
+      "Outdoor Activities",
+      "Painting & Paper"
+    ]
+  },
+  {
+    "category": "Home & Garden",
+    "subcategories": [
+      "Bathroom & Kitchen",
+      "Cultural Goods",
+      "Decoration & Interior",
+      "Energy & Heating",
+      "Fabric & Stationery",
+      "Furniture Stores",
+      "Garden & Pond",
+      "Home & Garden Services",
+      "Home Goods Stores",
+      "Home Improvements"
+    ]
+  },
+  {
+    "category": "Home Services",
+    "subcategories": [
+      "Cleaning Service Providers",
+      "Craftsman",
+      "House Services",
+      "House Sitting & Security",
+      "Moving & Storage",
+      "Plumbing & Sanitation",
+      "Repair Service Providers"
+    ]
+  },
+  {
+    "category": "Legal Services & Government",
+    "subcategories": [
+      "Customs & Toll",
+      "Government Department",
+      "Law Enforcement",
+      "Lawyers & Attorneys",
+      "Legal Service Providers",
+      "Libraries & Archives",
+      "Municipal Department",
+      "Registration Services"
+    ]
+  },
+  {
+    "category": "Media & Publishing",
+    "subcategories": [
+      "Books & Magazines",
+      "Media & Information",
+      "Photography",
+      "Video & Sound"
+    ]
+  },
+  {
+    "category": "Money & Insurance",
+    "subcategories": [
+      "Accounting & Tax",
+      "Banking & Money",
+      "Credit & Debt Services",
+      "Insurance",
+      "Investments & Wealth",
+      "Real Estate"
+    ]
+  },
+  {
+    "category": "Public & Local Services",
+    "subcategories": [
+      "Employment & Career",
+      "Funeral & Memorial",
+      "Housing Associations",
+      "Kids & Family",
+      "Military & Veteran",
+      "Nature & Environment",
+      "Professional Organizations",
+      "Public Services & Welfare",
+      "Religious Institutions",
+      "Shelters & Homes",
+      "Waste Management"
+    ]
+  },
+  {
+    "category": "Restaurants & Bars",
+    "subcategories": [
+      "Bars & Cafes",
+      "Chinese & Korean Cuisine",
+      "European Cuisine",
+      "General Restaurants",
+      "Japanese Cuisine",
+      "Mediterranean Cuisine",
+      "Middle Eastern Cuisine",
+      "North & South American Cuisine",
+      "Southeast Asian Cuisine",
+      "Takeaway",
+      "Vegetarian & Diet"
+    ]
+  },
+  {
+    "category": "Shopping & Fashion",
+    "subcategories": [
+      "Accessories",
+      "Clothing & Underwear",
+      "Clothing Rental & Repair",
+      "Costume & Wedding",
+      "Jewelry & Watches",
+      "Malls & Marketplaces"
+    ]
+  },
+  {
+    "category": "Sports",
+    "subcategories": [
+      "Ball Games",
+      "Bat-and-ball Games",
+      "Bowls & Lawn Sports",
+      "Dancing & Gymnastics",
+      "Equipment & Associations",
+      "Extreme Sports",
+      "Fitness & Weight Lifting",
+      "Golf & Ultimate",
+      "Hockey & Ice Skating",
+      "Martial arts & Wrestling",
+      "Outdoor & Winter Sports",
+      "Shooting & Target Sports",
+      "Swimming & Water Sports",
+      "Tennis & Racquet Sports"
+    ]
+  },
+  {
+    "category": "Travel & Vacation",
+    "subcategories": [
+      "Accommodation & Lodging",
+      "Activities & Tours",
+      "Airlines & Air Travel",
+      "Hotels",
+      "Travel Agencies"
+    ]
+  },
+  {
+    "category": "Utilities",
+    "subcategories": [
+      "Energy & Power",
+      "Oil & Fuel",
+      "Water Utilities"
+    ]
+  },
+  {
+    "category": "Vehicles & Transportation",
+    "subcategories": [
+      "Air & Water Transport",
+      "Airports & Parking",
+      "Auto Parts & Wheels",
+      "Bicycles",
+      "Cars & Trucks",
+      "Motorcycle & Powersports",
+      "Other Vehicles & Trailers",
+      "Taxis & Public Transport",
+      "Vehical Rental",
+      "Vehicle Repair & Fuel"
+    ]
+  }
+]

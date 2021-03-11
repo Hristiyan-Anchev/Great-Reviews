@@ -24,4 +24,8 @@ public class CategoryEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "category")
     Set<SubcategoryEntity> subcategories;
+
+    @OneToMany(mappedBy = "category")
+    Set<CompanyEntity> companies;
+
 }

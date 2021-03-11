@@ -1,0 +1,47 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      >
+
+
+<body>
+<th:block th:fragment="writeReviewSection">
+    <div class="container d-flex justify-content-center">
+
+        <div class="col d-flex flex-column justify-content-center">
+
+            <div sec:authorize="isAuthenticated()" class="media w-50 mb-5 align-self-center">
+                <a href="#" >
+                <img class="m-3 rounded-circle " src="https://via.placeholder.com/150" alt="Generic placeholder image">
+                </a>
+
+                <div class="media-body mt-5">
+                <h5 th:text="${currentUser.username}" class="mt-0">John Doe</h5>
+                    <a th:href="@{/reviews/company/evaluate(cid=${currentCompany.id})}">Write a review</a>
+                </div>
+            </div>
+
+            <!--            if not logged in show this -->
+            <p sec:authorize="!isAuthenticated()" class="w-50 align-self-center text-center">To write a review</p>
+            <div sec:authorize="!isAuthenticated()" class="container d-flex align-items-center align-self-center w-50 p-0 justify-content-center mb-5">
+                <a href="/users/login" type="button" class="btn btn-primary m-2">Login</a>
+                <p class="m-2"> or </p>
+                <a href="/users/register" type="button" class="btn btn-success m-2">Register</a>
+            </div>
+
+            <!--         show reviews here-->
+
+        </div>
+
+        <!--        <div class="col">-->
+        <!--            2 of 3-->
+        <!--        </div>-->
+        <!--        <div class="col">-->
+        <!--            3 of 3-->
+        <!--        </div>-->
+    </div>
+</th:block>
+</body>
+</html>

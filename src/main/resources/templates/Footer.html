@@ -1,6 +1,8 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+>
 
     <th:block th:include="head">
 
@@ -23,21 +25,15 @@
             <a class="nav-link" href="/blog">Blog<span class="sr-only">(current)</span></a>
         </li>
 
-
-
     </ul>
 
-        <ul class="nav flex-column m-5 col-md-2">
+        <ul sec:authorize="!isAuthenticated()" class="nav flex-column m-5 col-md-2">
             <li class="nav-item ">
                 <a class="nav-link" href="/users/login">Login<span class="sr-only">(current)</span></a>
             </li>
 
             <li class="nav-item ">
                 <a class="nav-link" href="/users/register">Register<span class="sr-only">(current)</span></a>
-            </li>
-
-            <li class="nav-item ">
-                <a class="nav-link" href="/enterprise">For Companies<span class="sr-only">(current)</span></a>
             </li>
         </ul>
 

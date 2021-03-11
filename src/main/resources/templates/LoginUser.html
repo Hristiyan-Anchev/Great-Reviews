@@ -19,9 +19,13 @@
 <!--        todo-->
 <!--        use is-valid or is-invalid class on inputs-->
 
-<!--    -->     <p th:if="${false}" class="text-danger">Invalid credentials</p>
+<!--    -->     <p th:if="${loginError == true}" class="text-danger text-center">Invalid credentials</p>
 
-                <form class="d-flex flex-column justify-content-center align-items-center m-5">
+                <form class="d-flex flex-column justify-content-center align-items-center m-5"
+                   method="POST" action="/users/login"
+                >
+
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                         <div class="col-md-4 mb-3">
                             <label for="email">Email</label>
@@ -36,8 +40,8 @@
 
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="validationServer02">Password</label>
-                            <input type="password" class="form-control " id="validationServer02" placeholder="Password" value="" required>
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control " id="password" name="password" placeholder="Password" value="" required>
                             <div class="valid-feedback">
                                 Looks good!
                             </div>

@@ -1,4 +1,17 @@
 package greatreviews.grw.services.interfaces;
 
-public interface UserService {
+import greatreviews.grw.services.models.UserServiceModel;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+
+import java.util.Optional;
+
+public interface UserService  extends UserDetailsService {
+    Optional<UserServiceModel> findByUsername(String username);
+    @Transactional
+    Optional<UserServiceModel> findByEmail(String email);
+
+    void registerUser(UserServiceModel userServiceModel);
+
 }
