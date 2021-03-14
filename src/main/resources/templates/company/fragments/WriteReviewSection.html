@@ -14,7 +14,7 @@
 
             <div sec:authorize="isAuthenticated()" class="media w-50 mb-5 align-self-center">
                 <a href="#" >
-                <img class="m-3 rounded-circle " src="https://via.placeholder.com/150" alt="Generic placeholder image">
+                <img class="m-3 rounded-circle" th:src="@{${currentUser.imageURL}}" alt="Generic placeholder image" style="max-width: 100px; height: auto">
                 </a>
 
                 <div class="media-body mt-5">

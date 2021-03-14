@@ -22,5 +22,8 @@ public class CompanyViewModel {
     String shortDescription;
     Boolean isVerified;
     Set<String> subcategories;
+    Long upVotesCount;
+    Long downVotesCount;
+    Long reviewsCount;
 
 }

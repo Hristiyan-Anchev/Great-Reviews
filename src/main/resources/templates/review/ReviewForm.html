@@ -1,10 +1,107 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="head"></th:block>
+
 <body>
 
+<th:block th:replace="Header"></th:block>
+
+
+<!--    company main  statistics-->
+<th:block th:replace="company/fragments/CompanyHeaderStats"></th:block>
+
+
+<div th:object="${review}" class="container mt-5 min-vh-100">
+    <form th:action="@{/reviews/company/evaluate(cid=${currentCompany.id})}" method="POST">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <small th:if="${#fields.hasErrors()}" class="text-muted">The following errors occurred:</small>
+        <p class="text-danger" th:if="${#fields.hasErrors()}" th:each="error : ${allErrors}"
+           th:text="${error.defaultMessage}"></p>
+
+
+        <h4>Rate your recent experience</h4>
+        <input id="vote" name="vote" th:value="*{vote}" type="hidden">
+        <div class="btn-group btn-group-lg" role="group" aria-label="...">
+            <button id="upvote" type="button" th:classappend="*{vote} == '1' ? 'text-success' : ''" class="btn" th:data-toggle="*{vote.equals('1')}"><span class="far fa-thumbs-up"></span></button>
+            <button id="downvote" type="button" th:classappend="*{vote} == '-1' ? 'text-danger' : ''" class="btn " th:data-toggle="*{vote.equals('-1')}"><span class="far fa-thumbs-down"></span></button>
+
+        </div>
+
+        <div class="form-group mt-5 w-50">
+            <label for="title">Give your review a title</label>
+            <small class="text-muted ml-5">10 - 100 characters</small>
+            <input type="text" class="form-control" id="title" name="title" aria-describedby="reviewTitle"
+                   placeholder="Enter your title" required
+                   th:value="${review.title}"
+            >
+        </div>
+
+
+
+        <div class="form-group mt-5 w-50">
+            <label for="content">Tell us about your experience(optional)</label>
+            <small class="text-muted ml-5">Max length: 5000 characters</small>
+            <textarea class="form-control" id="content" name="content" rows="10"
+                      th:text="${review.content}"
+            ></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit review</button>
+    </form>
+
+
+</div>
+
+
+<th:block th:replace="Footer"></th:block>
 </body>
+
+<script>
+
+
+        const upvoteHandler = (evt) => {
+            const upBtn = evt.currentTarget;
+            if(upBtn.dataset.toggle === 'false' && inputField.value !== 1){
+
+                downvoteBtn.dataset.toggle = 'false';
+                downvoteBtn.classList.remove('text-danger');
+
+                upBtn.dataset.toggle = 'true';
+                upBtn.classList.add('text-success')
+                inputField.value = 1;
+            }
+
+
+        }
+
+        const downvoteHandler = (evt) => {
+            const downBtn = evt.currentTarget;
+
+            if(downBtn.dataset.toggle === 'false' && inputField.value !== -1){
+                upvoteBtn.dataset.toggle = 'false';
+                upvoteBtn.classList.remove('text-success');
+
+                downBtn.dataset.toggle = 'true';
+                downBtn.classList.add('text-danger')
+                inputField.value = -1;
+            }
+
+        }
+
+
+
+
+        const upvoteBtn = document.getElementById("upvote");
+        const downvoteBtn = document.getElementById("downvote");
+        const inputField = document.getElementById("vote");
+
+        upvoteBtn.addEventListener("click",upvoteHandler);
+        downvoteBtn.addEventListener("click",downvoteHandler);
+
+
+
+
+</script>
 </html>

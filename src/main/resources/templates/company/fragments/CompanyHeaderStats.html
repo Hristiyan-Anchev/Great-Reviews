@@ -14,41 +14,42 @@
         </div>
 
         <!--        main info-->
-        <div class="container d-flex flex-wrap">
-            <img src="https://via.placeholder.com/150" alt="" class="img-thumbnail">
+        <div class="container d-flex flex-wrap" th:object="${currentCompany}">
+            <img th:src="@{*{logo}}" alt="" class="img-thumbnail" style="max-width: 150px; height: auto;">
             <div class="container d-flex flex-column w-25 m-0">
-                <p class="lead">Reviews 985  •  Rating 4.9</p>
-                <span class="d-flex">
-                    <div class="m-2">
-                        <i class="far fa-comment"></i>
-                    </div>
+                <div th:inline="text" class="lead">
+                   <span class="d-block"> Total Reviews [[${currentCompany.reviewsCount}]]</span>
 
-                        <div class="m-2">
-                        <i class="far fa-comment"></i>
-                    </div>
+                <div class="m-2 d-inline">
+                    <i class="far fa-comment text-success"></i>
+                </div> [[${currentCompany.upVotesCount}]]
 
-                        <div class="m-2">
-                        <i class="far fa-comment"></i>
-                    </div>
+                <div class="m-2 d-inline">
+                    <i class="far fa-comment text-danger"></i>
+                </div> [[${currentCompany.downVotesCount}]]
 
-                        <div class="m-2">
-                        <i class="far fa-comment"></i>
-                    </div>
+                </div>
 
-                        <div class="m-2">
-                        <i class="far fa-comment"></i>
-                    </div>
-                </span>
-                <h6 th:text="${currentCompany.website}" class="text-muted">www.website.com</h6>
+
+
+                <h6 th:text="${currentCompany.website}" class="text-muted mt-3">www.website.com</h6>
                 <a th:href="|http://${currentCompany.website}|" class="badge badge-dark w-50" target="_blank" rel="noopener noreferrer">Visit website</a>
             </div>
 
             <!--            address email phone-->
-
             <div class="container d-flex flex-column w-25 m-0">
-                <p th:text="${currentCompany.address}" class="lead">Main Street 1</p>
-                <p th:text="${currentCompany.email}" >acme@mail.com</p>
-                <p th:text="${currentCompany.phone}" class="text-muted">555-050-333-4</p>
+                <p th:if="${currentCompany.address != ''}" th:inline="text"  class="lead">
+                    <i class="fas fa-map-marked-alt"></i>
+                    [[${currentCompany.address}]]
+                </p>
+                <p th:if="${currentCompany.email != null}" th:inline="text" >
+                    <i class="fas fa-envelope"></i>
+                    [[${currentCompany.email}]]
+                </p>
+                <p th:if="${currentCompany.phone != null}" th:inline="text" class="">
+                    <i class="fas fa-phone"></i>
+                    [[${currentCompany.phone}]]
+                </p>
             </div>
 
             <!--  short description-->

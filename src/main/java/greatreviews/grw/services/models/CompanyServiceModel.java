@@ -22,4 +22,8 @@ public class CompanyServiceModel {
 
     String name;
     String shortDescription;
+
+    Long upVotesCount;
+    Long downVotesCount;
+
 }

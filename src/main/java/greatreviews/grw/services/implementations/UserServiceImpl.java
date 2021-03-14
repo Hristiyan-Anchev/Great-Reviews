@@ -1,5 +1,6 @@
 package greatreviews.grw.services.implementations;
 
+import greatreviews.grw.config.authentication.CustomUser;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
 import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.RoleRepository;
@@ -64,7 +65,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email).orElseGet(()-> null);
-        return userEntity;
+
+        //shell object
+        CustomUser cu = modelMapper.map(userEntity,CustomUser.class);
+
+        return cu;
 
     }
 }

@@ -9,7 +9,7 @@
 
 
 <!--    company main  statistics-->
-    <th:block  th:replace="company/fragments/CompanyHeaderStats"></th:block>
+    <th:block   th:replace="company/fragments/CompanyHeaderStats"></th:block>
 
 
 
@@ -19,9 +19,29 @@
 
 <!--company reviews section-->
     <div class="container-fluid d-flex flex-column align-items-center justify-content-center">
-        <th:block th:replace="company/fragments/ReviewCard"></th:block>
-        <th:block th:replace="company/fragments/ReviewCard"></th:block>
-        <th:block th:replace="company/fragments/ReviewCard"></th:block>
+        <div th:each="r : ${reviews}" th:object="${r}" class="card border-success m-3 p-0 align-self-center" style="max-width: 18rem;">
+            <div class="card-header bg-transparent border-success">
+                <div class="media">
+                    <img class="mr-3 w-100" th:src="@{*{userImageURL}}" alt="Generic placeholder image" style="max-width: 120px; height: auto">
+                    <div class="media-body">
+                        <h5 th:text="*{userName}" class="mt-0 text-nowrap">John Doe</h5>
+                        <small th:text="*{created}" class="text-muted">01/01/2015</small>
+                        <i th:if="*{vote == '1'}" class="far fa-thumbs-up text-success d-inline-block m-2" ></i>
+                        <i th:if="*{vote == '-1'}" class="far fa-thumbs-down text-danger d-inline-block m-2"></i>
+                        <a th:text="|*{userReviewsCount} reviews|" href="#" class="text-nowrap"> 15 reviews</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-success">
+                <h5 th:text="*{title}" class="card-title">Very good company </h5>
+                <p th:text="*{content}" class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque nihil quae rem? A at corporis cum delectus, dicta, dolorem dolorum exercitationem fugit quisquam quos reiciendis rem tempora tempore? Minima, quam!</p>
+            </div>
+            <!--            footer section-->
+            <a  href="#" class="card-footer bg-transparent border-success">Mark as useful</a>
+            <a  href="#" class="card-footer bg-transparent border-success">Do something else</a>
+        </div>
+
+
     </div>
 
 

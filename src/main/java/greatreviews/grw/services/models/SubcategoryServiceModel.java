@@ -24,5 +24,6 @@ public class SubcategoryServiceModel {
     Integer companiesCount;
     Long id;
     String name;
+    Boolean isDeleted;
 
 }

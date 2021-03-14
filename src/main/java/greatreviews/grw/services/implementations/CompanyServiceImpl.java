@@ -71,6 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
         companyServiceModel.setName(currentPageTitle);
 
         CompanyEntity newCompany = modelMapper.map(companyServiceModel, CompanyEntity.class);
+        newCompany.setLogo("/images/big_biznis.png");
 
         var mainCategory = categoryService
                 .getCategoryEntityById(companyServiceModel.getMainCategory());
@@ -96,7 +97,6 @@ public class CompanyServiceImpl implements CompanyService {
        else{
            throw new IllegalArgumentException("Main category could not be found");
        }
-
     }
 
     @Override

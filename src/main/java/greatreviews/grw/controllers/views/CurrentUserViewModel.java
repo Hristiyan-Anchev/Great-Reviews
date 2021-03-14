@@ -12,4 +12,13 @@ public class CurrentUserViewModel {
     Long id;
     String username;
     String email;
+    String imageURL;
+
+    @Override
+    public String toString() {
+        return
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' ;
+    }
 }

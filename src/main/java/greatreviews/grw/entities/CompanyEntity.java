@@ -27,23 +27,22 @@ public class CompanyEntity extends BaseEntity {
         this.isVerified = false;
     }
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     @Pattern(regexp = PatternEnum.Constants.VALID_URL_PATTERN)
-
     String website;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false, unique = true)
     @Pattern(regexp = PatternEnum.Constants.EMAIL_PATTERN)
     String email;
 
 
-    @Column(nullable = true,unique = true)
+    @Column(nullable = true, unique = true)
     String name;
 
     @Column(nullable = true)
     String address;
 
-    @Column(nullable = true,unique = true)
+    @Column(nullable = true, unique = true)
     String phone;
 
 
@@ -63,7 +62,7 @@ public class CompanyEntity extends BaseEntity {
 
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id",referencedColumnName = "id")
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
     CategoryEntity category;
 
 
@@ -74,8 +73,8 @@ public class CompanyEntity extends BaseEntity {
     )
     Set<SubcategoryEntity> subcategories;
 
-
-
+    @OneToMany(mappedBy = "company")
+    Set<ReviewEntity> reviews;
     //todo
 
 

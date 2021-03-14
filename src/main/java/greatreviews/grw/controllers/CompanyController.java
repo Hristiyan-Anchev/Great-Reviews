@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,7 +46,7 @@ public class CompanyController {
 
     SubcategoryRepository subcategoryRepository;
 
-
+    @PreAuthorize(value = "isAuthenticated()")
     @GetMapping("/add")
     public ModelAndView getAddCompanyView(Model model) {
         var modelAndView = new ModelAndView("/company/AddCompany");
@@ -72,6 +73,7 @@ public class CompanyController {
         return modelAndView;
     }
 
+    @PreAuthorize(value = "isAuthenticated()")
     @PostMapping("/add")
     public ModelAndView registerCompany(@Valid @ModelAttribute AddCompanyBinding companyBinding, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         var modelAndView = new ModelAndView("redirect:/");
@@ -95,7 +97,7 @@ public class CompanyController {
             bindingResult.rejectValue("mainCategory","category.not.exists","The category does not exist in the database");
         }
 
-        //todo make at least one category mandatory!!!
+
 
         //check if someone tried to shove the same subcategory more than once ...
         var subcategoriesCollection = new Long[]{
@@ -144,16 +146,17 @@ public class CompanyController {
 
 
         var companies = subcategoryService
-                .getCompaniesInCategory(id);
+                             .getCompaniesInCategory(id);
 
         //put subcategory name in modelAndView
         subcategoryService.findSubcategoryById(id).ifPresent(subcategoryEntity -> {
             modelAndView.addObject("currentSubcategory",subcategoryEntity.getName());
         });
 
-     Set<CompanyViewModel> companyViewModels =
+        Set<CompanyViewModel> companyViewModels =
              modelMapper.map(companies,
                      new TypeToken<Set<CompanyViewModel>>(){}.getType());
+
 
 
         modelAndView.addObject("companies",companyViewModels);
@@ -167,7 +170,7 @@ public class CompanyController {
 
 
 
-    //todo refactor this to a custom exception
+    //todo: refactor this to a custom exception
     @ExceptionHandler(IllegalArgumentException.class)
     public ModelAndView illegalCategoryHandler(){
         return new ModelAndView("redirect:/companies/add?error=true");

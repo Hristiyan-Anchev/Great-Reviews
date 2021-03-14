@@ -7,22 +7,22 @@
 
 
 <body>
-<th:block th:fragment="reviewCard">
+<th:block  th:fragment="reviewCard">
 
-    <div class="card border-success m-3 p-0 align-self-center" style="max-width: 18rem;">
+    <div  class="card border-success m-3 p-0 align-self-center" style="max-width: 18rem;">
         <div class="card-header bg-transparent border-success">
             <div class="media">
-                <img class="mr-3 w-100" src="https://via.placeholder.com/150" alt="Generic placeholder image">
+                <img class="mr-3 w-100" th:src="@{*{userImageURL}}" alt="Generic placeholder image">
                 <div class="media-body">
-                    <h5 class="mt-0 text-nowrap">John Doe</h5>
-                    <small class="text-muted">01/01/2015</small>
-                    <a href="#"> 15 reviews</a>
+                    <h5 th:text="${userName}" class="mt-0 text-nowrap">John Doe</h5>
+                    <small th:text="*{created}" class="text-muted">01/01/2015</small>
+                    <a th:text="*{userReviewsCount}" href="#"> 15 reviews</a>
                 </div>
             </div>
         </div>
         <div class="card-body text-success">
-            <h5 class="card-title">Very good company </h5>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque nihil quae rem? A at corporis cum delectus, dicta, dolorem dolorum exercitationem fugit quisquam quos reiciendis rem tempora tempore? Minima, quam!</p>
+            <h5 th:text="*{title}" class="card-title">Very good company </h5>
+            <p th:text="*{content}" class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque nihil quae rem? A at corporis cum delectus, dicta, dolorem dolorum exercitationem fugit quisquam quos reiciendis rem tempora tempore? Minima, quam!</p>
         </div>
 <!--            footer section-->
         <a  href="#" class="card-footer bg-transparent border-success">Mark as useful</a>

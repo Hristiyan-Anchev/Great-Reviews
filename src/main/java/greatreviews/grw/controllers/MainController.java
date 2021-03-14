@@ -2,7 +2,9 @@ package greatreviews.grw.controllers;
 
 import greatreviews.grw.controllers.basecontrollers.BaseController;
 import greatreviews.grw.controllers.views.CurrentUserViewModel;
+import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.UserEntity;
+import greatreviews.grw.services.interfaces.ReviewService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Set;
+
 @Controller
 @RequestMapping()
 @Getter
@@ -23,11 +27,15 @@ import org.springframework.web.servlet.ModelAndView;
 @NoArgsConstructor
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class MainController
+public class MainController {
 
-{
      ModelMapper modelMapper;
+     ReviewService reviewService;
 
+    @ModelAttribute("latestReviews")
+     private Set<ReviewViewModel> getLatestReviews(){
+        reviewService.getLatestReviews(4);
+    }
 
     @GetMapping("/")
     public ModelAndView getIndex(Model model){

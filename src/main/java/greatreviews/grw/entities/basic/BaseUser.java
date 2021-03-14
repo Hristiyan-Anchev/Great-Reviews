@@ -4,6 +4,7 @@ import greatreviews.grw.entities.RoleEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -14,10 +15,10 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Getter
 @Setter
-
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public abstract class BaseUser extends BaseEntity {
+
+public abstract class BaseUser extends BaseEntity  {
 
     @Column
     String email;
@@ -28,9 +29,15 @@ public abstract class BaseUser extends BaseEntity {
     @Column
     Boolean enabled;
 
+
+//    todo: add image url or image entity
+    @Column
+    String imageURL;
+
     public BaseUser(){
         super();
         this.enabled = true;
+        this.imageURL = "/images/haisenberg.png";
     }
 
 

@@ -34,6 +34,7 @@ public class BaseController {
 
         CurrentUserViewModel currentUser = modelMapper.map(principal,CurrentUserViewModel.class);
 
+
         return currentUser;
     }
 }

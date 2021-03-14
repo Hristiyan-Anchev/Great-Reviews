@@ -17,9 +17,21 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+//@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserEntity extends BaseUser implements UserDetails {
+public class UserEntity extends BaseUser
+//        implements UserDetails
+{
+
+    public UserEntity(String email, String password, Boolean enabled, String imageURL, Set<RoleEntity> roles, String username, LocalDate birthDate, LocationEnum location, Set<CompanyEntity> companies, Set<ReviewEntity> reviews) {
+        super(email, password, enabled, imageURL, roles);
+        this.username = username;
+        this.birthDate = birthDate;
+        this.location = location;
+        this.companies = companies;
+        this.reviews = reviews;
+    }
+
 
 
     @Column
@@ -34,45 +46,50 @@ public class UserEntity extends BaseUser implements UserDetails {
     @OneToMany(mappedBy = "owner")
     Set<CompanyEntity> companies;
 
-    @Override
-    public String getEmail() {
-        return super.getEmail();
-    }
+    @OneToMany(mappedBy = "user")
+    Set<ReviewEntity> reviews;
 
-    @Override
-    public String getPassword() {
-        return super.getPassword();
-    }
+//    @Override
+//    public String getEmail() {
+//        return super.getEmail();
+//    }
+//
+//    @Override
+//    public String getPassword() {
+//        return super.getPassword();
+//    }
+//
+//    @Override
+//    public Boolean getEnabled() {
+//        return super.getEnabled();
+//    }
+//
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return super.getRoles();
+//    }
+//
+//    @Override
+//    public boolean isAccountNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isAccountNonLocked() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isCredentialsNonExpired() {
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean isEnabled() {
+//        return super.getEnabled();
+//    }
 
-    @Override
-    public Boolean getEnabled() {
-        return super.getEnabled();
-    }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return super.getRoles();
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return super.getEnabled();
-    }
 }
 
 

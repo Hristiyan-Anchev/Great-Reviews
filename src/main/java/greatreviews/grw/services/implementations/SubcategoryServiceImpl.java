@@ -1,5 +1,6 @@
 package greatreviews.grw.services.implementations;
 
+import greatreviews.grw.controllers.views.SubcategoryViewModel;
 import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.entities.SubcategoryEntity;
 import greatreviews.grw.repositories.SubcategoryRepository;
@@ -36,8 +37,14 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    public Optional<SubcategoryEntity> findSubcategoryById(Long id) {
-        return subcategoryRepository.findSubcategoryEntityById(id);
+    public Optional<SubcategoryServiceModel> findSubcategoryById(Long id) {
+        Optional<SubcategoryEntity> subcategoryEntityById = subcategoryRepository.findSubcategoryEntityById(id);
+
+        SubcategoryServiceModel mappedSubcategory = modelMapper.map(subcategoryEntityById.orElseGet(SubcategoryEntity::new)
+                , SubcategoryServiceModel.class);
+
+
+        return Optional.of(mappedSubcategory);
     }
 
 
