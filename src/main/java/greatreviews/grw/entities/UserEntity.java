@@ -49,6 +49,11 @@ public class UserEntity extends BaseUser
     @OneToMany(mappedBy = "user")
     Set<ReviewEntity> reviews;
 
+    @OneToMany(mappedBy = "user")
+    Set<ClaimTokenEntity> claimTokens;
+
+
+
 //    @Override
 //    public String getEmail() {
 //        return super.getEmail();

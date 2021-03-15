@@ -2,6 +2,7 @@ package greatreviews.grw.services.implementations;
 
 import greatreviews.grw.config.authentication.CustomUser;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
+import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.RoleRepository;
 import greatreviews.grw.repositories.UserRepository;
@@ -48,6 +49,8 @@ public class UserServiceImpl implements UserService {
         return  userRepository.findByEmail(email).map(userEntity -> modelMapper.map(userEntity,UserServiceModel.class));
     }
 
+
+
     @Override
     public void registerUser(UserServiceModel userServiceModel) {
         UserEntity newUser = modelMapper.map(userServiceModel,UserEntity.class);
@@ -60,6 +63,11 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    @Override
+    public UserEntity getUserEntityById(Long id) {
+        return userRepository.findById(id).orElse(null);
+
+    }
 
     @Override
     @Transactional
@@ -72,4 +80,7 @@ public class UserServiceImpl implements UserService {
         return cu;
 
     }
+
+
+
 }

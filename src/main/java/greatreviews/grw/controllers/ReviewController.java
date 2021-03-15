@@ -1,7 +1,7 @@
 package greatreviews.grw.controllers;
 
 import greatreviews.grw.controllers.views.CompanyViewModel;
-import greatreviews.grw.controllers.views.CurrentUserViewModel;
+import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.DTO.AddReviewDTO;
 import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.services.interfaces.CompanyService;
@@ -24,7 +24,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.Optional;
 import java.util.Set;
 
@@ -127,10 +126,10 @@ public class ReviewController {
             ReviewServiceModel reviewServiceModel = modelMapper.map(review,ReviewServiceModel.class);
 
 
-            Optional<CurrentUserViewModel> currentUser = Optional.of(
+            Optional<CurrentUserDTO> currentUser = Optional.of(
                     (model.getAttribute("currentUser"))
-            ).map((obj)->((CurrentUserViewModel)obj));
-           Long userId = currentUser.map(CurrentUserViewModel::getId).orElse(0L);
+            ).map((obj)->((CurrentUserDTO)obj));
+           Long userId = currentUser.map(CurrentUserDTO::getId).orElse(0L);
 
 
          reviewService.addReview(reviewServiceModel,userId,companyId);

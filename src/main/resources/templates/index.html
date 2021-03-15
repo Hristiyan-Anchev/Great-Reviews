@@ -37,7 +37,7 @@
                 <div class="col-sm  " th:each="r : ${latestReviews}" th:object="${r}">
 
                     <div class="media m-5"  >
-                        <a class="pr-3" th:href="@{/companies/profile/{companyId}(companyId=*{companyId})}">
+                        <a class="pr-3" th:href="@{/reviews/company(of=*{companyId})}">
                             <img class="mr-3" th:src="@{*{companyLogo}}" alt="Company logo" style="max-width: 64px; height: auto">
                         </a>
                         <div class="media-body">

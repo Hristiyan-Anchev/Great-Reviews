@@ -1,12 +1,10 @@
 package greatreviews.grw.services.implementations;
 
-import greatreviews.grw.entities.CategoryEntity;
+import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.entities.CompanyEntity;
-import greatreviews.grw.entities.SubcategoryEntity;
-import greatreviews.grw.repositories.CategoryRepository;
 import greatreviews.grw.repositories.CompanyRepository;
-import greatreviews.grw.repositories.SubcategoryRepository;
 import greatreviews.grw.services.interfaces.CategoryService;
+import greatreviews.grw.services.interfaces.ClaimTokenService;
 import greatreviews.grw.services.interfaces.CompanyService;
 import greatreviews.grw.services.interfaces.SubcategoryService;
 import greatreviews.grw.services.models.CompanyServiceModel;
@@ -16,8 +14,10 @@ import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import javax.transaction.Transactional;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +37,7 @@ public class CompanyServiceImpl implements CompanyService {
     CompanyRepository companyRepository;
     CategoryService categoryService;
     SubcategoryService subcategoryService;
+    CurrentUserDTO currentUser;
 
     @Override
     public Optional<CompanyServiceModel> getCompanyByWebsite(String website) {
@@ -71,12 +72,16 @@ public class CompanyServiceImpl implements CompanyService {
         companyServiceModel.setShortDescription(currentPageDescription);
         companyServiceModel.setName(currentPageTitle);
 
+        //set default logo
         CompanyEntity newCompany = modelMapper.map(companyServiceModel, CompanyEntity.class);
         newCompany.setLogo("/images/big_biznis.png");
+
+
 
         var mainCategory = categoryService
                 .getCategoryEntityById(companyServiceModel.getMainCategory());
 
+        //set main category
        if(mainCategory.isPresent()) {
            newCompany.setCategory(mainCategory.get());
 
@@ -90,8 +95,9 @@ public class CompanyServiceImpl implements CompanyService {
            var subcategories = newCompany.getCategory().getSubcategories()
                    .stream().filter(subcategoryEntity -> serviceModelSubcategories.contains(subcategoryEntity.getId()))
                    .collect(Collectors.toSet());
-
+           //set subcategories
            newCompany.setSubcategories(subcategories);
+
 
            companyRepository.saveAndFlush(newCompany);
        }
@@ -112,8 +118,21 @@ public class CompanyServiceImpl implements CompanyService {
         return  company.map(companyEntity -> {
             return modelMapper.map(companyEntity,CompanyServiceModel.class);
         });
-
     }
 
+    @Override
+    public CompanyEntity getCompanyEntityById(Long companyId) {
+        return companyRepository.findCompanyEntityById(companyId).orElse(null);
+    }
+
+
+    //======================================================================================================================
+
+    private String generateClaimTokenValue(String userEmail,String companyWebsite){
+        var rawData = userEmail + companyWebsite;
+        var digestedData = DigestUtils.md5DigestAsHex(rawData.getBytes(StandardCharsets.UTF_8));
+
+        return digestedData;
+    }
 
 }

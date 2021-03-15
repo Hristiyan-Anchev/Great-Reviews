@@ -51,6 +51,7 @@ public class SpringAuthenticationConfig extends WebSecurityConfigurerAdapter {
                         "/home",
                         "/users/register",
                         "/users/login",
+                        "users/claim",
                         "/blog",
                         "/companies/show",
                         "/reviews/company",

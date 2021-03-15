@@ -35,7 +35,6 @@ public class CompanyEntity extends BaseEntity {
     @Pattern(regexp = PatternEnum.Constants.EMAIL_PATTERN)
     String email;
 
-
     @Column(nullable = true, unique = true)
     String name;
 
@@ -44,7 +43,6 @@ public class CompanyEntity extends BaseEntity {
 
     @Column(nullable = true, unique = true)
     String phone;
-
 
     @Column(nullable = true)
     String logo;
@@ -55,16 +53,16 @@ public class CompanyEntity extends BaseEntity {
     @Column
     Boolean isVerified;
 
+    @OneToMany(mappedBy = "company")
+    Set<ClaimTokenEntity> claimToken;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     UserEntity owner;
 
-
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     CategoryEntity category;
-
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -75,7 +73,9 @@ public class CompanyEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "company")
     Set<ReviewEntity> reviews;
-    //todo
+
+//    @OneToMany(mappedBy = "company")
+//    Set<ClaimTokenEntity> claimTokens;
 
 
 }

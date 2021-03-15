@@ -4,7 +4,6 @@ import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.services.models.CompanyServiceModel;
 
 import java.util.Optional;
-import java.util.Set;
 
 public interface CompanyService {
 
@@ -17,4 +16,6 @@ public interface CompanyService {
     Long getCompanyCountInCategory(Long categoryId);
 
     Optional<CompanyServiceModel> getCompanyById(Long id);
+
+    CompanyEntity getCompanyEntityById(Long companyId);
 }

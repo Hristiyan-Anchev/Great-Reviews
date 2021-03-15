@@ -1,10 +1,7 @@
 package greatreviews.grw.services.implementations;
 
 
-import greatreviews.grw.controllers.views.CurrentUserViewModel;
-import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.entities.ReviewEntity;
-import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.CompanyRepository;
 import greatreviews.grw.repositories.ReviewRepository;
 import greatreviews.grw.repositories.UserRepository;
@@ -13,14 +10,9 @@ import greatreviews.grw.services.models.ReviewServiceModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
-import org.modelmapper.TypeMap;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +38,7 @@ public class ReviewServiceImpl implements ReviewService {
         ReviewEntity newReview = modelMapper.map(review,ReviewEntity.class);
 
         //this is needed because modelMapper maps the companyId property to the ReviewEntity's id (unwanted behaviour)
-        newReview.setId(null);
+//        newReview.setId(null);
 
         var targetCompany = companyRepository.findCompanyEntityById(companyId).orElse(null);
         var targetUser = userRepository.findById(currentUserId).orElse(null);

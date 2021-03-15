@@ -15,6 +15,7 @@ public class CompanyServiceModel {
     String website;
     String address;
     String logo;
+    Boolean isVerified;
     Long mainCategory;
     Long firstSubcategory;
     Long secondSubcategory;

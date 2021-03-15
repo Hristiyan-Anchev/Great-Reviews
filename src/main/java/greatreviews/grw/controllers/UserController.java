@@ -1,24 +1,30 @@
 package greatreviews.grw.controllers;
 
-import greatreviews.grw.controllers.basecontrollers.BaseController;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
+import greatreviews.grw.controllers.DTO.CurrentUserDTO;
+import greatreviews.grw.services.interfaces.ClaimTokenService;
+import greatreviews.grw.services.interfaces.CompanyService;
 import greatreviews.grw.services.interfaces.UserService;
+import greatreviews.grw.services.models.ClaimTokenServiceModel;
+import greatreviews.grw.services.models.CompanyServiceModel;
 import greatreviews.grw.services.models.UserServiceModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -30,6 +36,10 @@ import java.time.LocalDate;
 public class UserController  {
 
     UserService userService;
+    CompanyService companyService;
+    CurrentUserDTO currentUser;
+    ClaimTokenService claimTokenService;
+
     PasswordEncoder passwordEncoder;
     ModelMapper modelMapper;
 
@@ -84,7 +94,29 @@ public class UserController  {
 
        return new ModelAndView("redirect:/users/login");
     }
+    @GetMapping("/claim")
+    public ModelAndView getClaimBussinessPage(Model model,@RequestParam(name="companyId") Long companyId){
+        var modelAndView = new ModelAndView("redirect:/categories");
 
+        Optional<CompanyServiceModel> targetCompany = companyService.getCompanyById(companyId);
+        targetCompany.ifPresent((tc)->{
+            String companyRawData = String.format("%s%d",tc.getWebsite(),tc.getId());
+            String currentUserRawData = currentUser.getEmail();
+
+            //generate company/user specific hash value
+            String claimTokenHashValue = DigestUtils
+                    .md5DigestAsHex(
+                            (companyRawData + currentUserRawData).getBytes(StandardCharsets.UTF_8)
+                    );
+
+            claimTokenService.registerNewClaimToken(
+                    new ClaimTokenServiceModel(null,tc.getId(),null,claimTokenHashValue,false,false)
+            );
+        });
+
+
+        return modelAndView;
+    }
 
 //======================================================================================================================
     private Boolean passwordsMatch(RegisterUserBinding userBinding){

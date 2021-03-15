@@ -1,16 +1,11 @@
 package greatreviews.grw.controllers;
 
-import greatreviews.grw.controllers.basecontrollers.BaseController;
-import greatreviews.grw.controllers.views.CurrentUserViewModel;
 import greatreviews.grw.controllers.views.ReviewViewModel;
-import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.services.interfaces.ReviewService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

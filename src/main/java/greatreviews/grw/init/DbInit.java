@@ -1,8 +1,6 @@
 package greatreviews.grw.init;
 
-import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.google.gson.Gson;
-import com.machinepublishers.jbrowserdriver.JBrowserDriver;
 import greatreviews.grw.entities.*;
 import greatreviews.grw.enums.LocationEnum;
 import greatreviews.grw.init.dto.CategoryDTO;
@@ -13,9 +11,6 @@ import greatreviews.grw.repositories.UserRepository;
 import greatreviews.grw.utilities.TextFileParser;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,16 +19,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.DigestUtils;
 
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -64,12 +62,19 @@ public class DbInit implements CommandLineRunner {
     public void run(String... args) throws Exception {
         initRoles();
         initCategories();
-//        THIS_IS_A_TEST_METHOD();
         initDefaultUser();
+
+
+
+//        calculateConfidenceBasedOnVotes();
+        testMessageDigestApi();
+
 
 //======================================================================================================================
 
     }
+
+
 
     private void initDefaultUser() {
         if(userRepository.count() == 0) {
@@ -147,7 +152,7 @@ public class DbInit implements CommandLineRunner {
     }
 
 
-    protected void THIS_IS_A_TEST_METHOD() throws IOException, InterruptedException {
+    protected void calculateConfidenceBasedOnVotes() throws IOException, InterruptedException {
     List<MyReview> reviews = new ArrayList<MyReview>(
             List.of(
             new MyReview(1,1,0),
@@ -200,6 +205,16 @@ public class DbInit implements CommandLineRunner {
         public String toString() {
             return String.format("Rewiew - %d | Confidence: %f",this.reviewId,this.confidence);
         }
+    }
+
+    private void testMessageDigestApi() throws NoSuchAlgorithmException {
+//        String s = DigestUtils.md5DigestAsHex("Hello how are you".getBytes(StandardCharsets.UTF_8));
+//
+////        System.out.println(
+////
+////      .equals("2953d33828c395aebe8225236ba4e23fa75e6f13bd881b9056a3295cbd64d3")
+////);
+//        System.out.println();
     }
 
 

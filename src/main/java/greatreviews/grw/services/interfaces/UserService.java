@@ -1,5 +1,7 @@
 package greatreviews.grw.services.interfaces;
 
+import greatreviews.grw.entities.CompanyEntity;
+import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.services.models.UserServiceModel;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -15,4 +17,5 @@ public interface UserService  extends UserDetailsService {
     Optional<UserServiceModel> findByEmail(String email);
     void registerUser(UserServiceModel userServiceModel);
 
+    UserEntity getUserEntityById(Long id);
 }
