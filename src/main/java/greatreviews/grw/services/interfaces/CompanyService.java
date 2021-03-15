@@ -18,4 +18,6 @@ public interface CompanyService {
     Optional<CompanyServiceModel> getCompanyById(Long id);
 
     CompanyEntity getCompanyEntityById(Long companyId);
+
+    Boolean isClaimInProgressForUser(Long userId, Long companyId);
 }

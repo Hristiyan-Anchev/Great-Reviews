@@ -1,7 +1,7 @@
 package greatreviews.grw.controllers;
 
-import greatreviews.grw.controllers.bindings.RegisterUserBinding;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
+import greatreviews.grw.controllers.bindings.RegisterUserBinding;
 import greatreviews.grw.services.interfaces.ClaimTokenService;
 import greatreviews.grw.services.interfaces.CompanyService;
 import greatreviews.grw.services.interfaces.UserService;
@@ -33,22 +33,22 @@ import java.util.Optional;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Controller
 @RequestMapping("/users")
-public class UserController  {
+public class UserController {
 
     UserService userService;
     CompanyService companyService;
-    CurrentUserDTO currentUser;
+
     ClaimTokenService claimTokenService;
 
     PasswordEncoder passwordEncoder;
     ModelMapper modelMapper;
 
     @GetMapping("/login")
-    public ModelAndView getLoginPage(@RequestParam(name = "error", defaultValue = "")String err,  Model model) {
+    public ModelAndView getLoginPage(@RequestParam(name = "error", defaultValue = "") String err, Model model) {
         var modelAndView = new ModelAndView("LoginUser");
 
-        if(err.equals("true")){
-            modelAndView.addObject("loginError",true);
+        if (err.equals("true")) {
+            modelAndView.addObject("loginError", true);
         }
         return modelAndView;
     }
@@ -56,8 +56,8 @@ public class UserController  {
     @GetMapping("/register")
     public ModelAndView getRegisterPage(Model model) {
         var modelAndView = new ModelAndView("RegisterUser");
-        if(!model.containsAttribute("userBinding")){
-            model.addAttribute("userBinding",new RegisterUserBinding("","", LocalDate.now(),"",""));
+        if (!model.containsAttribute("userBinding")) {
+            model.addAttribute("userBinding", new RegisterUserBinding("", "", LocalDate.now(), "", ""));
         }
 
         return modelAndView;
@@ -67,20 +67,20 @@ public class UserController  {
     public ModelAndView registerUser(@Valid @ModelAttribute RegisterUserBinding userBinding,
                                      BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
-        if(!passwordsMatch(userBinding)){
-            bindingResult.rejectValue("","passwords.no.match","Passwords do not match");
+        if (!passwordsMatch(userBinding)) {
+            bindingResult.rejectValue("", "passwords.no.match", "Passwords do not match");
         }
 
-        if(!isUserUnique(userBinding)){
-            bindingResult.rejectValue("","user.exists","Username is already taken");
+        if (!isUserUnique(userBinding)) {
+            bindingResult.rejectValue("", "user.exists", "Username is already taken");
         }
 
-        if(!isEmailUnique(userBinding)){
-            bindingResult.rejectValue("","email.exists","Email is already in use");
+        if (!isEmailUnique(userBinding)) {
+            bindingResult.rejectValue("", "email.exists", "Email is already in use");
         }
 
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("userBinding",userBinding);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("userBinding", userBinding);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userBinding",
                     bindingResult);
             return new ModelAndView("redirect:/users/register");
@@ -92,42 +92,58 @@ public class UserController  {
                 modelMapper.map(userBinding, UserServiceModel.class)
         );
 
-       return new ModelAndView("redirect:/users/login");
+        return new ModelAndView("redirect:/users/login");
     }
+
     @GetMapping("/claim")
-    public ModelAndView getClaimBussinessPage(Model model,@RequestParam(name="companyId") Long companyId){
+    public ModelAndView getClaimBussinessPage(Model model, @RequestParam(name = "companyId") Long companyId) {
         var modelAndView = new ModelAndView("redirect:/categories");
 
         Optional<CompanyServiceModel> targetCompany = companyService.getCompanyById(companyId);
-        targetCompany.ifPresent((tc)->{
-            String companyRawData = String.format("%s%d",tc.getWebsite(),tc.getId());
-            String currentUserRawData = currentUser.getEmail();
+        targetCompany.ifPresent((tc) -> {
 
-            //generate company/user specific hash value
-            String claimTokenHashValue = DigestUtils
-                    .md5DigestAsHex(
-                            (companyRawData + currentUserRawData).getBytes(StandardCharsets.UTF_8)
-                    );
+            if (!tc.getIsVerified()) {
+                CurrentUserDTO currentUser =((CurrentUserDTO)model.getAttribute("currentUser"));
 
-            claimTokenService.registerNewClaimToken(
-                    new ClaimTokenServiceModel(null,tc.getId(),null,claimTokenHashValue,false,false)
-            );
+                        String companyRawData = String.format("%s%d", tc.getWebsite(), tc.getId());
+                        String currentUserRawData = currentUser.getEmail();
+
+
+                //generate company/user specific hash value
+                String claimTokenHashValue = DigestUtils
+                        .md5DigestAsHex(
+                                (companyRawData + currentUserRawData).getBytes(StandardCharsets.UTF_8)
+                        );
+
+                claimTokenService.registerNewClaimToken(currentUser.getId(),
+                        new ClaimTokenServiceModel(null, tc.getId(), null, claimTokenHashValue, false, false)
+                );
+
+                //add claim token to model
+                modelAndView.addObject("claimToken", claimTokenHashValue);
+
+                //add company view-model
+                modelAndView.addObject("currentCompany", tc);
+
+                //todo: set view
+                modelAndView.setViewName("/company/ClaimCompanyPage");
+            }
         });
 
 
         return modelAndView;
     }
 
-//======================================================================================================================
-    private Boolean passwordsMatch(RegisterUserBinding userBinding){
+    //======================================================================================================================
+    private Boolean passwordsMatch(RegisterUserBinding userBinding) {
         return userBinding.getPassword().equals(userBinding.getConfirmPassword());
     }
 
-    private Boolean isUserUnique(RegisterUserBinding userBinding){
+    private Boolean isUserUnique(RegisterUserBinding userBinding) {
         return userService.findByUsername(userBinding.getUsername()).isEmpty();
     }
 
-    private Boolean isEmailUnique(RegisterUserBinding userBinding){
+    private Boolean isEmailUnique(RegisterUserBinding userBinding) {
         return userService.findByEmail(userBinding.getEmail()).isEmpty();
     }
 

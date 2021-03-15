@@ -25,13 +25,16 @@ public class BaseController {
     ModelMapper modelMapper;
     CurrentUserDTO currentUser;
 
+
     @ModelAttribute(value = "currentUser")
     public CurrentUserDTO fetchPrincipal(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
          currentUser = modelMapper.map(principal, CurrentUserDTO.class);
 
-
         return currentUser;
     }
+
+
+
 }

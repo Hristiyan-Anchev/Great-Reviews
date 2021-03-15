@@ -5,5 +5,5 @@ import greatreviews.grw.services.models.ClaimTokenServiceModel;
 
 public interface ClaimTokenService {
 
-    ClaimTokenEntity registerNewClaimToken(ClaimTokenServiceModel claimToken);
+    ClaimTokenEntity registerNewClaimToken(Long userId, ClaimTokenServiceModel claimToken);
 }

@@ -37,7 +37,10 @@
                 <h6 th:text="${currentCompany.website}" class="text-muted mt-3">www.website.com</h6>
                 <a th:href="|http://${currentCompany.website}|" class="badge badge-dark w-50 m-1" target="_blank" rel="noopener noreferrer">Visit website</a>
 
-                <a th:if="${!currentCompany.isVerified}" th:href="@{/users/claim(companyId=${currentCompany.id})}" class="badge badge-info w-50 m-1" >Claim business</a>
+                <a  th:if="${!currentCompany.isVerified && !isInProcess}" th:href="@{/users/claim(companyId=${currentCompany.id})}" class="badge badge-info w-50 m-1" >Claim business</a>
+
+                <span th:If="${currentCompany.isVerified}" class="badge badge-success">Verified</span>
+                <span th:If="${!currentCompany.isVerified && isInProcess}" class="badge badge-info">Verified</span>
             </div>
 
             <!--            address email phone-->

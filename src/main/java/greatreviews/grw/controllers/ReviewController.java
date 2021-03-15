@@ -37,6 +37,7 @@ import java.util.Set;
 public class ReviewController {
 
     CompanyService companyService;
+    CurrentUserDTO currentUser;
     ReviewService reviewService;
     ModelMapper modelMapper;
 
@@ -61,6 +62,14 @@ public class ReviewController {
             Set<ReviewViewModel> reviewsViewModel =
                     modelMapper.map(companyReviews, new TypeToken<Set<ReviewViewModel>>(){}.getType());
 
+            //check if user is in process of claiming this company
+            Boolean claimInProgressForUser = false;
+            if(currentUser.getId()!= null){
+               claimInProgressForUser = companyService.isClaimInProgressForUser(currentUser.getId(),companyId);
+            }
+
+
+        modelAndView.addObject("isInProcess",claimInProgressForUser);
         modelAndView.addObject("reviews",reviewsViewModel);
 
         modelAndView.setViewName("/company/CompanyReviewsPage");

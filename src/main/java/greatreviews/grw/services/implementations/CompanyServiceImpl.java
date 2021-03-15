@@ -2,11 +2,9 @@ package greatreviews.grw.services.implementations;
 
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.entities.CompanyEntity;
+import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.CompanyRepository;
-import greatreviews.grw.services.interfaces.CategoryService;
-import greatreviews.grw.services.interfaces.ClaimTokenService;
-import greatreviews.grw.services.interfaces.CompanyService;
-import greatreviews.grw.services.interfaces.SubcategoryService;
+import greatreviews.grw.services.interfaces.*;
 import greatreviews.grw.services.models.CompanyServiceModel;
 import greatreviews.grw.utilities.interfaces.Scraper;
 import lombok.*;
@@ -35,6 +33,7 @@ public class CompanyServiceImpl implements CompanyService {
     Scraper scraper;
     ModelMapper modelMapper;
     CompanyRepository companyRepository;
+    UserService userService;
     CategoryService categoryService;
     SubcategoryService subcategoryService;
     CurrentUserDTO currentUser;
@@ -123,6 +122,19 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     public CompanyEntity getCompanyEntityById(Long companyId) {
         return companyRepository.findCompanyEntityById(companyId).orElse(null);
+    }
+
+    @Override
+    public Boolean isClaimInProgressForUser(Long userId, Long companyId) {
+
+        UserEntity targetUser = userService.getUserEntityById(userId);
+        //check user claim tokens, if there is a token which companyId matches and the company isVerified==false
+        //then user is in process of claiming the company
+        boolean isInProcessForTargetUser = targetUser.getClaimTokens().stream().anyMatch(token -> {
+            return token.getCompany().getId().equals( companyId) && !token.getCompany().getIsVerified();
+        });
+
+        return isInProcessForTargetUser;
     }
 
 

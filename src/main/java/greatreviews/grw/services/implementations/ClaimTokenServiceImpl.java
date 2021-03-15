@@ -29,13 +29,14 @@ public class ClaimTokenServiceImpl implements ClaimTokenService {
     UserService userService;
     ModelMapper modelMapper;
 
-    public ClaimTokenEntity registerNewClaimToken(ClaimTokenServiceModel claimTokenServiceMode){
+    public ClaimTokenEntity registerNewClaimToken(Long userId, ClaimTokenServiceModel claimTokenServiceMode){
             var newClaimToken = modelMapper.map(claimTokenServiceMode,ClaimTokenEntity.class);
             //add company entity to claim token
             CompanyEntity targetCompany = companyService.getCompanyEntityById(claimTokenServiceMode.getCompanyId());
 
             //add user entity to claim token
-            UserEntity targetUser = userService.getUserEntityById(currentUser.getId());
+        // todo: check why currentUser holds no info
+            UserEntity targetUser = userService.getUserEntityById(userId);
 
             //set user that is claiming
             newClaimToken.setUser(targetUser);
