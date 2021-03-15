@@ -130,7 +130,6 @@ public class ReviewController {
             Optional<CurrentUserViewModel> currentUser = Optional.of(
                     (model.getAttribute("currentUser"))
             ).map((obj)->((CurrentUserViewModel)obj));
-
            Long userId = currentUser.map(CurrentUserViewModel::getId).orElse(0L);
 
 

@@ -31,102 +31,83 @@
 
         <h2 class="text-center text-nowrap">Here's what people say...</h2>
 
-        <div class="container">
-            <div class="row ">
-                <div class="col-sm">
+        <div class="container" >
+            <div class="row d-flex flex-wrap align-items-start justify-content-lg-center">
 
-                    <div class="media m-5">
-                        <a class="pr-3" href="/companies/profile/{id}">
-                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
+                <div class="col-sm  " th:each="r : ${latestReviews}" th:object="${r}">
+
+                    <div class="media m-5"  >
+                        <a class="pr-3" th:href="@{/companies/profile/{companyId}(companyId=*{companyId})}">
+                            <img class="mr-3" th:src="@{*{companyLogo}}" alt="Company logo" style="max-width: 64px; height: auto">
                         </a>
                         <div class="media-body">
-                            <h5 class="mt-0">Company name</h5>
+                            <h5 th:text="*{companyName} == null ? *{companyWebsite} : *{companyName}" class="mt-0">Company name</h5>
 
                             <div class="media mt-3">
 
-                                <div class="media-body">
+                                <div th:inline="text" class="media-body">
 
-                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
-                                    </h5>
-                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
-                                    necessitatibus.
+                                    <h5 class="mt-0"><a class="pr-3 text-dark" th:href="@{/users/profile/{userId}(userId=*{userId})}" th:text="*{userName}">John Doe</a>
+                                        <i th:if="*{vote == '1'}" class="far fa-thumbs-up text-success d-inline-block m-2" ></i>
+                                        <i th:if="*{vote == '-1'}" class="far fa-thumbs-down text-danger d-inline-block m-2"></i>
+                                    </h5 >
+                                    [[*{content} == '' ? *{title} : *{content}]]
+
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <br>
 
-                    <div class="media m-5">
-                        <a class="pr-3" href="/companies/profile/{id}">
-                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
-                        </a>
-                        <div class="media-body">
-                            <h5 class="mt-0">Company name</h5>
-
-                            <div class="media mt-3">
-
-                                <div class="media-body">
-
-                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
-                                    </h5>
-                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
-                                    necessitatibus.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <br>
 
                 </div>
-                <div class="col-sm ">
+<!--                <div class="col-sm ">-->
 
-                    <div class="media m-5">
-                        <a class="pr-3" href="/companies/profile/{id}">
-                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
-                        </a>
-                        <div class="media-body">
-                            <h5 class="mt-0">Company name</h5>
+<!--                    <div class="media m-5">-->
+<!--                        <a class="pr-3" href="/companies/profile/{id}">-->
+<!--                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">-->
+<!--                        </a>-->
+<!--                        <div class="media-body">-->
+<!--                            <h5 class="mt-0">Company name</h5>-->
 
-                            <div class="media mt-3">
+<!--                            <div class="media mt-3">-->
 
-                                <div class="media-body">
+<!--                                <div class="media-body">-->
 
-                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
-                                    </h5>
-                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
-                                    necessitatibus.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!--                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>-->
+<!--                                    </h5>-->
+<!--                                    Review content &#45;&#45; Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,-->
+<!--                                    necessitatibus.-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <br>
+<!--                    <br>-->
 
-                    <div class="media m-5">
-                        <a class="pr-3" href="/companies/profile/{id}">
-                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">
-                        </a>
-                        <div class="media-body">
-                            <h5 class="mt-0">Company name</h5>
+<!--                    <div class="media m-5">-->
+<!--                        <a class="pr-3" href="/companies/profile/{id}">-->
+<!--                            <img class="mr-3" src="https://via.placeholder.com/64" alt="Company logo">-->
+<!--                        </a>-->
+<!--                        <div class="media-body">-->
+<!--                            <h5 class="mt-0">Company name</h5>-->
 
-                            <div class="media mt-3">
+<!--                            <div class="media mt-3">-->
 
-                                <div class="media-body">
+<!--                                <div class="media-body">-->
 
-                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>
-                                    </h5>
-                                    Review content -- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,
-                                    necessitatibus.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+<!--                                    <h5 class="mt-0"><a class="pr-3 text-dark " href="/users/profile/{id}">John Doe</a>-->
+<!--                                    </h5>-->
+<!--                                    Review content &#45;&#45; Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae,-->
+<!--                                    necessitatibus.-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
 
-                    <br>
+<!--                    <br>-->
 
-                </div>
+<!--                </div>-->
 
             </div>
         </div>

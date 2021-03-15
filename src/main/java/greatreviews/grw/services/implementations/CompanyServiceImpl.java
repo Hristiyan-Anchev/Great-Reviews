@@ -64,6 +64,7 @@ public class CompanyServiceImpl implements CompanyService {
         String currentPageTitle = scraper.getCurrentPageTitle();
 
         if(currentPageTitle.isBlank() || companyRepository.findCompanyEntityByName(currentPageTitle).isPresent()){
+
             currentPageTitle = null;
         }
 

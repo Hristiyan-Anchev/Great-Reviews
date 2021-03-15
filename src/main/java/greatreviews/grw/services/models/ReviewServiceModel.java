@@ -12,15 +12,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewServiceModel {
-//    Long companyId;
+
+
     String created;
     String userName;
+    Long userId;
     Integer userReviewsCount;
     String userImageURL;
 
     String vote;
     String title;
     String content;
+
+    String companyName;
+    String companyLogo;
+    Long companyId;
+    String companyWebsite;
 
 
 }

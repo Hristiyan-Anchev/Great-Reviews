@@ -29,12 +29,15 @@ public class BeansConfig {
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
 
         configPropMappingReviewEntityReviewServiceModel(modelMapper);
+        configReviewServiceModelToReviewEntity(modelMapper);
         localDateTimeToStringConverter(modelMapper);
         companyEntToCompServModelVotesMap(modelMapper);
 
 
         return modelMapper;
     }
+
+
 
 
     @Bean
@@ -131,5 +134,16 @@ public class BeansConfig {
 
     }
 
+    private void configReviewServiceModelToReviewEntity(ModelMapper modelMapper) {
+        PropertyMap<ReviewServiceModel,ReviewEntity> serviceModelToEntityMap =
+                new PropertyMap<ReviewServiceModel, ReviewEntity>() {
+                    @Override
+                    protected void configure() {
+                        skip(destination.getId());
+                    }
+                };
+
+        modelMapper.addMappings(serviceModelToEntityMap);
+    }
 
 }

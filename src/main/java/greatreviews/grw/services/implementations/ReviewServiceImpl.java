@@ -44,6 +44,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Transactional
     public void addReview(ReviewServiceModel review,Long currentUserId, Long companyId) {
         ReviewEntity newReview = modelMapper.map(review,ReviewEntity.class);
+
+        //this is needed because modelMapper maps the companyId property to the ReviewEntity's id (unwanted behaviour)
+        newReview.setId(null);
+
         var targetCompany = companyRepository.findCompanyEntityById(companyId).orElse(null);
         var targetUser = userRepository.findById(currentUserId).orElse(null);
 
@@ -82,12 +86,13 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public Set<ReviewServiceModel> getLatestReviews(int reviewsCount) {
 
+        Set<ReviewServiceModel> reviewServiceModels = reviewRepository.getLatestReviews(PageRequest.of(0, reviewsCount,Sort.by("created").descending()))
+                .map(re -> {
+                    return modelMapper.map(re, ReviewServiceModel.class);
+                }).toSet();
 
-        reviewRepository.getLatestReviews( PageRequest.of(0,reviewsCount, Sort.Direction.DESC));
-
-
-
-        return null;
+        System.out.println(reviewServiceModels.toString());
+        return reviewServiceModels;
     }
 
 

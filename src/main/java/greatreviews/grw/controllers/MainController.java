@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping()
@@ -34,7 +35,12 @@ public class MainController {
 
     @ModelAttribute("latestReviews")
      private Set<ReviewViewModel> getLatestReviews(){
-        reviewService.getLatestReviews(4);
+        Set<ReviewViewModel> collect = reviewService.getLatestReviews(4).stream().map(r -> {
+            ReviewViewModel mapped = modelMapper.map(r, ReviewViewModel.class);
+            return mapped;
+        }).collect(Collectors.toSet());
+
+        return collect;
     }
 
     @GetMapping("/")

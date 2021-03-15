@@ -25,9 +25,9 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity,Long> {
     @Query("SELECT COUNT(r) FROM ReviewEntity r WHERE r.company.id = ?1 AND r.vote = '-1'")
     Long getCompanyDownVotesCount(Long companyId);
 
-    @Query("SELECT r FROM ReviewEntity r WHERE r.company.id = ?1")
+    @Query("SELECT r FROM ReviewEntity r WHERE r.company.id = ?1 ORDER BY r.created DESC")
     Set<ReviewEntity> getCompanyReviewsById(Long companyId);
 
-    @Query("SELECT r FROM ReviewEntity r ORDER BY r.created DESC ")
+    @Query("SELECT r FROM ReviewEntity r ORDER BY r.created DESC")
     Page<ReviewEntity> getLatestReviews(Pageable pageable);
 }

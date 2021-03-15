@@ -13,9 +13,10 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewViewModel {
 
-//    Long companyId;
+
     String created;
     String userName;
+    Long userId;
     Integer userReviewsCount;
     String userImageURL;
 
@@ -23,5 +24,9 @@ public class ReviewViewModel {
     String title;
     String content;
 
+    String companyName;
+    String companyLogo;
+    Long companyId;
+    String companyWebsite;
 
 }
