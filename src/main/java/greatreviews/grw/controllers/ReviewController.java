@@ -37,12 +37,13 @@ import java.util.Set;
 public class ReviewController {
 
     CompanyService companyService;
-    CurrentUserDTO currentUser;
+
     ReviewService reviewService;
     ModelMapper modelMapper;
 
     @GetMapping("/company")
-    public ModelAndView getCompanyReviews(@RequestParam(name = "of") Long companyId) {
+    public ModelAndView getCompanyReviews(Model model,@RequestParam(name = "of") Long companyId) {
+        CurrentUserDTO currentUser = ((CurrentUserDTO) model.getAttribute("currentUser"));
         var modelAndView = new ModelAndView("redirect:/categories");
 
         Optional<CompanyViewModel> companyViewModel = companyService.getCompanyById(companyId).map(companyServiceModel -> {
@@ -83,6 +84,7 @@ public class ReviewController {
     @PreAuthorize(value = "isAuthenticated()")
     @GetMapping("/company/evaluate")
     public ModelAndView getReviewForm(Model model, @RequestParam(name = "cid") Long companyId){
+        CurrentUserDTO currentUser = ((CurrentUserDTO) model.getAttribute("currentUser"));
         var modelAndView = new ModelAndView("redirect:/categories");
 
         if(!model.containsAttribute("review")){
@@ -92,6 +94,8 @@ public class ReviewController {
         //adding the current company stats
         Optional<CompanyViewModel> currentCompany =
                 companyService.getCompanyById(companyId).map(companyServiceModel -> modelMapper.map(companyServiceModel,CompanyViewModel.class));
+
+        modelAndView.addObject("isInProcess",companyService.isClaimInProgressForUser(currentUser.getId(),companyId));
 
         //passing company view model to template
         currentCompany.ifPresent(companyViewModel -> {

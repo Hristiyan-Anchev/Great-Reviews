@@ -112,7 +112,7 @@ public class CompanyController {
 
 
 
-        if (initialSize != filteredSize ) {
+        if (!initialSize.equals( filteredSize )) {
             bindingResult.rejectValue("", "problem.choosing.subcategory", "There was a problem choosing subcategories");
         }
 

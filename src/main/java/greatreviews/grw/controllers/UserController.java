@@ -2,6 +2,7 @@ package greatreviews.grw.controllers;
 
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
+import greatreviews.grw.entities.ClaimTokenEntity;
 import greatreviews.grw.services.interfaces.ClaimTokenService;
 import greatreviews.grw.services.interfaces.CompanyService;
 import greatreviews.grw.services.interfaces.UserService;
@@ -24,6 +25,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 @Getter
@@ -107,25 +110,34 @@ public class UserController {
 
                         String companyRawData = String.format("%s%d", tc.getWebsite(), tc.getId());
                         String currentUserRawData = currentUser.getEmail();
+                        String timestamp = String.valueOf(LocalDateTime.now().toEpochSecond(ZoneOffset.ofTotalSeconds(0)));
 
 
                 //generate company/user specific hash value
                 String claimTokenHashValue = DigestUtils
                         .md5DigestAsHex(
-                                (companyRawData + currentUserRawData).getBytes(StandardCharsets.UTF_8)
+                                (companyRawData + currentUserRawData + timestamp).getBytes(StandardCharsets.UTF_8)
                         );
 
-                claimTokenService.registerNewClaimToken(currentUser.getId(),
+                //todo: if such token value already exists dont add a new one
+                String registeredClaimTokenValue = claimTokenService.registerNewClaimToken(currentUser.getId(), companyId,
                         new ClaimTokenServiceModel(null, tc.getId(), null, claimTokenHashValue, false, false)
                 );
 
+
                 //add claim token to model
-                modelAndView.addObject("claimToken", claimTokenHashValue);
+                modelAndView.addObject("claimToken", registeredClaimTokenValue);
+
+                //add the html element as text so that thymeleaf can escape the markup
+                modelAndView.addObject("tokenMarkup",
+                        String.format("<meta name=\"great-reviews-one-time-domain-verification-id\" content= \"%s\">",
+                                registeredClaimTokenValue)
+                        );
 
                 //add company view-model
                 modelAndView.addObject("currentCompany", tc);
 
-                //todo: set view
+
                 modelAndView.setViewName("/company/ClaimCompanyPage");
             }
         });

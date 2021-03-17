@@ -74,6 +74,7 @@ public class CompanyServiceImpl implements CompanyService {
         //set default logo
         CompanyEntity newCompany = modelMapper.map(companyServiceModel, CompanyEntity.class);
         newCompany.setLogo("/images/big_biznis.png");
+        newCompany.setIsVerified(false);
 
 
 
