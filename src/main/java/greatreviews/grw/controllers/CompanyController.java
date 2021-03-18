@@ -1,4 +1,7 @@
 package greatreviews.grw.controllers;
+import greatreviews.grw.controllers.DTO.CurrentUserDTO;
+import greatreviews.grw.controllers.DTO.VerificationRequestDTO;
+import greatreviews.grw.controllers.DTO.VerificationResponseDTO;
 import greatreviews.grw.controllers.basecontrollers.BaseController;
 import greatreviews.grw.controllers.bindings.AddCompanyBinding;
 import greatreviews.grw.controllers.views.CategoryAndSubcategoriesViewModel;
@@ -14,19 +17,22 @@ import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
+import org.springframework.util.MultiValueMapAdapter;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Getter
@@ -167,9 +173,29 @@ public class CompanyController {
     }
 
 
+//todo
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/verify")
+public ResponseEntity<VerificationResponseDTO> verifyCompany(Model model, @RequestBody VerificationRequestDTO requestBody){
+        //scrape company website for token
+    CurrentUserDTO currentUser = (CurrentUserDTO)model.getAttribute("currentUser");
 
 
+    VerificationResponseDTO vrdto =
+            companyService.attemptVerificationFor(requestBody.getCompanyId(),currentUser.getId());
 
+        HttpHeaders headers = new HttpHeaders();
+
+        if(!vrdto.getVerificationSuccessful()){
+            return new ResponseEntity<VerificationResponseDTO>(vrdto,HttpStatus.OK);
+        }
+
+
+    return  new ResponseEntity<VerificationResponseDTO>(vrdto,HttpStatus.OK);
+}
+
+
+//======================================================================================================================
     //todo: refactor this to a custom exception
     @ExceptionHandler(IllegalArgumentException.class)
     public ModelAndView illegalCategoryHandler(){

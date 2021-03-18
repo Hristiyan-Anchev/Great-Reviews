@@ -9,7 +9,8 @@
 
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
-        <h1 th:text="|Three step process to claim ${currentCompany.name ?: currentCompany.website.substring(4)} |" class="display-4"> </h1>
+        <h1 th:text="|Three step process to claim ${currentCompany.name ?: currentCompany.website.substring(4)} |"
+            class="display-4"></h1>
 
     </div>
 </div>
@@ -18,15 +19,18 @@
     <div class="row d-flex justify-content-center flex-wrap">
         <div class="d-flex flex-column justify-content-center align-items-center m-5">
             <h1 class="text-center text-dark">1</h1>
-            <p class="m2" th:inline="text" >You need <b>root/admin</b> access to the server where <q>[[${currentCompany.website}]]</q> is hosted</p>
+            <p class="m2" th:inline="text">You need <b>root/admin</b> access to the server where <q>[[${currentCompany.website}]]</q>
+                is hosted</p>
         </div>
 
 
         <div class="row d-flex justify-content-center flex-wrap">
             <div class="d-flex flex-column justify-content-center align-items-center m-5 ">
                 <h1 class="text-center text-dark">2</h1>
-                <p class="text-wrap m-3">Put the following <b>&ltmeta&gt</b> tag inside the <b>&lthead&gt</b> tag of your website </p>
-                <blockquote  th:text="${tokenMarkup}" class="blockquote text-info m-2 bg-light p-3 rounded w-75 text-wrap  align-self-sm-start align-self-md-center align-self-lg-center">
+                <p class="text-wrap m-3">Put the following <b>&ltmeta&gt</b> tag inside the <b>&lthead&gt</b> tag of
+                    your website </p>
+                <blockquote th:text="${tokenMarkup}"
+                            class="blockquote text-info m-2 bg-light p-3 rounded w-75 text-wrap  align-self-sm-start align-self-md-center align-self-lg-center">
                 </blockquote>
             </div>
 
@@ -36,7 +40,8 @@
             <div class="d-flex flex-column justify-content-center align-items-center m-5 ">
                 <h1 class="text-center text-dark">3</h1>
                 <p>Click the button when you are ready to verify this business</p>
-                <button id="verify-business" type="button" class="btn btn-warning m-2">Verify business</button>
+                <p id="messageArea" class="text-info"></p>
+                <button id="verifyBusiness" type="button" class="btn btn-warning m-2">Verify business</button>
 
             </div>
         </div>
@@ -45,15 +50,52 @@
 </div>
 
 
-
-
 <th:block th:replace="Footer"></th:block>
 </body>
 
-<script>
+<script th:inline="javascript">
+
+
+    /*<![CDATA[*/
+
+
+    const verifyBtn = document.getElementById("verifyBusiness");
+    const messageAre = document.getElementById("messageArea")
+    const currentCompanyId =  /*[[${currentCompany.id}]]*/;
 
 
 
+    const headerValue = /*[[${_csrf.token}]]*/;
 
+
+
+    const clickVerifyBtnEvtHandler = async (evt) => {
+
+
+        let verificationResult = await (await fetch(`/companies/verify`, {
+            method: 'POST',
+            headers:{
+                'Content-Type':'application/json',
+            'X-CSRF-TOKEN':headerValue
+            },
+            body: JSON.stringify({companyId: currentCompanyId})
+        })).json();
+
+        verifyBtn.classList.remove("btn-warning");
+
+        messageAre.textContent = verificationResult.message;
+        verifyBtn.classList.add(verificationResult.verificationSuccessful === true ? "btn-success" : "btn-danger");
+        verifyBtn.textContent = verificationResult.verificationSuccessful === true ? "Success" : "Failure";
+
+        if(verificationResult.verificationSuccessful===true){
+            verifyBtn.removeEventListener("click",clickVerifyBtnEvtHandler);
+        }
+
+        console.log(verificationResult);
+    }
+
+
+    verifyBtn.addEventListener("click", clickVerifyBtnEvtHandler);
+    /*]]>*/
 </script>
 </html>

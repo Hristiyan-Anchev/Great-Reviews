@@ -28,7 +28,7 @@ public class CompanyEntity extends BaseEntity {
     }
 
     @Column(nullable = false, unique = true)
-    @Pattern(regexp = PatternEnum.Constants.VALID_URL_PATTERN)
+    @Pattern(regexp = PatternEnum.Constants.VALID_FQDN_PATTERN)
     String website;
 
     @Column(nullable = false, unique = true)

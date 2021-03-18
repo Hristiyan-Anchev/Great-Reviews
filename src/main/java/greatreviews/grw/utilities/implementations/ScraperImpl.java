@@ -30,13 +30,13 @@ public class ScraperImpl implements Scraper {
          * */
 
         if (!url.startsWith("http")) {
-                    url = "http://" + url;
+                    url = "https://" + url;
         }
         try{
             this.currentPage = Jsoup.connect(url).timeout(5 * 1000).get();
         } catch (Exception e){
             System.out.println("The following exception was thrown from Jsoup  :: ");
-            System.out.println();
+            System.out.println(e.getMessage());
         }
 
     }
@@ -76,6 +76,28 @@ public class ScraperImpl implements Scraper {
                                         .map(element -> element.attributes().get("content")).orElseGet(()-> "");
                             });
                 });
+
+        return result;
+    }
+
+    @Override
+    public String getElementAttributeByAnotherAttribute(String tagName, String searchByAttribute, String searchByAttributeValue, String targetAttribute) {
+        String result = "";
+
+        if(this.currentPage != null){
+            Elements elementsByAttributeValueMatching = this.currentPage.getElementsByAttributeValueMatching(searchByAttribute, searchByAttributeValue);
+            if(!elementsByAttributeValueMatching.isEmpty()){
+                Element element = elementsByAttributeValueMatching.get(0);
+
+                if(element.attributes().hasKey(targetAttribute)){
+                    String targetAttribValue = element.attributes().get(targetAttribute);
+                    result = targetAttribValue;
+
+                    }
+                }
+
+            }
+
 
         return result;
     }

@@ -1,5 +1,6 @@
 package greatreviews.grw.services.interfaces;
 
+import greatreviews.grw.controllers.DTO.VerificationResponseDTO;
 import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.services.models.CompanyServiceModel;
 
@@ -20,4 +21,6 @@ public interface CompanyService {
     CompanyEntity getCompanyEntityById(Long companyId);
 
     Boolean isClaimInProgressForUser(Long userId, Long companyId);
+
+    VerificationResponseDTO attemptVerificationFor(Long companyId, Long id);
 }

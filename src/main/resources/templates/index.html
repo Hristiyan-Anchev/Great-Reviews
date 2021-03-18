@@ -29,14 +29,18 @@
         </div>
         <br>
 
-        <h2 class="text-center text-nowrap">Here's what people say...</h2>
+        <h2 th:if="!${latestReviews.size() == 0} " class="text-center text-nowrap">Here's what people say...</h2>
+
+        <h2 th:if="${latestReviews.size() == 0}" class="text-center text-nowrap">
+            We have no reviews yet... feel free to add some!
+        </h2>
 
         <div class="container" >
             <div class="row d-flex flex-wrap align-items-start justify-content-lg-center">
 
                 <div class="col-sm  " th:each="r : ${latestReviews}" th:object="${r}">
 
-                    <div class="media m-5"  >
+                    <div class="media m-5" >
                         <a class="pr-3" th:href="@{/reviews/company(of=*{companyId})}">
                             <img class="mr-3" th:src="@{*{companyLogo}}" alt="Company logo" style="max-width: 64px; height: auto">
                         </a>

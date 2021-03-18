@@ -1,6 +1,8 @@
 package greatreviews.grw.services.implementations;
 
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
+import greatreviews.grw.controllers.DTO.VerificationResponseDTO;
+import greatreviews.grw.entities.ClaimTokenEntity;
 import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.CompanyRepository;
@@ -21,6 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -33,6 +36,7 @@ public class CompanyServiceImpl implements CompanyService {
     Scraper scraper;
     ModelMapper modelMapper;
     CompanyRepository companyRepository;
+//    ClaimTokenService claimTokenService; do not call this service here (circular dependency err)
     UserService userService;
     CategoryService categoryService;
     SubcategoryService subcategoryService;
@@ -136,6 +140,64 @@ public class CompanyServiceImpl implements CompanyService {
         });
 
         return isInProcessForTargetUser;
+    }
+
+    @Override
+    public VerificationResponseDTO attemptVerificationFor(Long companyId, Long userId) {
+        var response = new VerificationResponseDTO(false,"Something went wrong, please make sure that you have put the token in your website and is not expired!");
+        Optional<CompanyEntity> targetCompany = companyRepository.findCompanyEntityById(companyId);
+
+        targetCompany.ifPresent(tgcmp -> {
+            if(!tgcmp.getIsVerified()) {
+                Set<ClaimTokenEntity> userTokens = tgcmp.getClaimToken().stream().filter(token -> {
+                    return token.getUser().getId().equals(userId) && !token.getIsExpired() && !token.getIsVerified();
+                }).collect(Collectors.toSet());
+
+                if (!userTokens.isEmpty()) {
+                    Optional<ClaimTokenEntity> cte = userTokens.stream().findFirst();
+                    //get user and compare tokens from webpage and user's
+                    ClaimTokenEntity currentUserClaimToken = cte.get();
+
+                    //get token from webpage
+                    scraper.getPage(tgcmp.getWebsite());
+                    String websiteVerificationToken =
+                            scraper.getElementAttributeByAnotherAttribute("meta", "name", "great-reviews-one-time-domain-verification-id", "content");
+
+                    if (        //to verify a webpage uncomment this
+                            websiteVerificationToken.equals(currentUserClaimToken.getValue())
+
+                            //to pass verification every time put TRUE
+//                            true
+                    ) {
+                        //verify token and company
+                        tgcmp.setIsVerified(true);
+                        tgcmp.setOwner(currentUserClaimToken.getUser());
+                        currentUserClaimToken.setIsVerified(true);
+                        currentUserClaimToken.setIsExpired(true);
+
+
+                        //invalidate all other tokens for this company
+                        tgcmp.getClaimToken().stream().filter(t-> !(t.getId().equals(currentUserClaimToken.getId()) && t.getIsVerified()))
+                                .map(invalidToken -> {
+                                    invalidToken.setIsExpired(true);
+                                    return invalidToken;
+                                });
+
+                        companyRepository.save(tgcmp);
+
+
+                        response.setVerificationSuccessful(true);
+                        response.setMessage("Verification successful, you can now remove the token from the website.");
+                    }
+                }
+            }else{
+                response.setMessage("This company has already been verified");
+            }
+        });
+
+
+
+        return response;
     }
 
 

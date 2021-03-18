@@ -8,4 +8,5 @@ public interface Scraper {
      String getCurrentPageTitle();
      String getCurrentPageDescription();
 
+     String getElementAttributeByAnotherAttribute(String tagName, String searchByAttribute, String searchByAttributeValue, String targetAttribute);
 }
