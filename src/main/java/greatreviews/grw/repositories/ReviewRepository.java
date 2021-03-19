@@ -30,4 +30,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity,Long> {
 
     @Query("SELECT r FROM ReviewEntity r ORDER BY r.created DESC")
     Page<ReviewEntity> getLatestReviews(Pageable pageable);
+
+    @Query("SELECT r FROM ReviewEntity r WHERE r.user.id = ?1")
+    Set<ReviewEntity> getReviewsByUser(Long userId);
 }

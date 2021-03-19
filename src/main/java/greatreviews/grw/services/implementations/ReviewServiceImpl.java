@@ -1,6 +1,7 @@
 package greatreviews.grw.services.implementations;
 
 
+import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.ReviewEntity;
 import greatreviews.grw.repositories.CompanyRepository;
 import greatreviews.grw.repositories.ReviewRepository;
@@ -85,6 +86,19 @@ public class ReviewServiceImpl implements ReviewService {
 
         System.out.println(reviewServiceModels.toString());
         return reviewServiceModels;
+    }
+
+    @Override
+    public Set<ReviewServiceModel> getUserReviewsById(Long userId) {
+        Set<ReviewEntity> userReviews = reviewRepository.getReviewsByUser(userId);
+
+        Set<ReviewServiceModel> mappedReviews = modelMapper.map(
+                userReviews,
+                new TypeToken<Set<ReviewServiceModel>>(){}.getType()
+        );
+
+
+        return mappedReviews;
     }
 
 

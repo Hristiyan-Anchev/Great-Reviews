@@ -24,7 +24,12 @@ public class CustomUser extends User {
     *
     * */
 
+
+
     public CustomUser(){
+        // UGLY!!... dont do that
+//        we need a default no args constructor in order to instantiate this class
+//        the values passed to super() are then re-assigned with new ones
         super("null","null",new HashSet<GrantedAuthority>(List.of(new RoleEntity())));
     }
 
@@ -43,7 +48,7 @@ public class CustomUser extends User {
         this.location = location;
     }
 
-    public CustomUser(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities, Long id, LocalDateTime created, Boolean isDeleted, String email, String password1, Boolean enabled1, String imageURL, String username1, LocalDate birthDate, LocationEnum location) {
+    public CustomUser(String username, String password, boolean enabled, boolean accountNonExpired, boolean credentialsNonExpired, boolean accountNonLocked, Collection<? extends GrantedAuthority> authorities, Long id, LocalDateTime created, Boolean isDeleted, String email, String password1, Boolean enabled1, String imageURL, String username1, LocalDate birthDate, LocationEnum location,Boolean hasCompanies) {
         super(username, password, enabled, accountNonExpired, credentialsNonExpired, accountNonLocked, authorities);
         this.id = id;
         this.created = created;
@@ -55,6 +60,7 @@ public class CustomUser extends User {
         this.username = username1;
         this.birthDate = birthDate;
         this.location = location;
+        this.hasCompanies = hasCompanies;
     }
 
 
@@ -70,17 +76,21 @@ public class CustomUser extends User {
 
     Boolean enabled;
 
-
     String imageURL;
-
 
     String username;
 
-
     LocalDate birthDate;
-
 
     LocationEnum location;
 
+    Boolean hasCompanies;
 
+    Set<RoleEntity> roles;
+
+
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        return new ArrayList<GrantedAuthority>(this.roles);
+    }
 }

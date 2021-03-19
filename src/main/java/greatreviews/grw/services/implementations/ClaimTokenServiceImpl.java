@@ -3,10 +3,12 @@ package greatreviews.grw.services.implementations;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.entities.ClaimTokenEntity;
 import greatreviews.grw.entities.CompanyEntity;
+import greatreviews.grw.entities.RoleEntity;
 import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.ClaimTokenRepository;
 import greatreviews.grw.services.interfaces.ClaimTokenService;
 import greatreviews.grw.services.interfaces.CompanyService;
+import greatreviews.grw.services.interfaces.RoleService;
 import greatreviews.grw.services.interfaces.UserService;
 import greatreviews.grw.services.models.ClaimTokenServiceModel;
 import lombok.*;
@@ -28,7 +30,7 @@ import java.util.stream.Collectors;
 public class ClaimTokenServiceImpl implements ClaimTokenService {
 
     ClaimTokenRepository claimTokenRepository;
-//    CurrentUserDTO currentUser;
+    RoleService roleService;
     CompanyService companyService;
     UserService userService;
     ModelMapper modelMapper;
@@ -60,6 +62,8 @@ public class ClaimTokenServiceImpl implements ClaimTokenService {
                 //set the company for this token
                 newClaimToken.setCompany(targetCompany);
 
+                //todo make role service work with userDTO instead of entity
+                roleService.setRole(targetUser.getId(),"ROLE_OWNER");
 
                 claimTokenRepository.saveAndFlush(newClaimToken);
                 return newClaimToken.getValue();

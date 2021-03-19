@@ -2,9 +2,10 @@ package greatreviews.grw.controllers;
 
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
-import greatreviews.grw.entities.ClaimTokenEntity;
+import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.services.interfaces.ClaimTokenService;
 import greatreviews.grw.services.interfaces.CompanyService;
+import greatreviews.grw.services.interfaces.ReviewService;
 import greatreviews.grw.services.interfaces.UserService;
 import greatreviews.grw.services.models.ClaimTokenServiceModel;
 import greatreviews.grw.services.models.CompanyServiceModel;
@@ -12,7 +13,9 @@ import greatreviews.grw.services.models.UserServiceModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +31,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -40,9 +44,8 @@ public class UserController {
 
     UserService userService;
     CompanyService companyService;
-
+    ReviewService reviewService;
     ClaimTokenService claimTokenService;
-
     PasswordEncoder passwordEncoder;
     ModelMapper modelMapper;
 
@@ -99,6 +102,7 @@ public class UserController {
     }
 
     @GetMapping("/claim")
+    @PreAuthorize("isAuthenticated()")
     public ModelAndView getClaimBussinessPage(Model model, @RequestParam(name = "companyId") Long companyId) {
         var modelAndView = new ModelAndView("redirect:/categories");
 
@@ -119,7 +123,7 @@ public class UserController {
                                 (companyRawData + currentUserRawData + timestamp).getBytes(StandardCharsets.UTF_8)
                         );
 
-                //todo: if such token value already exists dont add a new one
+
                 String registeredClaimTokenValue = claimTokenService.registerNewClaimToken(currentUser.getId(), companyId,
                         new ClaimTokenServiceModel(null, tc.getId(), null, claimTokenHashValue, false, false)
                 );
@@ -146,6 +150,23 @@ public class UserController {
         return modelAndView;
     }
 
+    //todo add users reviews
+
+    @GetMapping("/reviews")
+    public ModelAndView getUserReviews(Model model, @RequestParam(name = "usrid") Long userId){
+        ModelAndView modelAndView = new ModelAndView("/review/ReviewsFromUser");
+
+
+        Set<ReviewViewModel> userReviews = modelMapper.map(reviewService.getUserReviewsById(userId),
+            new TypeToken<Set<ReviewViewModel>>(){}.getType()
+        );
+
+        modelAndView.addObject("reviews",userReviews);
+        modelAndView.addObject("targetUser",userService.getUserNameById(userId));
+
+       return modelAndView;
+
+    }
     //======================================================================================================================
     private Boolean passwordsMatch(RegisterUserBinding userBinding) {
         return userBinding.getPassword().equals(userBinding.getConfirmPassword());

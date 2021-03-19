@@ -52,6 +52,12 @@ public class UserEntity extends BaseUser
     @OneToMany(mappedBy = "user")
     Set<ClaimTokenEntity> claimTokens;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+            @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),inverseJoinColumns = @JoinColumn(name = "role_id")
+            )
+    Set<RoleEntity> roles;
+
 
 
 //    @Override

@@ -33,7 +33,6 @@ public class BeansConfig {
         localDateTimeToStringConverter(modelMapper);
         companyEntToCompServModelVotesMap(modelMapper);
 
-
         return modelMapper;
     }
 
@@ -51,9 +50,11 @@ public class BeansConfig {
         return new Pbkdf2PasswordEncoder();
     }
 
-    private void configPropMappingReviewEntityReviewServiceModel(ModelMapper modelMapper) {
+
+        private void configPropMappingReviewEntityReviewServiceModel(ModelMapper modelMapper) {
         modelMapper.typeMap(ReviewEntity.class, ReviewServiceModel.class)
                 .addMappings(new PropertyMap<ReviewEntity, ReviewServiceModel>() {
+
                     @Override
                     protected void configure() {
                         map().setUserReviewsCount(
@@ -95,7 +96,6 @@ public class BeansConfig {
                    public Long convert(MappingContext<Set<ReviewEntity>, Long> context) {
                        Long upvotesCount = context.getSource().stream().filter(r->r.getVote().equals("1"))
                                .count();
-
                        return upvotesCount;
                    }
                };
@@ -145,5 +145,7 @@ public class BeansConfig {
 
         modelMapper.addMappings(serviceModelToEntityMap);
     }
+
+
 
 }

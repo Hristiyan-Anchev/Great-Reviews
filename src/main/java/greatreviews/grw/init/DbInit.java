@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import greatreviews.grw.entities.*;
 import greatreviews.grw.enums.LocationEnum;
 import greatreviews.grw.init.dto.CategoryDTO;
-import greatreviews.grw.repositories.CategoryRepository;
-import greatreviews.grw.repositories.RoleRepository;
-import greatreviews.grw.repositories.SubcategoryRepository;
-import greatreviews.grw.repositories.UserRepository;
+import greatreviews.grw.repositories.*;
+import greatreviews.grw.services.interfaces.CompanyService;
+import greatreviews.grw.services.interfaces.RoleService;
+import greatreviews.grw.services.models.CompanyServiceModel;
 import greatreviews.grw.utilities.TextFileParser;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -46,10 +46,14 @@ public class DbInit implements CommandLineRunner {
     public static final Logger LOGGER = LoggerFactory.getLogger(DbInit.class);
 
     RoleRepository roleRepository;
+    RoleService roleService;
     CategoryRepository categoryRepository;
     SubcategoryRepository subcategoryRepository;
+    CompanyService companyService;
+    CompanyRepository companyRepository;
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
+
 
     TextFileParser textFileParser;
     Gson gson;
@@ -63,6 +67,7 @@ public class DbInit implements CommandLineRunner {
         initRoles();
         initCategories();
         initDefaultUser();
+        initTestCompany();
 
 
 
@@ -74,11 +79,32 @@ public class DbInit implements CommandLineRunner {
 
     }
 
+    private void initTestCompany() {
+        if(companyRepository.count() == 0) {
+            companyService.registerCompany(new CompanyServiceModel(
+                    1L,
+                    "somemail@mail.com",
+                    "www.asd.bg",
+                    "Main Street 1",
+                    "",
+                    false,
+                    1L,
+                    2L,
+                    3L,
+                    4L,
+                    "TEST COMPANY",
+                    "",
+                    0L,
+                    0L
+            ));
+        }
+    }
 
 
+    @Transactional
     private void initDefaultUser() {
         if(userRepository.count() == 0) {
-            userRepository.saveAndFlush(new UserEntity(
+            var user = new UserEntity(
                     "test@mail.com",
                     passwordEncoder.encode("passwd1"),
                     true,
@@ -89,7 +115,10 @@ public class DbInit implements CommandLineRunner {
                     LocationEnum.GBR,
                     new HashSet<CompanyEntity>(),
                     new HashSet<ReviewEntity>()
-            ));
+            );
+            userRepository.saveAndFlush(user);
+
+            roleService.setRole(user.getId(),"ROLE_USER");
         }
 
     }

@@ -11,10 +11,12 @@ import org.springframework.stereotype.Component;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Component
 public class CurrentUserDTO {
+
     Long id;
     String username;
     String email;
     String imageURL;
+    Boolean hasCompanies;
 
     @Override
     public String toString() {

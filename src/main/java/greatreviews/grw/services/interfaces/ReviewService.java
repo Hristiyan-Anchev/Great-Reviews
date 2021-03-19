@@ -1,6 +1,9 @@
 package greatreviews.grw.services.interfaces;
 
+import greatreviews.grw.controllers.views.ReviewViewModel;
+import greatreviews.grw.entities.ReviewEntity;
 import greatreviews.grw.services.models.ReviewServiceModel;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.Set;
 
@@ -16,4 +19,7 @@ public interface ReviewService {
     Set<ReviewServiceModel> getCompanyReviews(Long companyId);
 
     Set<ReviewServiceModel> getLatestReviews(int i);
+
+
+    Set<ReviewServiceModel> getUserReviewsById(Long userId);
 }

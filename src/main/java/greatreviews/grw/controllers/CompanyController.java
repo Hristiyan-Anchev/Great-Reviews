@@ -1,5 +1,6 @@
 package greatreviews.grw.controllers;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
+import greatreviews.grw.controllers.DTO.SearchCompanyBinding;
 import greatreviews.grw.controllers.DTO.VerificationRequestDTO;
 import greatreviews.grw.controllers.DTO.VerificationResponseDTO;
 import greatreviews.grw.controllers.basecontrollers.BaseController;
@@ -176,7 +177,7 @@ public class CompanyController {
 //todo
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/verify")
-public ResponseEntity<VerificationResponseDTO> verifyCompany(Model model, @RequestBody VerificationRequestDTO requestBody){
+    public ResponseEntity<VerificationResponseDTO> verifyCompany(Model model, @RequestBody VerificationRequestDTO requestBody){
         //scrape company website for token
     CurrentUserDTO currentUser = (CurrentUserDTO)model.getAttribute("currentUser");
 
@@ -193,6 +194,28 @@ public ResponseEntity<VerificationResponseDTO> verifyCompany(Model model, @Reque
 
     return  new ResponseEntity<VerificationResponseDTO>(vrdto,HttpStatus.OK);
 }
+
+
+    @GetMapping("/search")
+    public ModelAndView showSearchResult(@ModelAttribute SearchCompanyBinding searchString){
+        var modelAndView = new ModelAndView("/company/CompanySearchResult");
+        Set<CompanyServiceModel> companies = companyService.getCompanyContaining(searchString.getSearch());
+
+        Set<CompanyViewModel> mappedCompanies = modelMapper.map(companies,
+                new TypeToken<Set<CompanyViewModel>>() {
+                }.getType()
+        );
+
+
+        modelAndView
+                .addObject("companies",mappedCompanies);
+        modelAndView
+                .addObject("searchString",searchString.getSearch());
+
+
+        return modelAndView;
+    }
+
 
 
 //======================================================================================================================

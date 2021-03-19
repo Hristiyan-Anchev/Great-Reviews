@@ -2,15 +2,19 @@ package greatreviews.grw.services.implementations;
 
 import greatreviews.grw.config.authentication.CustomUser;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
+import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.CompanyEntity;
+import greatreviews.grw.entities.ReviewEntity;
 import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.RoleRepository;
 import greatreviews.grw.repositories.UserRepository;
+import greatreviews.grw.services.interfaces.ReviewService;
 import greatreviews.grw.services.interfaces.UserService;
 import greatreviews.grw.services.models.UserServiceModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,6 +38,8 @@ public class UserServiceImpl implements UserService {
 
     RoleRepository roleRepository;
     UserRepository userRepository;
+    ReviewService reviewService;
+
     ModelMapper modelMapper;
 
 
@@ -65,17 +72,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserEntity getUserEntityById(Long id) {
-        return userRepository.findById(id).orElse(null);
 
+        return userRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public String getUserNameById(Long userId) {
+        var targetUser = userRepository.findById(userId);
+
+        return targetUser.map(tu->{
+            return tu.getUsername();
+        }).orElse("");
+    }
+
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         UserEntity userEntity = userRepository.findByEmail(email).orElseGet(()-> null);
-
+        //get Authorities
         //shell object
         CustomUser cu = modelMapper.map(userEntity,CustomUser.class);
+        cu.setHasCompanies(userEntity.getCompanies().size() > 0);
+
 
         return cu;
 

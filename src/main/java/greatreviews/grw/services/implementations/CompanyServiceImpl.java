@@ -1,6 +1,7 @@
 package greatreviews.grw.services.implementations;
 
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
+import greatreviews.grw.controllers.DTO.SearchCompanyBinding;
 import greatreviews.grw.controllers.DTO.VerificationResponseDTO;
 import greatreviews.grw.entities.ClaimTokenEntity;
 import greatreviews.grw.entities.CompanyEntity;
@@ -12,6 +13,7 @@ import greatreviews.grw.utilities.interfaces.Scraper;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -163,12 +165,14 @@ public class CompanyServiceImpl implements CompanyService {
                     String websiteVerificationToken =
                             scraper.getElementAttributeByAnotherAttribute("meta", "name", "great-reviews-one-time-domain-verification-id", "content");
 
-                    if (        //to verify a webpage uncomment this
-                            websiteVerificationToken.equals(currentUserClaimToken.getValue())
 
-                            //to pass verification every time put TRUE
-//                            true
+                    if (        //to verify the actual  webpage uncomment this
+//                            websiteVerificationToken.equals(currentUserClaimToken.getValue())
+
+                            //to pass verification every time put TRUE - for dev purposes only
+                            true
                     ) {
+
                         //verify token and company
                         tgcmp.setIsVerified(true);
                         tgcmp.setOwner(currentUserClaimToken.getUser());
@@ -195,9 +199,20 @@ public class CompanyServiceImpl implements CompanyService {
             }
         });
 
-
-
         return response;
+    }
+
+
+    @Override
+    public Set<CompanyServiceModel> getCompanyContaining(String searchString) {
+        Set<CompanyEntity> companiesBySearchString = companyRepository.getCompaniesBySearchString(searchString);
+
+        Set<CompanyServiceModel> mappedCompanies =  modelMapper.map(companiesBySearchString,
+                new TypeToken<Set<CompanyServiceModel>>(){}.getType()
+                );
+
+
+        return mappedCompanies;
     }
 
 
