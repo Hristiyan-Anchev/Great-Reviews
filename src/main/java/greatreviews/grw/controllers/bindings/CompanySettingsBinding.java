@@ -5,24 +5,28 @@ import greatreviews.grw.controllers.views.SubcategoryViewModel;
 import greatreviews.grw.enums.PatternEnum;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.validator.constraints.Length;
 
-import javax.annotation.Nullable;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AddCompanyBinding {
+public class CompanySettingsBinding {
 
-    public AddCompanyBinding(@Pattern(regexp = PatternEnum.Constants.EMAIL_PATTERN, message = "Malformed email") String email, @Pattern(regexp = PatternEnum.Constants.VALID_URL_PATTERN, message = "Malformed URL") String website, String address) {
+    public CompanySettingsBinding(@Pattern(regexp = PatternEnum.Constants.EMAIL_PATTERN, message = "Malformed email") String email, @Pattern(regexp = PatternEnum.Constants.VALID_FQDN_PATTERN, message = "Malformed domain") String website, String address) {
         this.email = email;
         this.website = website;
         this.address = address;
     }
 
-
+    @Min(1)
+    Long id;
 
     @Pattern(regexp = PatternEnum.Constants.EMAIL_PATTERN,message = "Malformed email")
     String email;
@@ -46,10 +50,13 @@ public class AddCompanyBinding {
     Long thirdSubcategory;
 
     //populated in controller by scraping this.website
+    @Length(max = 5000)
     String shortDescription;
 
     //populated in controller by scraping this.website
     String name;
+
+    String logo;
 
     List<CategoryViewModel> allCategories;
     List<SubcategoryViewModel> allSubcategories;

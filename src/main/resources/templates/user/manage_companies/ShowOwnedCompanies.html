@@ -1,0 +1,46 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+
+<th:block th:replace="head"></th:block>
+
+<body>
+<th:block th:replace="Header">
+
+</th:block>
+
+<div class="d-flex flex-column  align-items-center  mt-5 min-vh-100">
+    <h3 th:if="${companies.size() > 0}" class="m-5" th:text='|All companies owned by "${currentUser.username}"|'></h3>
+
+    <div  class="container-fluid d-flex justify-content-center flex-wrap align-items-center">
+
+        <div
+                th:each="c : *{companies}"
+                class="card m-5" style="width: 18rem;">
+            <img class="card-img-top" th:src="@{${c.logo}}" alt="Card image cap">
+            <div class="card-body">
+                <h5 th:text="${c.name} ?: *{c.website.substring(4)}" class="card-title">Company name</h5>
+                <p class="card-text">
+                    <i class="far fa-thumbs-up text-success m-2"></i> <span th:text="${c.upVotesCount}"></span>
+                    <i class="far fa-thumbs-down text-danger m-2"></i> <span th:text="${c.downVotesCount}"></span>
+                </p>
+            </div>
+
+            <div class="card-body d-flex flex-row flex-wrap align-items-center justify-content-center">
+                <a th:href="@{/reviews/company(of=*{c.id})}" class="card-link text-nowrap">Go to reviews</a>
+                <a th:href="|http://*{c.website}|" class="card-link text-nowrap" target="_blank" rel="noopener noreferrer">Visit website</a>
+                <a th:href="@{/companies/settings(id=*{c.id})}" class="card-link">Manage</a>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="Footer">
+
+</th:block>
+</body>
+</html>

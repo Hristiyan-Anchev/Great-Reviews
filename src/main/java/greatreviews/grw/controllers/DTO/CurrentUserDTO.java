@@ -4,6 +4,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,6 +19,7 @@ public class CurrentUserDTO {
     String email;
     String imageURL;
     Boolean hasCompanies;
+    List<Long> ownedCompanies;
 
     @Override
     public String toString() {

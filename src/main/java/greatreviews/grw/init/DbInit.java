@@ -11,6 +11,7 @@ import greatreviews.grw.services.models.CompanyServiceModel;
 import greatreviews.grw.utilities.TextFileParser;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.cfg.Environment;
 import org.modelmapper.TypeToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class DbInit implements CommandLineRunner {
     public static final String SEED_DIR = "src/main/resources/dbseed/";
 
     public static final Logger LOGGER = LoggerFactory.getLogger(DbInit.class);
-
+    org.springframework.core.env.Environment env;
     RoleRepository roleRepository;
     RoleService roleService;
     CategoryRepository categoryRepository;
@@ -102,7 +103,7 @@ public class DbInit implements CommandLineRunner {
 
 
     @Transactional
-    private void initDefaultUser() {
+    protected void initDefaultUser() {
         if(userRepository.count() == 0) {
             var user = new UserEntity(
                     "test@mail.com",
@@ -237,13 +238,7 @@ public class DbInit implements CommandLineRunner {
     }
 
     private void testMessageDigestApi() throws NoSuchAlgorithmException {
-//        String s = DigestUtils.md5DigestAsHex("Hello how are you".getBytes(StandardCharsets.UTF_8));
-//
-////        System.out.println(
-////
-////      .equals("2953d33828c395aebe8225236ba4e23fa75e6f13bd881b9056a3295cbd64d3")
-////);
-//        System.out.println();
+//        System.out.println(env.getProperty("CLOUDINARY_URL"));
     }
 
 

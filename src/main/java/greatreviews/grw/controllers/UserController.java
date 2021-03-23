@@ -2,6 +2,7 @@ package greatreviews.grw.controllers;
 
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
+import greatreviews.grw.controllers.views.CompanyViewModel;
 import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.services.interfaces.ClaimTokenService;
 import greatreviews.grw.services.interfaces.CompanyService;
@@ -128,7 +129,6 @@ public class UserController {
                         new ClaimTokenServiceModel(null, tc.getId(), null, claimTokenHashValue, false, false)
                 );
 
-
                 //add claim token to model
                 modelAndView.addObject("claimToken", registeredClaimTokenValue);
 
@@ -167,6 +167,27 @@ public class UserController {
        return modelAndView;
 
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/manage/companies")
+    public ModelAndView getManagedCompanies(Model model){
+        CurrentUserDTO currentUser = ((CurrentUserDTO) model.getAttribute("currentUser"));
+
+        var modelAndView = new ModelAndView("/user/manage_companies/ShowOwnedCompanies");
+
+      Set<CompanyServiceModel> userCompanies = companyService.getCompaniesOwnedBy(currentUser.getId());
+
+        modelAndView.addObject("companies",
+              modelMapper.map(userCompanies,
+                      new TypeToken<Set<CompanyViewModel>>(){}.getType()
+                      )
+              );
+
+
+        return modelAndView;
+    }
+
+
     //======================================================================================================================
     private Boolean passwordsMatch(RegisterUserBinding userBinding) {
         return userBinding.getPassword().equals(userBinding.getConfirmPassword());

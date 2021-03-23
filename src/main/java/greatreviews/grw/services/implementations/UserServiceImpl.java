@@ -93,7 +93,8 @@ public class UserServiceImpl implements UserService {
         //get Authorities
         //shell object
         CustomUser cu = modelMapper.map(userEntity,CustomUser.class);
-        cu.setHasCompanies(userEntity.getCompanies().size() > 0);
+//        cu.setHasCompanies(userEntity.getCompanies().size() > 0);
+
 
 
         return cu;

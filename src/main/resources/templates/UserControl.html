@@ -12,17 +12,17 @@
             Action
         </button>
 
-        <div class="dropdown-menu">
+        <div id="userControlDropdown" class="dropdown-menu">
 
 
             <a sec:authorize="isAuthenticated()" class="dropdown-item" href="/companies/add">Add company</a>
 
             <a sec:authorize="hasRole('ROLE_USER')" class="dropdown-item" th:href="@{/users/reviews(usrid=${currentUser.getId()})}">My Reviews</a>
 
-            <a sec:authorize="isAuthenticated()" class="dropdown-item" href="/users/settings">Personal settings</a>
+            <a id="personalSettings" sec:authorize="isAuthenticated()" class="dropdown-item" href="/users/settings">Personal settings</a>
 
 <!--            todo if user owns any companies-->
-            <a sec:authorize="hasRole('ROLE_OWNER')" class="dropdown-item" href="/users/companies">Manage companies</a>
+            <a sec:authorize="hasRole('ROLE_OWNER')" class="dropdown-item" href="/users/manage/companies">Manage companies</a>
 
 <!--            todo if user is an employee-->
             <a sec:authorize="hasRole('ROLE_EMPLOYEE')" class="dropdown-item" href="/employees/controls"

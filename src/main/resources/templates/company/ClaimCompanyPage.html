@@ -59,8 +59,9 @@
     /*<![CDATA[*/
 
 
+
     const verifyBtn = document.getElementById("verifyBusiness");
-    const messageAre = document.getElementById("messageArea")
+    const uploadMessageArea = document.getElementById("messageArea")
     const currentCompanyId =  /*[[${currentCompany.id}]]*/;
 
 
@@ -70,32 +71,56 @@
 
 
     const clickVerifyBtnEvtHandler = async (evt) => {
-
+        const toArrayLike = (arrayToConvert) => {
+            let retVal = {};
+            Object.keys(arrayToConvert).forEach(function (key) {
+                retVal[key] = arrayToConvert[key];
+            });
+            return retVal
+        }
 
         let verificationResult = await (await fetch(`/companies/verify`, {
             method: 'POST',
-            headers:{
-                'Content-Type':'application/json',
-            'X-CSRF-TOKEN':headerValue
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': headerValue
             },
             body: JSON.stringify({companyId: currentCompanyId})
         })).json();
 
         verifyBtn.classList.remove("btn-warning");
 
-        messageAre.textContent = verificationResult.message;
+        uploadMessageArea.textContent = verificationResult.message;
         verifyBtn.classList.add(verificationResult.verificationSuccessful === true ? "btn-success" : "btn-danger");
         verifyBtn.textContent = verificationResult.verificationSuccessful === true ? "Success" : "Failure";
 
-        if(verificationResult.verificationSuccessful===true){
-            verifyBtn.removeEventListener("click",clickVerifyBtnEvtHandler);
-        }
+        if (verificationResult.verificationSuccessful === true) {
+            verifyBtn.removeEventListener("click", clickVerifyBtnEvtHandler);
+            let tempAnchor = document.createElement("a");
+            tempAnchor.classList.add("dropdown-item");
+            tempAnchor.href = "/users/manage/companies";
+            tempAnchor.text = "Manage companies"
 
-        console.log(verificationResult);
+            //fix adding Manage Companies via JS
+            let userControlDropdown = document.getElementById("userControlDropdown");
+            let uc = userControlDropdown.children
+            let dropdownChildren = Array.from(uc);
+            let indexOfPersonalSettings = 0;
+            dropdownChildren.forEach((el, idx) => {
+                if (el.id === "personalSettings") {
+                    indexOfPersonalSettings = idx;
+                }
+            });
+
+            let arrLikeChildren = toArrayLike(dropdownChildren.splice(indexOfPersonalSettings, 0, tempAnchor));
+            console.log(arrLikeChildren);
+            userControlDropdown.children = arrLikeChildren;
+
+        }
     }
 
+        verifyBtn.addEventListener("click", clickVerifyBtnEvtHandler);
 
-    verifyBtn.addEventListener("click", clickVerifyBtnEvtHandler);
     /*]]>*/
 </script>
 </html>

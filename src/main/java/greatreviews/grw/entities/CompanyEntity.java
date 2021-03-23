@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -20,7 +21,7 @@ import java.util.Set;
 //@NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
+@DynamicUpdate
 public class CompanyEntity extends BaseEntity {
 
     public CompanyEntity() {
@@ -73,9 +74,6 @@ public class CompanyEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "company")
     Set<ReviewEntity> reviews;
-
-//    @OneToMany(mappedBy = "company")
-//    Set<ClaimTokenEntity> claimTokens;
 
 
 }

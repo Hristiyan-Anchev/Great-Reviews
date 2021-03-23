@@ -8,6 +8,9 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SearchCompanyBinding {
-    String search;
+public class ImageUploadResponseDTO {
+
+    String message;
+    Boolean uploadSuccessful;
+    String newLogoUrl;
 }

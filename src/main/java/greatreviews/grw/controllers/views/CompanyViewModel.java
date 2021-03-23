@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompanyViewModel {
-
+    
     Long id;
     String website;
     String email;

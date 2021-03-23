@@ -1,6 +1,5 @@
 package greatreviews.grw.repositories;
 
-import greatreviews.grw.controllers.DTO.SearchCompanyBinding;
 import greatreviews.grw.entities.CompanyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +20,7 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Long> {
     @Query("SELECT c FROM CompanyEntity c WHERE c.name LIKE CONCAT('%',?1,'%') OR c.website LIKE CONCAT('%',?1,'%')")
     Set<CompanyEntity> getCompaniesBySearchString(String searchString);
 
+    Set<CompanyEntity> findCompanyEntitiesByOwnerId(Long ownerId);
 
 //    @Query("SELECT company FROM CategoryEntity company JOIN ")
 //    Set<CompanyEntity> findCompaniesBySubcategoryId(Long id);

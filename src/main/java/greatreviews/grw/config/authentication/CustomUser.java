@@ -88,9 +88,12 @@ public class CustomUser extends User {
 
     Set<RoleEntity> roles;
 
+    List<Long> ownedCompanies;
+
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
+
         return new ArrayList<GrantedAuthority>(this.roles);
     }
 }

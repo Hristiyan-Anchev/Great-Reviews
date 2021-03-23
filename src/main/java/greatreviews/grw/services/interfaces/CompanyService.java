@@ -1,9 +1,11 @@
 package greatreviews.grw.services.interfaces;
 
-import greatreviews.grw.controllers.DTO.SearchCompanyBinding;
+import greatreviews.grw.controllers.DTO.ImageUploadResponseDTO;
 import greatreviews.grw.controllers.DTO.VerificationResponseDTO;
+import greatreviews.grw.controllers.bindings.CompanySettingsBinding;
 import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.services.models.CompanyServiceModel;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.Set;
@@ -27,4 +29,10 @@ public interface CompanyService {
     VerificationResponseDTO attemptVerificationFor(Long companyId, Long id);
 
     Set<CompanyServiceModel> getCompanyContaining(String searchString);
+
+    Set<CompanyServiceModel> getCompaniesOwnedBy(Long id);
+
+    void updateCompanyDetails(CompanySettingsBinding companySettingsBinding);
+
+    ImageUploadResponseDTO uploadLogo(Long companyId, MultipartFile file);
 }

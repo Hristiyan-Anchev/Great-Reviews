@@ -15,6 +15,9 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.Timestamp;
@@ -30,7 +33,7 @@ import java.util.stream.Collectors;
 public class ClaimTokenServiceImpl implements ClaimTokenService {
 
     ClaimTokenRepository claimTokenRepository;
-    RoleService roleService;
+//    RoleService roleService;
     CompanyService companyService;
     UserService userService;
     ModelMapper modelMapper;
@@ -62,10 +65,11 @@ public class ClaimTokenServiceImpl implements ClaimTokenService {
                 //set the company for this token
                 newClaimToken.setCompany(targetCompany);
 
-                //todo make role service work with userDTO instead of entity
-                roleService.setRole(targetUser.getId(),"ROLE_OWNER");
+
 
                 claimTokenRepository.saveAndFlush(newClaimToken);
+
+
                 return newClaimToken.getValue();
             }
         Optional<String> firstNonExpiredTokenValue =
