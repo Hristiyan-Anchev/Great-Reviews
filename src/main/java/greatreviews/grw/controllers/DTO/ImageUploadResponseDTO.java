@@ -10,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ImageUploadResponseDTO {
 
-    String message;
+    String msg;
     Boolean uploadSuccessful;
-    String newLogoUrl;
+    String newUrl;
 }

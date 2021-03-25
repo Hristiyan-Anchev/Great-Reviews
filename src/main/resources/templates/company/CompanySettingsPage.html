@@ -17,8 +17,8 @@
 
     <p class="text-success text-center" th:if="${updateSuccessful.equals('true')}">Settings saved successfuly</p>
     <p class="text-danger text-center" th:if="${updateSuccessful.equals('false')}">Settings not saved, something went wrong</p>
-<!--  img upload form -->
 
+<!--  img upload form -->
     <div class="container-fluid d-flex flex-column justify-content-center align-items-center">
         <img th:src="${companyBinding.logo}" alt="company-logo"  class="img-thumbnail m-4" id="companyLogo" style="max-width: 200px;"/>
     <div class="input-group mb-3 w-50">
@@ -349,7 +349,7 @@
             uploadMessageArea.className ="text-center text-success";
             uploadMessageArea.textContent = response.message;
 
-            companyLogo.setAttribute("src",response.newLogoUrl);
+            companyLogo.setAttribute("src",response.newUrl);
 
         }   else{
             uploadMessageArea.className ="text-center text-danger";

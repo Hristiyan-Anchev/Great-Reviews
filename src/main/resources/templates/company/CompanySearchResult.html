@@ -17,13 +17,12 @@
     <h3 th:if="${companies.size() == 0}" class="m-5" th:text='|Sorry... we cannot find companies containing "${searchString}"|'></h3>
 
     <div  class="container-fluid d-flex justify-content-center flex-wrap">
-
         <div
                 th:each="c : *{companies}"
                 class="card m-5" style="width: 18rem;">
             <img class="card-img-top" th:src="@{${c.logo}}" alt="Card image cap">
             <div class="card-body">
-                <h5 th:text="${c.name} ?: *{c.website.substring(4)}" class="card-title">Company name</h5>
+                <h5 th:text="${c.name.equals('')} ? *{c.website.substring(4)} : ${c.name}" class="card-title">Company name</h5>
                 <p class="card-text">
                     <i class="far fa-thumbs-up text-success m-2"></i> <span th:text="${c.upVotesCount}"></span>
                     <i class="far fa-thumbs-down text-danger m-2"></i> <span th:text="${c.downVotesCount}"></span>

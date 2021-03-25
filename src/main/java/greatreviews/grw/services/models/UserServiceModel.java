@@ -12,9 +12,11 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserServiceModel {
 
+    Long id;
     String email;
     String username;
     LocalDate birthDate;
     String password;
+    String imageURL;
 
 }

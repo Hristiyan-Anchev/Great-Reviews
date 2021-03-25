@@ -15,9 +15,6 @@ import greatreviews.grw.utilities.interfaces.Scraper;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import org.apache.commons.io.FileUtils;
-
-import org.apache.http.entity.mime.MIME;
 import org.apache.tika.Tika;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -27,16 +24,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
-import org.springframework.util.MimeType;
-import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -316,11 +308,8 @@ public class CompanyServiceImpl implements CompanyService {
         @Override
         public ImageUploadResponseDTO uploadLogo(Long companyId, MultipartFile file) {
                 var responseObject = new ImageUploadResponseDTO("Something went wrong ... check your file again",false,"");
-                //todo validate if file is image
 
-            //todo images come back as application/json fix that
-
-            if(file != null && ! file.isEmpty()  ) {
+            if(file != null && !file.isEmpty()  ) {
 
 
                 try {
@@ -328,12 +317,8 @@ public class CompanyServiceImpl implements CompanyService {
 
                     if(!detect.startsWith("image/")) return responseObject;
 
-
-
-
-
-
-                    var uploadResponse = cloudinary.uploader().upload(file.getBytes(), Map.of("folder","webresources"));
+                    //upload image
+                    var uploadResponse = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
                     var resourceSecureURL = uploadResponse.get("secure_url").toString();
 
 
@@ -341,7 +326,9 @@ public class CompanyServiceImpl implements CompanyService {
                     companyEntityById.ifPresent(ce -> {
 
                         // delete old resource
+                        //todo: remove this try-catch
                         try {
+                            //remove previous image
                             cloudinary.uploader().destroy(extractPublicId(ce.getLogo()),ObjectUtils.emptyMap());
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -351,11 +338,9 @@ public class CompanyServiceImpl implements CompanyService {
                         companyRepository.saveAndFlush(ce);
                     });
 
-
                     responseObject.setUploadSuccessful(true);
-                    responseObject.setMessage("Image upload successful");
-                    responseObject.setNewLogoUrl(insertTransformation(TRANSFORMATION_PARAMS,resourceSecureURL));
-
+                    responseObject.setMsg("Image upload successful");
+                    responseObject.setNewUrl(insertTransformation(TRANSFORMATION_PARAMS,resourceSecureURL));
 
 
                 } catch (Exception e) {
@@ -377,7 +362,8 @@ public class CompanyServiceImpl implements CompanyService {
             return digestedData;
         }
 
-        private String extractPublicId(String resourceUrl){
+        public String extractPublicId(String resourceUrl){
+            // todo: Util class candidate
             int lastSlashIdx = resourceUrl.lastIndexOf("/");
             int fileExtensionDotIdx = resourceUrl.lastIndexOf(".");
             String result = resourceUrl.substring(lastSlashIdx + 1,fileExtensionDotIdx);
@@ -386,6 +372,8 @@ public class CompanyServiceImpl implements CompanyService {
         }
 
         private String insertTransformation(String transformation, String resourceUrl){
+            //todo: Util class candidate
+
             StringBuilder sb = new StringBuilder();
 
             List<String> tokens = Arrays.asList(resourceUrl.split("/"));

@@ -1,0 +1,148 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+
+<th:block th:replace="head"
+></th:block>
+
+<body>
+<th:block th:replace="Header">
+
+</th:block>
+
+<div class=" container min-vh-100">
+    <h2 class="m-5 text-center">Edit personal data</h2>
+
+    <p class="text-center text-success" th:if="${success.equals('true')}">Settings saved successfuly</p>
+    <p class="text-center text-danger" th:if="${success.equals('false')}">There was a problem saving your settings</p>
+
+    <!--  img upload form -->
+    <div class="container-fluid d-flex flex-column justify-content-center align-items-center">
+        <img th:src="${userBinding.imageURL}" alt="user image"  class="img-thumbnail m-4" id="userImage" style="max-width: 200px;"/>
+        <div class="input-group mb-3 w-50">
+            <div class="input-group-prepend">
+                <button class="input-group-text btn btn-primary" id="uploadImageButton">Upload</button>
+            </div>
+
+            <div class="custom-file">
+                <input type="file" name="imageUpload" class="custom-file-input" id="imageUpload">
+                <label class="custom-file-label " id="imageUploadLbl" for="imageUpload">Choose new user avatar</label>
+            </div>
+        </div>
+    </div>
+
+    <p id="uploadMessage" class="text-center"></p>
+
+    <form class="d-flex flex-column justify-content-center align-items-center m-5"
+          method="POST" th:action="@{/users/settings(id=${userBinding.id})}"
+          th:object="${userBinding}"
+    >
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        <input type="hidden" th:name="id" th:field="*{id}">
+
+        <small th:if="${#fields.hasErrors()}" th:errors="${userBinding}" class="text-danger">Backend error message</small>
+        <div class="col-md-4 mb-3">
+
+            <label for="email">Email</label>
+            <input type="email" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : '' "  class="form-control" name="email" id="email" placeholder="Email" th:value="*{email}" required>
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Please enter a valid email address
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" id="username" placeholder="Username" th:value="*{username}" required
+                   th:classappend="${#fields.hasErrors('username')} ? 'is-invalid' : '' "
+            >
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Username is invalid
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <label for="birthDate">Date of birth</label>
+            <input type="date" class="form-control" name="birthDate" id="birthDate" placeholder="Date of birth" th:value="*{birthDate}" required
+                   th:classappend="${#fields.hasErrors('birthDate')} ? 'is-invalid' : '' "
+            >
+            <div class="valid-feedback">
+                Looks good!
+            </div>
+            <div class="invalid-feedback">
+                Invalid birth date
+            </div>
+        </div>
+
+
+
+        <button class="btn btn-primary" type="submit">Save</button>
+    </form>
+
+
+</div>
+
+<th:block th:replace="Footer">
+
+</th:block>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+
+    //file upload code
+    let uploadMessageArea = document.getElementById("uploadMessage");
+    let imageUploadInput = document.getElementById("imageUpload");
+    let imageUploadLabel = document.getElementById("imageUploadLbl");
+    let imageUploadBtn = document.getElementById("uploadImageButton");
+    let userImage = document.getElementById("userImage");
+    //csrf token value
+
+    let csrfValue = /*[[${_csrf.token}]]*/;
+
+
+
+    imageUploadInput.addEventListener("change",function (evt){
+        imageUploadLabel.textContent = imageUploadInput.files[0].name
+    });
+
+    imageUploadBtn.addEventListener("click",async function (evt){
+        let formData = new FormData();
+        formData.append("file",imageUploadInput.files[0]);
+
+
+        let response = await (await fetch(`/users/upload/image`, {
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': csrfValue
+            },
+            body: formData
+        })).json();
+
+
+        if(response.uploadSuccessful === true){
+            uploadMessageArea.className ="text-center text-success";
+            uploadMessageArea.textContent = response.msg;
+
+            userImage.setAttribute("src",response.newUrl);
+
+        }   else{
+            uploadMessageArea.className ="text-center text-danger";
+
+            uploadMessageArea.textContent = response.msg;
+        }
+
+        console.log(response);
+    });
+
+
+    /*]]>*/
+
+</script>
+</body>
+</html>

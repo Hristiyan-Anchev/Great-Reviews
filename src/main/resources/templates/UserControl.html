@@ -19,7 +19,7 @@
 
             <a sec:authorize="hasRole('ROLE_USER')" class="dropdown-item" th:href="@{/users/reviews(usrid=${currentUser.getId()})}">My Reviews</a>
 
-            <a id="personalSettings" sec:authorize="isAuthenticated()" class="dropdown-item" href="/users/settings">Personal settings</a>
+            <a id="personalSettings" sec:authorize="isAuthenticated()" class="dropdown-item" th:href="@{/users/settings}">Personal settings</a>
 
 <!--            todo if user owns any companies-->
             <a sec:authorize="hasRole('ROLE_OWNER')" class="dropdown-item" href="/users/manage/companies">Manage companies</a>

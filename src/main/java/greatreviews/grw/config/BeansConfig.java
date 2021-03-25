@@ -50,6 +50,7 @@ public class BeansConfig {
         return modelMapper;
     }
 
+
     @Bean
     public Tika getMagic(){
         var tika = new Tika();
@@ -98,7 +99,7 @@ public class BeansConfig {
             @Override
             public String convert(MappingContext<LocalDateTime, String> context) {
                 LocalDateTime sourceDate = context.getSource();
-                return sourceDate.format(DateTimeFormatter.ofPattern("dd MM yyyy"));
+                return sourceDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
             }
         };
 

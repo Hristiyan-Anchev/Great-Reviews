@@ -234,6 +234,10 @@ public class CompanyController {
             model.addAttribute("companyBinding", companyBinding);
         }
 
+        //to preserve logo through redirects
+        ((CompanySettingsBinding)model.getAttribute("companyBinding")).
+                setLogo(companyBinding.getLogo());
+
         //TODO: refactor this view model in the future to make binding easier
         Set<CategoryAndSubcategoriesViewModel> allCategoriesAndSubcategories =
                 categoryService.getAllCategoriesAndSubcategories();
@@ -261,7 +265,6 @@ public class CompanyController {
             var modelAndView = new ModelAndView("redirect:/users/manage/companies");
 
 
-
                 if(canAccessCompany(companySettingsBinding.getId())){
 
                     CompanyServiceModel companyById = companyService.getCompanyById(companySettingsBinding.getId()).orElse(new CompanyServiceModel());
@@ -270,19 +273,16 @@ public class CompanyController {
                     companySettingsBinding.setWebsite(companyById.getWebsite());
 
 
-
                     //check if email already exists
                     var targetCompany = companyService.getCompanyByEmail(companySettingsBinding.getEmail()).orElse(new CompanyServiceModel());
                     if(targetCompany.getId() != null && !companySettingsBinding.getId().equals(targetCompany.getId())){
                         bindingResult.rejectValue("email","email.exists","Such email is already in use by another company");
                     }
 
-
                     //check if mainCategory exists in database
                     if(!categoryService.getCategoryEntityById(companySettingsBinding.getMainCategory()).isPresent()){
                         bindingResult.rejectValue("mainCategory","category.not.exists","The category does not exist in the database");
                     }
-
 
                     //check if someone tried to shove the same subcategory more than once ...
                     var subcategoriesCollection = new Long[]{
@@ -296,7 +296,6 @@ public class CompanyController {
                     Integer filteredSize = new LinkedHashSet<Long>(List.of(subcategoriesCollection)).size();
 
 
-
                     if (!initialSize.equals( filteredSize )) {
                         bindingResult.rejectValue("", "problem.choosing.subcategory", "There was a problem choosing subcategories");
                     }
@@ -304,7 +303,6 @@ public class CompanyController {
                     if(filteredSize < 1){
                         bindingResult.rejectValue("","no.subcategory.chosen","Please choose a subcategory");
                     }
-
 
 
                     //check for default form errors
@@ -319,10 +317,6 @@ public class CompanyController {
 
                     modelAndView.setViewName(String.format("redirect:/companies/settings?id=%d&success=true",companySettingsBinding.getId()));
                 }
-            //todo validate form and update entity
-
-
-        System.out.println();
 
         return modelAndView;
     }

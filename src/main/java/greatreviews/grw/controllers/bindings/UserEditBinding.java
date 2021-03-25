@@ -15,8 +15,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+public class UserEditBinding {
 
-public class RegisterUserBinding {
+    Long id;
+
     @Pattern(regexp = PatternEnum.Constants.EMAIL_PATTERN,message = "Email is in the wrong format")
     String email;
 
@@ -28,12 +30,7 @@ public class RegisterUserBinding {
     @NotNull(message = "Birth date must be specified")
     LocalDate birthDate;
 
-    @Pattern(regexp = PatternEnum.Constants.PASSWORD_PATTERN,message = "Password is in the wrong format")
-    String password;
-
-    @Pattern(regexp = PatternEnum.Constants.PASSWORD_PATTERN,message = "Password is in the wrong format")
-    String confirmPassword;
-
+    String imageURL;
 
 
 }
