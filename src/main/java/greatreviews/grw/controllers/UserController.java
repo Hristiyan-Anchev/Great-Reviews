@@ -12,6 +12,7 @@ import greatreviews.grw.services.interfaces.ReviewService;
 import greatreviews.grw.services.interfaces.UserService;
 import greatreviews.grw.services.models.ClaimTokenServiceModel;
 import greatreviews.grw.services.models.CompanyServiceModel;
+import greatreviews.grw.services.models.ReviewServiceModel;
 import greatreviews.grw.services.models.UserServiceModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -37,6 +38,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -275,6 +277,66 @@ public class UserController {
     }
 
 
+    @GetMapping("/admin/panel")
+    @PreAuthorize("isAuthenticated()")
+    public ModelAndView getAdminPanelPage(Model model){
+        var modelAndView = new ModelAndView("redirect:/");
+        var currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
+
+        if(currentUser.getRoles().contains("ROLE_ADMIN")){
+            modelAndView.setViewName("/user/admin_templates/MainAdminControlPanel");
+            Integer unpublishedReviewsCount = reviewService.getUnpublishedReviewsCount();
+            Integer flaggedReviewsCount = reviewService.getFlaggedReviewsCount();
+            modelAndView.addAllObjects(Map.of(
+                    "unpublishedReviewsCount",unpublishedReviewsCount,
+                    "flaggedReviewsCount",flaggedReviewsCount
+            ));
+
+        }
+
+        return modelAndView;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/admin/unpublished")
+    public ModelAndView getUnpublishedReviews(Model model){
+        var modelAndView = new ModelAndView("redirect:/");
+        CurrentUserDTO currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
+
+        if (currentUser.getRoles().contains("ROLE_ADMIN")) {
+            //get unpublished reviews
+           List<ReviewServiceModel> unpublishedReviews = reviewService.getUnpublishedReviews();
+
+           List<ReviewViewModel> mappedUnpublishedReviews =
+                   modelMapper.map(unpublishedReviews, new TypeToken<List<ReviewViewModel>>(){}.getType());
+
+           modelAndView.setViewName("/user/admin_templates/UnpublishedReviewsPage");
+           modelAndView.addObject("unpublishedReviews",mappedUnpublishedReviews);
+        }
+
+
+        return modelAndView;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/admin/flagged")
+    public ModelAndView getFggedReviews(Model model){
+        CurrentUserDTO currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
+        var modelAndView = new ModelAndView("redirect:/");
+
+        if (currentUser.getRoles().contains("ROLE_ADMIN")) {
+             modelAndView .setViewName("/user/admin_templates/FlaggedReviewsPage");
+
+            List<ReviewServiceModel> flaggedReviews = reviewService.getFlaggedReviews();
+
+            List<ReviewViewModel> mappedFlaggedReviews = modelMapper.map(flaggedReviews,
+                    new TypeToken<List<ReviewViewModel>>() {
+                    }.getType());
+
+            modelAndView.addObject("flaggedReviews", mappedFlaggedReviews);
+        }
+        return modelAndView;
+    }
 
 
     //======================================================================================================================
@@ -303,7 +365,6 @@ public class UserController {
     private Boolean isEmailUnique(String email) {
         return userService.findByEmail(email).isEmpty();
     }
-
 
     private Boolean isEmailUnique(String email, List<String> exemptValues) {
         var targetUser = userService.findByEmail(email);

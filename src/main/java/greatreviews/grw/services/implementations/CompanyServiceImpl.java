@@ -178,7 +178,7 @@ public class CompanyServiceImpl implements CompanyService {
 
                         if (        //to verify the actual  webpage uncomment this
     //                            websiteVerificationToken.equals(currentUserClaimToken.getValue())
-
+                                //TODO: Company verification check
                                 //to pass verification every time put TRUE - for dev purposes only
                                 true
                         ) {

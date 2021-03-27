@@ -1,10 +1,13 @@
 package greatreviews.grw.services.interfaces;
 
+import greatreviews.grw.controllers.DTO.FlagReviewResponseDTO;
+import greatreviews.grw.controllers.DTO.PublishReviewResponseDTO;
 import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.ReviewEntity;
 import greatreviews.grw.services.models.ReviewServiceModel;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 import java.util.Set;
 
 public interface ReviewService {
@@ -16,10 +19,21 @@ public interface ReviewService {
 
     Long getCompanyDownVotesCount(Long companyId);
 
-    Set<ReviewServiceModel> getCompanyReviews(Long companyId);
+    List<ReviewServiceModel> getCompanyReviews(Long companyId, Boolean published);
 
-    Set<ReviewServiceModel> getLatestReviews(int i);
-
+    List<ReviewServiceModel> getLatestReviews(int i);
 
     Set<ReviewServiceModel> getUserReviewsById(Long userId);
+
+    FlagReviewResponseDTO addUserFlag(Long reviewId, Long id);
+
+    Integer getUnpublishedReviewsCount();
+
+    Integer getFlaggedReviewsCount();
+
+    List<ReviewServiceModel> getUnpublishedReviews();
+
+    PublishReviewResponseDTO publishReview(Long reviewId);
+
+    List<ReviewServiceModel> getFlaggedReviews();
 }

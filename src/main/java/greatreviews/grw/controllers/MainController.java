@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,11 +30,11 @@ public class MainController {
      ReviewService reviewService;
 
     @ModelAttribute("latestReviews")
-     private Set<ReviewViewModel> getLatestReviews(){
-        Set<ReviewViewModel> collect = reviewService.getLatestReviews(4).stream().map(r -> {
+     private List<ReviewViewModel> getLatestReviews(){
+        List<ReviewViewModel> collect = reviewService.getLatestReviews(6).stream().map(r -> {
             ReviewViewModel mapped = modelMapper.map(r, ReviewViewModel.class);
             return mapped;
-        }).collect(Collectors.toSet());
+        }).collect(Collectors.toList());
 
         return collect;
     }

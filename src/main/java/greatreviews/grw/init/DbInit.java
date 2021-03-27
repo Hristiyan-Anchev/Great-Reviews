@@ -98,6 +98,23 @@ public class DbInit implements CommandLineRunner {
                     0L,
                     0L
             ));
+
+            companyService.registerCompany(new CompanyServiceModel(
+                    2L,
+                    "facebook@mail.com",
+                    "www.facebook.com",
+                    "Main Road 23",
+                    "",
+                    false,
+                    1L,
+                    2L,
+                    3L,
+                    4L,
+                    "TEST COMPANY",
+                    "",
+                    0L,
+                    0L
+            ));
         }
     }
 
@@ -117,9 +134,25 @@ public class DbInit implements CommandLineRunner {
                     new HashSet<CompanyEntity>(),
                     new HashSet<ReviewEntity>()
             );
-            userRepository.saveAndFlush(user);
+
+            var admin = new UserEntity(
+                    "admin@mail.com",
+                    passwordEncoder.encode("passwd1"),
+                    true,
+                    "/images/haisenberg.png",
+                    new HashSet<RoleEntity>(),
+                    "-Admin-",
+                    LocalDate.now(),
+                    LocationEnum.GBR,
+                    new HashSet<CompanyEntity>(),
+                    new HashSet<ReviewEntity>()
+            );
+
+            userRepository.saveAll(List.of(user,admin));
 
             roleService.setRole(user.getId(),"ROLE_USER");
+            roleService.setRole(admin.getId(),"ROLE_ADMIN");
+
         }
 
     }
@@ -176,7 +209,7 @@ public class DbInit implements CommandLineRunner {
 
         categoryRepository.saveAll(categoryEntities);
 
-        System.out.println();
+
 
         }
     }

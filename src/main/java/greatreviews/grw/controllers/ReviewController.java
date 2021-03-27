@@ -1,5 +1,7 @@
 package greatreviews.grw.controllers;
 
+import greatreviews.grw.controllers.DTO.FlagReviewResponseDTO;
+import greatreviews.grw.controllers.DTO.PublishReviewResponseDTO;
 import greatreviews.grw.controllers.views.CompanyViewModel;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.DTO.AddReviewDTO;
@@ -15,6 +17,8 @@ import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,17 +56,30 @@ public class ReviewController {
         });
 
         companyViewModel.ifPresent(viewModel -> {
+
             var reviewsStats = getCompanyReviewsStats(viewModel.getId());
             viewModel.setReviewsCount(reviewsStats[0]);
             viewModel.setUpVotesCount(reviewsStats[1]);
             viewModel.setDownVotesCount(reviewsStats[2]);
             modelAndView.addObject("currentCompany", viewModel);
 
-            Set<ReviewServiceModel> companyReviews =
-                    reviewService.getCompanyReviews(viewModel.getId());
+            List<ReviewServiceModel> companyReviews =
+                    reviewService.getCompanyReviews(viewModel.getId(),true);
 
-            Set<ReviewViewModel> reviewsViewModel =
-                    modelMapper.map(companyReviews, new TypeToken<Set<ReviewViewModel>>(){}.getType());
+            List<ReviewViewModel> reviewsViewModel =
+                    modelMapper.map(companyReviews, new TypeToken<List<ReviewViewModel>>(){}.getType());
+
+            Set<ReviewViewModel> unpublishedReviews =
+                    modelMapper.map(reviewService.getCompanyReviews(viewModel.getId(),false),
+                            new TypeToken<Set<ReviewViewModel>>(){}.getType());
+
+            //check if current user has pending review
+            var userHasPendingReview =
+            unpublishedReviews.stream().anyMatch(rvm -> {
+                return rvm.getUserId().equals(currentUser.getId()) && !rvm.getIsPublished();
+            });
+
+            modelAndView.addObject("userHasPendingReview",userHasPendingReview);
 
             //check if user is in process of claiming this company
             Boolean claimInProgressForUser = false;
@@ -150,6 +168,25 @@ public class ReviewController {
         return modelAndView;
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/flag")
+    public ResponseEntity<?> requestReviewVlag(Model model,@RequestParam (name = "id")Long reviewId){
+        CurrentUserDTO currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
+
+        FlagReviewResponseDTO flagReviewResponseDTO = reviewService.addUserFlag(reviewId, currentUser.getId());
+
+        return new ResponseEntity<>(flagReviewResponseDTO,HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/publish")
+    public ResponseEntity<?> publishReview(Model model, @RequestParam(name = "id") Long reviewId){
+
+        PublishReviewResponseDTO response = reviewService.publishReview(reviewId);
+
+        return new ResponseEntity<>(response,HttpStatus.OK);
+
+    }
 
 
 

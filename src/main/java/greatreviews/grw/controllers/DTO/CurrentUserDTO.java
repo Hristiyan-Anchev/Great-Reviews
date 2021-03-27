@@ -20,6 +20,7 @@ public class CurrentUserDTO {
     String imageURL;
     Boolean hasCompanies;
     List<Long> ownedCompanies;
+    List<String> roles;
 
     @Override
     public String toString() {

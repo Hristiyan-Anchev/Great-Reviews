@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block th:replace="head"></th:block>
 
 <body>
@@ -38,14 +38,32 @@
             </div>
             <!--            footer section-->
 <!--            todo: implement mark as useful and flag review functions-->
+            <div class="container-fluid d-flex flex-wrap justify-content-center">
+                <button class="btn badge  text-white m-3 flag-button"
+                        th:if="${!r.userId.equals(currentUser.id)}"
+                        sec:authorize="isAuthenticated()"  id="flagBtn"
+                         th:data-review-id="${r.id}"
+                         th:disabled="${r.usersFlagged.contains(currentUser.id)}"
+                         th:classappend="${r.usersFlagged.contains(currentUser.id)} ? 'badge-warning disabled' : 'badge-info' "
+                         th:inline="text"
+                >
+                        [[${r.usersFlagged.contains(currentUser.id)} ? 'Awaiting admin response' : 'Flag review']]
+
+                    <i th:if="!${r.usersFlagged.contains(currentUser.id)}" class="fas fa-flag text-danger ml-1"></i>
+                </button>
+
+
+
+
+            </div>
 <!--            <a  href="#" class="card-footer bg-transparent border-success">Mark as useful</a>-->
 <!--            <a  href="#" class="card-footer bg-transparent border-success">Flag this review</a>-->
+
+
         </div>
 
 
     </div>
-
-
 
 </div>
 
@@ -53,10 +71,43 @@
 <th:block th:replace="Footer"></th:block>
 </body>
 
-<script>
+<script sec:authorize="isAuthenticated()" th:inline="javascript">
+    /*<![CDATA[*/
+    let csrfValue = /*[[${_csrf.token}]]*/;
+    const flagButtons = document.getElementsByClassName("flag-button");
 
 
 
+  const flagHandler = async function(evt){
+        evt.stopPropagation();
+        evt.preventDefault();
 
+        const reviewId = evt.currentTarget.dataset["reviewId"];
+
+        let response = await(await fetch(`/reviews/flag?id=${reviewId}`, {
+            method: "POST",
+            headers: {
+                'X-CSRF-TOKEN': csrfValue
+            },
+        })).json();
+        //todo disable the button
+
+        if(response["isFlagged"]){
+            evt.target.classList.add("disabled");
+            evt.target.disabled = true;
+            evt.target.textContent = "Awaiting admin response"
+            evt.target.classList.remove("badge-info")
+            evt.target.classList.add("badge-warning")
+        }
+
+    };
+
+    Array.from(flagButtons).forEach(btn => {
+        btn.addEventListener("click",flagHandler);
+    })
+
+
+
+    /*]]>*/
 </script>
 </html>

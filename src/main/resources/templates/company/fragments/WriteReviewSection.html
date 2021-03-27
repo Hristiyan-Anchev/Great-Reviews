@@ -19,7 +19,9 @@
 
                 <div class="media-body mt-5">
                 <h5 th:text="${currentUser.username}" class="mt-0">John Doe</h5>
-                    <a th:href="@{/reviews/company/evaluate(cid=${currentCompany.id})}">Write a review</a>
+                    <a th:if="${!userHasPendingReview}" th:href="@{/reviews/company/evaluate(cid=${currentCompany.id})}">Write a review</a>
+                    <span th:if="${userHasPendingReview}" class="badge badge-pill badge-primary">Review approval pending...</span>
+                    <small th:if="${userHasPendingReview}" class="text-center text-muted d-block m-3"> Once your review is published you will be able to post again</small>
                 </div>
             </div>
 

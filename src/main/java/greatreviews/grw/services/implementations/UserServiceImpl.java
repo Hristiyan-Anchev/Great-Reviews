@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
 //        role.setUsers(Set.of(newUser));
 
         newUser.setRoles(Set.of(roleRepository.findByName("ROLE_USER").get()));
-
+        newUser.setImageURL("/images/haisenberg.png");
         UserEntity save = userRepository.saveAndFlush(newUser);
 
     }
@@ -124,8 +124,6 @@ public class UserServiceImpl implements UserService {
 
                 userRepository.saveAndFlush(user);
             });
-
-
 
     }
 

@@ -27,6 +27,14 @@ public class ReviewEntity extends BaseEntity {
     @Column
     String vote;
 
+    @Column
+    Boolean isPublished;
+
+    @Column
+    Boolean isCensored;
+
+
+
     @ManyToOne(fetch = FetchType.EAGER)
             @JoinColumn(name = "user_id",referencedColumnName = "id")
     UserEntity user;
@@ -34,5 +42,8 @@ public class ReviewEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
             @JoinColumn(name = "company_id", referencedColumnName = "id")
     CompanyEntity company;
+
+    @ManyToMany(mappedBy = "flaggedReviews")
+    Set<UserEntity> usersFlagged;
 
 }

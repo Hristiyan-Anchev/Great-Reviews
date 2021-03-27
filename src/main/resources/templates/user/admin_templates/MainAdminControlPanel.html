@@ -1,0 +1,69 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+
+<th:block th:replace="head"
+></th:block>
+
+<body>
+<th:block th:replace="Header">
+
+</th:block>
+
+<th:block th:fragment="adminPanel">
+
+    <div class="container d-flex flex-column flex-wrap align-items-center   min-vh-100">
+        <div class="d-flex flex-row flex-wrap justify-content-around mt-5 mb-5">
+
+            <div class="card m-5">
+                <div class="card-body">
+                    <h5 class="card-title">Unpublished reviews</h5>
+                    <p class="card-text">Review and approve recently added reviews</p>
+                    <a th:inline="text" href="/users/admin/unpublished"
+                       class="btn btn-primary">[[${unpublishedReviewsCount > 0 ? 'Check ' + unpublishedReviewsCount + ' unpublished reviews' : 'No unpublished reviews'}]]
+                    </a>
+                </div>
+            </div>
+
+            <div class="card m-5">
+                <div class="card-body">
+                    <h5 class="card-title">Reported reviews</h5>
+                    <p class="card-text">All reviews that have been marked as harmful or offensive </p>
+                    <a th:inline="text" href="/users/admin/flagged"
+                       class="btn btn-primary">[[${flaggedReviewsCount > 0 ? 'Check ' + flaggedReviewsCount + ' flagged reviews' : 'No flagged reviews'}]]
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-column">
+
+            <div class="item mt-3 mb-3">
+                <h3 class="text-center">Search users</h3>
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+
+            <div class="item mt-3 mb-3">
+                <h3 class="text-center">Search companies</h3>
+                <form class="form-inline">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</th:block>
+
+<th:block th:replace="Footer">
+
+</th:block>
+</body>
+</html>

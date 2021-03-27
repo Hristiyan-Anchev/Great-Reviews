@@ -1,0 +1,114 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="head"></th:block>
+
+<body>
+
+<th:block th:replace="Header"></th:block>
+
+
+<!--    company main  statistics-->
+
+
+<h3 id="unpublishedReviewsH3" th:if="${unpublishedReviews.size() > 0}" th:text="|${unpublishedReviews.size()} unpublished reviews|"
+    class="text-center m-5"></h3>
+<h3 id="noUnpublishedReviewsH3" th:if="${unpublishedReviews.size() == 0}" th:text="|No unpublished reviews ...|" class="text-center m-5"></h3>
+
+
+<div class="container mt-5 min-vh-100">
+    <!--       write a review or login section -->
+
+
+    <!--company reviews section-->
+    <div class="container-fluid d-flex    align-items-center justify-content-center" id="reviewsContainer">
+        <div th:each="r : ${unpublishedReviews}" th:object="${r}" class="card border-success m-3 p-0 align-self-center"
+             style="max-width: 18rem;">
+            <div class="card-header bg-transparent border-success">
+                <div class="media">
+                    <img class="mr-3 w-100" th:src="@{*{userImageURL}}" alt="Generic placeholder image"
+                         style="max-width: 120px; height: auto">
+                    <div class="media-body">
+                        <h5 th:text="*{userName}" class="mt-0 text-nowrap">John Doe</h5>
+                        <small th:text="*{created}" class="text-muted">01/01/2015</small>
+                        <i th:if="*{vote == '1'}" class="far fa-thumbs-up text-success d-inline-block m-2"></i>
+                        <i th:if="*{vote == '-1'}" class="far fa-thumbs-down text-danger d-inline-block m-2"></i>
+                        <!--                        <a th:text="|*{userReviewsCount} reviews|" th:href="@{/users/reviews(usrid=*{userId})}" class="text-nowrap"> 15 reviews</a>-->
+                    </div>
+                </div>
+            </div>
+            <div class="card-body text-success">
+                <h5 th:text="*{title}" class="card-title">Very good company </h5>
+                <p th:text="*{content}" class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Doloremque nihil quae rem? A at corporis cum delectus, dicta, dolorem dolorum exercitationem fugit
+                    quisquam quos reiciendis rem tempora tempore? Minima, quam!</p>
+            </div>
+            <div class="container-fluid d-flex flex-wrap justify-content-center">
+                <button class="btn badge badge-success  text-white m-3 publish-btn"
+                        th:data-review-id="${r.id}"
+                >
+                    Publish review
+                    <i  class="fas fa-check text-danger ml-1"></i>
+                </button>
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+<th:block th:replace="Footer"></th:block>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let csrfValue = /*[[${_csrf.token}]]*/;
+    let reviewsCount = /*[[${unpublishedReviews.size() }]]*/;
+
+    let publishButtons = document.getElementsByClassName("publish-btn");
+    let reviewsContainer = document.getElementById("reviewsContainer");
+
+    let unpublishedReviewsH3 = document.getElementById("unpublishedReviewsH3");
+    // let noUnpublishedReviewsH3 = document.getElementById("noUnpublishedReviewsH3");
+
+    const publishHandler = async (evt) => {
+        evt.stopPropagation();
+
+        const reviewId = evt.currentTarget.dataset["reviewId"];
+
+        try {
+            let response = await (await fetch(`/reviews/publish?id=${reviewId}`, {
+                method: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': csrfValue
+                },
+            })).json();
+
+            if (response.isPublished) {
+                if(reviewsCount > 0){
+                    reviewsContainer.removeChild(evt.target.parentElement.parentElement)
+                    reviewsCount--;
+                    if(reviewsCount === 0){
+                        unpublishedReviewsH3.textContent = "No unpublished reviews ...";
+                    }
+                }
+            }
+
+        } catch (err) {
+            console.error(err);
+        }
+
+    }
+
+
+    Array.from(publishButtons).forEach(pb => {
+        pb.addEventListener("click", publishHandler);
+    })
+
+    /*]]>*/
+</script>
+</html>

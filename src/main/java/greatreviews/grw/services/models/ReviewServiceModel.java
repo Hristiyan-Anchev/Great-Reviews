@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,12 +14,15 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewServiceModel {
 
-
+    Long id;
     String created;
     String userName;
     Long userId;
     Integer userReviewsCount;
     String userImageURL;
+
+    Boolean isCensored;
+    Boolean isPublished;
 
     String vote;
     String title;
@@ -29,5 +33,6 @@ public class ReviewServiceModel {
     Long companyId;
     String companyWebsite;
 
+    Set<Long> usersFlagged;
 
 }

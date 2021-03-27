@@ -1,5 +1,6 @@
 package greatreviews.grw.controllers.basecontrollers;
 
+import greatreviews.grw.config.authentication.CustomUser;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.services.interfaces.UserService;
 import lombok.*;
@@ -34,10 +35,9 @@ public class BaseController {
     public CurrentUserDTO fetchPrincipal(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-         currentUser = modelMapper.map(principal, CurrentUserDTO.class);
+        currentUser = modelMapper.map(principal, CurrentUserDTO.class);
 
-
-         return currentUser;
+        return currentUser;
     }
 
 

@@ -96,4 +96,9 @@ public class CustomUser extends User {
 
         return new ArrayList<GrantedAuthority>(this.roles);
     }
+
+    @Override
+    public boolean isEnabled() {
+        return this.enabled;
+    }
 }

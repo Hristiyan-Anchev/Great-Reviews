@@ -58,6 +58,14 @@ public class UserEntity extends BaseUser
             )
     Set<RoleEntity> roles;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+            @JoinTable(
+                    name="users_flagged_reviews",
+                    joinColumns = @JoinColumn(name = "user_id"),
+                    inverseJoinColumns = @JoinColumn(name = "review_id")
+            )
+    Set<ReviewEntity> flaggedReviews;
+
 
 
 //    @Override

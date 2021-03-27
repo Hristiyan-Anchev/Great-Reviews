@@ -5,6 +5,9 @@ import com.cloudinary.utils.ObjectUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import greatreviews.grw.config.authentication.CustomUser;
+import greatreviews.grw.controllers.DTO.CurrentUserDTO;
+import greatreviews.grw.controllers.DTO.RoleDTO;
+import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.*;
 import greatreviews.grw.entities.basic.BaseEntity;
 import greatreviews.grw.services.models.CompanyServiceModel;
@@ -46,9 +49,12 @@ public class BeansConfig {
         localDateTimeToStringConverter(modelMapper);
         companyEntToCompServModelVotesMap(modelMapper);
         mapUserEntityToCustomUser(modelMapper);
+        customUserRolesToCurrentUserDTORoles(modelMapper);
 
         return modelMapper;
     }
+
+
 
 
     @Bean
@@ -89,8 +95,33 @@ public class BeansConfig {
                                 source.getUser().getReviews().size()
                         );
 
+                        map().setId(
+                                source.getId()
+                        );
+
+                        map().setCompanyId(
+                                source.getCompany().getId()
+                        );
                     }
                 });
+
+        Converter<Set<UserEntity>,Set<Long>> usersFlaggedConverter =
+                new Converter<Set<UserEntity>, Set<Long>>() {
+                    @Override
+                    public Set<Long> convert(MappingContext<Set<UserEntity>, Set<Long>> context) {
+                        return context.getSource().stream().map(UserEntity::getId).collect(Collectors.toSet());
+                    }
+                };
+
+        modelMapper.typeMap(ReviewEntity.class,ReviewServiceModel.class).addMappings(
+                new PropertyMap<ReviewEntity, ReviewServiceModel>() {
+                    @Override
+                    protected void configure() {
+                        using(usersFlaggedConverter).map(source.getUsersFlagged()).setUsersFlagged(null);
+                    }
+                }
+        );
+
 
     }
 
@@ -257,6 +288,24 @@ public class BeansConfig {
                }
        );
 
+    }
+
+    private void customUserRolesToCurrentUserDTORoles(ModelMapper modelMapper) {
+        var roleEntityRoleDTOConverter = new Converter<Set<RoleEntity>, List<String>>() {
+            @Override
+            public List<String> convert(MappingContext<Set<RoleEntity>, List<String>> context) {
+                return context.getSource().stream().map(RoleEntity::getName).collect(Collectors.toList());
+            }
+        };
+
+        modelMapper.typeMap(CustomUser.class, CurrentUserDTO.class).addMappings(
+                new PropertyMap<CustomUser, CurrentUserDTO>() {
+                    @Override
+                    protected void configure() {
+                       using(roleEntityRoleDTOConverter).map(source.getRoles()).setRoles(null);
+                    }
+                }
+        );
 
     }
 

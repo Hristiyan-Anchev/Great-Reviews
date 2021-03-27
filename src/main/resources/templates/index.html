@@ -51,7 +51,7 @@
 
                                 <div th:inline="text" class="media-body">
 
-                                    <h5 class="mt-0"><a class="pr-3 text-dark" th:href="@{/users/profile/{userId}(userId=*{userId})}" th:text="*{userName}">John Doe</a>
+                                    <h5 class="mt-0"><a class="pr-3 text-dark" th:href="@{/users/reviews(usrid=*{userId})}" th:text="*{userName}">John Doe</a>
                                         <i th:if="*{vote == '1'}" class="far fa-thumbs-up text-success d-inline-block m-2" ></i>
                                         <i th:if="*{vote == '-1'}" class="far fa-thumbs-down text-danger d-inline-block m-2"></i>
                                     </h5 >
