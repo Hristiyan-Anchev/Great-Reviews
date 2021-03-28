@@ -1,6 +1,7 @@
 package greatreviews.grw.services.implementations;
 
 
+import greatreviews.grw.controllers.DTO.CensorResponseDTO;
 import greatreviews.grw.controllers.DTO.FlagReviewResponseDTO;
 import greatreviews.grw.controllers.DTO.PublishReviewResponseDTO;
 import greatreviews.grw.entities.ReviewEntity;
@@ -183,6 +184,24 @@ public class ReviewServiceImpl implements ReviewService {
                 modelMapper.map(flaggedReviews, new TypeToken<List<ReviewServiceModel>>(){}.getType());
 
         return mappedFlaggedReviews;
+    }
+
+    @Override
+    public CensorResponseDTO toggleReviewCensorById(Long reviewId) {
+        Optional<ReviewEntity> targetReviewOpt = reviewRepository.findById(reviewId);
+        var response = new CensorResponseDTO(false);
+
+        if (targetReviewOpt.isPresent()) {
+            var review = targetReviewOpt.get();
+
+            review.setIsCensored(!review.getIsCensored());
+
+            reviewRepository.saveAndFlush(review);
+
+            response =  new CensorResponseDTO(review.getIsCensored());
+        }
+
+        return response;
     }
 
 

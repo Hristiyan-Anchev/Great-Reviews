@@ -1,5 +1,6 @@
 package greatreviews.grw.controllers;
 
+import greatreviews.grw.controllers.DTO.CensorResponseDTO;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.DTO.ImageUploadResponseDTO;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
@@ -336,6 +337,15 @@ public class UserController {
             modelAndView.addObject("flaggedReviews", mappedFlaggedReviews);
         }
         return modelAndView;
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/admin/censor")
+    public ResponseEntity<?> toggleCensoredReview(Model model,@RequestParam(name = "id") Long reviewId){
+       CensorResponseDTO response = reviewService.toggleReviewCensorById(reviewId);
+
+
+        return new ResponseEntity<CensorResponseDTO>(response,HttpStatus.OK);
     }
 
 

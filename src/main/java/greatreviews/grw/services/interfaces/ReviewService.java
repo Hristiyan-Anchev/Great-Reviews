@@ -1,5 +1,6 @@
 package greatreviews.grw.services.interfaces;
 
+import greatreviews.grw.controllers.DTO.CensorResponseDTO;
 import greatreviews.grw.controllers.DTO.FlagReviewResponseDTO;
 import greatreviews.grw.controllers.DTO.PublishReviewResponseDTO;
 import greatreviews.grw.controllers.views.ReviewViewModel;
@@ -36,4 +37,6 @@ public interface ReviewService {
     PublishReviewResponseDTO publishReview(Long reviewId);
 
     List<ReviewServiceModel> getFlaggedReviews();
+
+    CensorResponseDTO toggleReviewCensorById(Long reviewId);
 }
