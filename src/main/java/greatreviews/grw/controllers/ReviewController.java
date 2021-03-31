@@ -140,8 +140,6 @@ public class ReviewController {
 
         var modelAndView = new ModelAndView("redirect:/reviews/company?of=" + companyId);
 
-
-
             if(bindingResult.hasErrors()){
                 redirectAttributes.addFlashAttribute("review",review);
                 redirectAttributes.addFlashAttribute("allErrors",bindingResult.getAllErrors());

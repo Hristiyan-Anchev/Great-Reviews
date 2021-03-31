@@ -1,23 +1,16 @@
-package greatreviews.grw.services.models;
+package greatreviews.grw.controllers.views;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class UserServiceModel {
-
+public class UserViewModel {
     Long id;
-    String email;
     String username;
-    LocalDate birthDate;
-    String password;
-    String imageURL;
+    String email;
     Boolean enabled;
-
 }

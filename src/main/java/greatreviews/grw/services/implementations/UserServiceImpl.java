@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import greatreviews.grw.config.authentication.CustomUser;
 import greatreviews.grw.controllers.DTO.ImageUploadResponseDTO;
+import greatreviews.grw.controllers.DTO.UserDisableResponseDTO;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
 import greatreviews.grw.controllers.bindings.UserEditBinding;
 import greatreviews.grw.controllers.views.ReviewViewModel;
@@ -164,6 +165,32 @@ public class UserServiceImpl implements UserService {
         }
 
     return responseObj;
+    }
+
+    @Override
+    public List<UserServiceModel> getUserBySearchString(String search) {
+        List<UserEntity> searchResult = userRepository.findUsersBySearchString(search);
+
+       List<UserServiceModel> targetUsers =
+               modelMapper.map(searchResult,
+               new TypeToken<List<UserServiceModel>>(){}.getType());
+
+        return targetUsers;
+    }
+
+    @Override
+    public UserDisableResponseDTO toggleUserDisabled(Long id) {
+
+        Optional<UserEntity> targetUser = userRepository.findById(id);
+
+        if (targetUser.isPresent()) {
+            var user = targetUser.get();
+            user.setEnabled(!user.getEnabled());
+            userRepository.saveAndFlush(user);
+            return new UserDisableResponseDTO(user.getEnabled());
+        }
+
+        return new UserDisableResponseDTO(false);
     }
 
     @Override

@@ -30,7 +30,7 @@ public interface ReviewRepository extends JpaRepository<ReviewEntity,Long> {
     @Query("SELECT r FROM ReviewEntity r WHERE r.company.id = ?1 AND r.isPublished = ?2 ORDER BY r.created DESC")
     List<ReviewEntity> getCompanyReviewsById(Long companyId, Boolean published);
 
-    @Query("SELECT r FROM ReviewEntity r WHERE r.isPublished = true ORDER BY r.created DESC")
+    @Query("SELECT r FROM ReviewEntity r WHERE r.isPublished = TRUE AND r.isCensored = FALSE AND r.isDeleted = FALSE ORDER BY r.created DESC")
     Page<ReviewEntity> getLatestReviews(Pageable pageable);
 
     @Query("SELECT r FROM ReviewEntity r WHERE r.user.id = ?1")

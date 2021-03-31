@@ -3,10 +3,12 @@ package greatreviews.grw.controllers;
 import greatreviews.grw.controllers.DTO.CensorResponseDTO;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.DTO.ImageUploadResponseDTO;
+import greatreviews.grw.controllers.DTO.UserDisableResponseDTO;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
 import greatreviews.grw.controllers.bindings.UserEditBinding;
 import greatreviews.grw.controllers.views.CompanyViewModel;
 import greatreviews.grw.controllers.views.ReviewViewModel;
+import greatreviews.grw.controllers.views.UserViewModel;
 import greatreviews.grw.services.interfaces.ClaimTokenService;
 import greatreviews.grw.services.interfaces.CompanyService;
 import greatreviews.grw.services.interfaces.ReviewService;
@@ -200,10 +202,10 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/settings")
-    public ModelAndView getUserSettings(Model model,@RequestParam(name = "success",defaultValue = "") String success) {
+    public ModelAndView getUserSettings(Model model, @RequestParam(name = "success", defaultValue = "") String success) {
         var modelAndView = new ModelAndView("/user/settings/UserSettingsPage");
         CurrentUserDTO currentUser = modelMapper.map(model.getAttribute("currentUser"), CurrentUserDTO.class);
-        modelAndView.addObject("success",success);
+        modelAndView.addObject("success", success);
 
         if (!model.containsAttribute("userBinding")) {
             UserServiceModel targetUserById = userService.findUserById(currentUser.getId());
@@ -219,8 +221,6 @@ public class UserController {
         modelAndView.addObject("userBinding", model.getAttribute("userBinding"));
 
 
-
-
         return modelAndView;
     }
 
@@ -229,7 +229,7 @@ public class UserController {
     public ModelAndView updateUserSettings(@Valid @ModelAttribute UserEditBinding userBinding,
                                            BindingResult bindingResult,
                                            RedirectAttributes redirectAttributes, Model model
-                                           ) {
+    ) {
         CurrentUserDTO currentUser = modelMapper.map(model.getAttribute("currentUser"), CurrentUserDTO.class);
         var modelAndView = new ModelAndView("redirect:/users/settings?id");
 
@@ -256,7 +256,6 @@ public class UserController {
             userService.updateUserDetails(userBinding);
 
 
-
             modelAndView.setViewName("redirect:/users/settings?success=true");
         }
 
@@ -266,11 +265,11 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/upload/image")
-    public ResponseEntity<?> uploadUserImage(Model model, MultipartFile file){
+    public ResponseEntity<?> uploadUserImage(Model model, MultipartFile file) {
         CurrentUserDTO currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
 
         ImageUploadResponseDTO responseObj =
-                userService.uploadUserImage(file,currentUser.getId());
+                userService.uploadUserImage(file, currentUser.getId());
 
 
         return new ResponseEntity<ImageUploadResponseDTO>(responseObj, HttpStatus.OK);
@@ -280,17 +279,17 @@ public class UserController {
 
     @GetMapping("/admin/panel")
     @PreAuthorize("isAuthenticated()")
-    public ModelAndView getAdminPanelPage(Model model){
+    public ModelAndView getAdminPanelPage(Model model) {
         var modelAndView = new ModelAndView("redirect:/");
         var currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
 
-        if(currentUser.getRoles().contains("ROLE_ADMIN")){
+        if (currentUser.getRoles().contains("ROLE_ADMIN")) {
             modelAndView.setViewName("/user/admin_templates/MainAdminControlPanel");
             Integer unpublishedReviewsCount = reviewService.getUnpublishedReviewsCount();
             Integer flaggedReviewsCount = reviewService.getFlaggedReviewsCount();
             modelAndView.addAllObjects(Map.of(
-                    "unpublishedReviewsCount",unpublishedReviewsCount,
-                    "flaggedReviewsCount",flaggedReviewsCount
+                    "unpublishedReviewsCount", unpublishedReviewsCount,
+                    "flaggedReviewsCount", flaggedReviewsCount
             ));
 
         }
@@ -300,19 +299,20 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/admin/unpublished")
-    public ModelAndView getUnpublishedReviews(Model model){
+    public ModelAndView getUnpublishedReviews(Model model) {
         var modelAndView = new ModelAndView("redirect:/");
         CurrentUserDTO currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
 
         if (currentUser.getRoles().contains("ROLE_ADMIN")) {
             //get unpublished reviews
-           List<ReviewServiceModel> unpublishedReviews = reviewService.getUnpublishedReviews();
+            List<ReviewServiceModel> unpublishedReviews = reviewService.getUnpublishedReviews();
 
-           List<ReviewViewModel> mappedUnpublishedReviews =
-                   modelMapper.map(unpublishedReviews, new TypeToken<List<ReviewViewModel>>(){}.getType());
+            List<ReviewViewModel> mappedUnpublishedReviews =
+                    modelMapper.map(unpublishedReviews, new TypeToken<List<ReviewViewModel>>() {
+                    }.getType());
 
-           modelAndView.setViewName("/user/admin_templates/UnpublishedReviewsPage");
-           modelAndView.addObject("unpublishedReviews",mappedUnpublishedReviews);
+            modelAndView.setViewName("/user/admin_templates/UnpublishedReviewsPage");
+            modelAndView.addObject("unpublishedReviews", mappedUnpublishedReviews);
         }
 
 
@@ -321,12 +321,12 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/admin/flagged")
-    public ModelAndView getFggedReviews(Model model){
+    public ModelAndView getFggedReviews(Model model) {
         CurrentUserDTO currentUser = (CurrentUserDTO) model.getAttribute("currentUser");
         var modelAndView = new ModelAndView("redirect:/");
 
         if (currentUser.getRoles().contains("ROLE_ADMIN")) {
-             modelAndView .setViewName("/user/admin_templates/FlaggedReviewsPage");
+            modelAndView.setViewName("/user/admin_templates/FlaggedReviewsPage");
 
             List<ReviewServiceModel> flaggedReviews = reviewService.getFlaggedReviews();
 
@@ -341,13 +341,48 @@ public class UserController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/admin/censor")
-    public ResponseEntity<?> toggleCensoredReview(Model model,@RequestParam(name = "id") Long reviewId){
-       CensorResponseDTO response = reviewService.toggleReviewCensorById(reviewId);
+    public ResponseEntity<?> toggleCensoredReview(Model model, @RequestParam(name = "id") Long reviewId) {
+        CensorResponseDTO response = reviewService.toggleReviewCensorById(reviewId);
 
 
-        return new ResponseEntity<CensorResponseDTO>(response,HttpStatus.OK);
+        return new ResponseEntity<CensorResponseDTO>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/admin/search")
+    public ModelAndView searchUsers(Model model, @RequestParam(name = "searchString") String searchString) {
+        CurrentUserDTO currentUser = ((CurrentUserDTO) model.getAttribute("currentUser"));
+        var modelAndView = new ModelAndView("redirect:/");
+
+        if (currentUser.getRoles().contains("ROLE_ADMIN")) {
+
+            List<UserServiceModel> usersResult = userService.getUserBySearchString(searchString);
+
+            var mappedResults = modelMapper.map(usersResult,
+                    new TypeToken<List<UserViewModel>>() {
+                    }.getType());
+
+            modelAndView = new ModelAndView("/user/admin_templates/UserSearchResultAdminView");
+            modelAndView.addObject("searchString", searchString);
+            modelAndView.addObject("users", mappedResults);
+        }
+
+        return modelAndView;
+    }
+
+    @GetMapping("/disable")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<?> toggleUserDisabled(Model model, @RequestParam(name = "id") Long id) {
+        CurrentUserDTO currentUser = ((CurrentUserDTO) model.getAttribute("currentUser"));
+        UserDisableResponseDTO userDisableResponse = new UserDisableResponseDTO(false);
+
+        if (currentUser.getRoles().contains("ROLE_ADMIN")) {
+            userDisableResponse = userService.toggleUserDisabled(id);
+
+        }
+
+        return new ResponseEntity<>(userDisableResponse, HttpStatus.OK);
+    }
 
     //======================================================================================================================
     private Boolean passwordsMatch(RegisterUserBinding userBinding) {

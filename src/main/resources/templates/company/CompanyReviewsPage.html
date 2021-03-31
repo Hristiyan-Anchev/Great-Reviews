@@ -33,8 +33,8 @@
                 </div>
             </div>
             <div class="card-body text-success">
-                <h5 th:text="*{title}" class="card-title">Very good company </h5>
-                <p th:text="*{content}" class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque nihil quae rem? A at corporis cum delectus, dicta, dolorem dolorum exercitationem fugit quisquam quos reiciendis rem tempora tempore? Minima, quam!</p>
+                <h5 th:classappend="${r.isCensored == true ? 'text-danger' : ''}" th:text="*{title}" class="card-title">Very good company </h5>
+                <p th:classappend="${r.isCensored == true ? 'text-danger' : ''}" th:text="*{content}" class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloremque nihil quae rem? A at corporis cum delectus, dicta, dolorem dolorum exercitationem fugit quisquam quos reiciendis rem tempora tempore? Minima, quam!</p>
             </div>
             <!--            footer section-->
 <!--            todo: implement mark as useful and flag review functions-->

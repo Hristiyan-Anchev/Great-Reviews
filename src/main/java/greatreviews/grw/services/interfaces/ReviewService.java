@@ -24,7 +24,7 @@ public interface ReviewService {
 
     List<ReviewServiceModel> getLatestReviews(int i);
 
-    Set<ReviewServiceModel> getUserReviewsById(Long userId);
+    List<ReviewServiceModel> getUserReviewsById(Long userId);
 
     FlagReviewResponseDTO addUserFlag(Long reviewId, Long id);
 

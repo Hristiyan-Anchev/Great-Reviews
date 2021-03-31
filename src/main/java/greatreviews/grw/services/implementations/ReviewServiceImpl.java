@@ -21,9 +21,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Getter
@@ -32,6 +34,8 @@ import java.util.Set;
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewServiceImpl implements ReviewService {
+    public static final String CENSORED_CONTENT_TEXT = "This review has been censored due to violation of our policy.";
+    public static final String CENSORED_TITLE_TEXT = "Censored review";
     ReviewRepository reviewRepository;
     UserRepository userRepository;
     CompanyRepository companyRepository;
@@ -87,7 +91,8 @@ public class ReviewServiceImpl implements ReviewService {
                 new TypeToken<List<ReviewServiceModel>>() {
                 }.getType());
 
-        return mappedReviews;
+
+        return alterCensoredReviews(mappedReviews);
     }
 
     @Override
@@ -103,7 +108,7 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public Set<ReviewServiceModel> getUserReviewsById(Long userId) {
+    public List<ReviewServiceModel> getUserReviewsById(Long userId) {
         Set<ReviewEntity> userReviews = reviewRepository.getReviewsByUser(userId);
 
         Set<ReviewServiceModel> mappedReviews = modelMapper.map(
@@ -112,7 +117,7 @@ public class ReviewServiceImpl implements ReviewService {
                 }.getType()
         );
 
-        return mappedReviews;
+        return this.alterCensoredReviews(mappedReviews);
     }
 
     @Override
@@ -205,4 +210,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
 
+    private List<ReviewServiceModel> alterCensoredReviews(Collection<ReviewServiceModel> allReviews){
+        return allReviews.stream().map(r -> {
+            if(r.getIsCensored()){
+                r.setContent(CENSORED_CONTENT_TEXT);
+                r.setTitle(CENSORED_TITLE_TEXT);
+                return r;
+            }
+            return r;
+        }).collect(Collectors.toList());
+    }
 }
