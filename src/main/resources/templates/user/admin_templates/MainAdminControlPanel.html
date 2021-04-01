@@ -35,6 +35,17 @@
                     </a>
                 </div>
             </div>
+
+            <div class="card m-5">
+                <div class="card-body">
+                    <h5 class="card-title">Blog controls</h5>
+                    <p class="card-text">Control the blog posts, add/edit/delete blogs </p>
+                    <a th:inline="text" href="/blogs"
+                       class="btn btn-primary">
+                        Manage blogs
+                    </a>
+                </div>
+            </div>
         </div>
 
         <div class="d-flex flex-column">
@@ -47,13 +58,15 @@
                 </form>
             </div>
 
-            <div class="item mt-3 mb-3">
-                <h3 class="text-center">Search companies</h3>
-                <form class="form-inline" method="POST" action="">
-                    <input class="form-control mr-sm-2" type="search" name="searchString" placeholder="Type a company name" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" id="companySearch" type="submit">Search</button>
-                </form>
-            </div>
+<!--            todo: admin company manage -->
+
+<!--            <div class="item mt-3 mb-3">-->
+<!--                <h3 class="text-center">Search companies</h3>-->
+<!--                <form class="form-inline" method="POST" action="">-->
+<!--                    <input class="form-control mr-sm-2" type="search" name="searchString" placeholder="Type a company name" aria-label="Search">-->
+<!--                    <button class="btn btn-outline-success my-2 my-sm-0" id="companySearch" type="submit">Search</button>-->
+<!--                </form>-->
+<!--            </div>-->
 
         </div>
 

@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
 
     @Query("SELECT u FROM UserEntity u WHERE u.email LIKE CONCAT('%',?1,'%') OR u.username LIKE CONCAT('%',?1,'%')")
     List<UserEntity> findUsersBySearchString(String search);
+
+
 }

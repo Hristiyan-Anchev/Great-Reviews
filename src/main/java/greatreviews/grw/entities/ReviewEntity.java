@@ -16,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@EqualsAndHashCode(callSuper = true)
 public class ReviewEntity extends BaseEntity {
 
     @Column
@@ -32,8 +33,6 @@ public class ReviewEntity extends BaseEntity {
 
     @Column
     Boolean isCensored;
-
-
 
     @ManyToOne(fetch = FetchType.EAGER)
             @JoinColumn(name = "user_id",referencedColumnName = "id")

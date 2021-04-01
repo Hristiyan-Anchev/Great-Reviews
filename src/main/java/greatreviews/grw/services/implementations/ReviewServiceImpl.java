@@ -4,6 +4,7 @@ package greatreviews.grw.services.implementations;
 import greatreviews.grw.controllers.DTO.CensorResponseDTO;
 import greatreviews.grw.controllers.DTO.FlagReviewResponseDTO;
 import greatreviews.grw.controllers.DTO.PublishReviewResponseDTO;
+import greatreviews.grw.controllers.DTO.ReviewReportsDismissResponseDTO;
 import greatreviews.grw.entities.ReviewEntity;
 import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.CompanyRepository;
@@ -21,10 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -209,6 +207,25 @@ public class ReviewServiceImpl implements ReviewService {
         return response;
     }
 
+    @Override
+    public ReviewReportsDismissResponseDTO dismissReportsByReviewId(Long id) {
+        Optional<ReviewEntity> targetReview = reviewRepository.findById(id);
+
+
+        if (targetReview.isPresent()) {
+            //todo: relation needs refactoring
+            ReviewEntity reviewEntity = targetReview.get();
+
+            reviewEntity.getUsersFlagged().forEach(u -> {
+                    u.getFlaggedReviews().remove(reviewEntity);
+            });
+
+            reviewRepository.saveAndFlush(reviewEntity);
+            return new ReviewReportsDismissResponseDTO(true);
+        }
+
+        return new ReviewReportsDismissResponseDTO(false);
+    }
 
     private List<ReviewServiceModel> alterCensoredReviews(Collection<ReviewServiceModel> allReviews){
         return allReviews.stream().map(r -> {

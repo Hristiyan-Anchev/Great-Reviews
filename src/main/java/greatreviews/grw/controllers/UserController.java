@@ -1,9 +1,6 @@
 package greatreviews.grw.controllers;
 
-import greatreviews.grw.controllers.DTO.CensorResponseDTO;
-import greatreviews.grw.controllers.DTO.CurrentUserDTO;
-import greatreviews.grw.controllers.DTO.ImageUploadResponseDTO;
-import greatreviews.grw.controllers.DTO.UserDisableResponseDTO;
+import greatreviews.grw.controllers.DTO.*;
 import greatreviews.grw.controllers.bindings.RegisterUserBinding;
 import greatreviews.grw.controllers.bindings.UserEditBinding;
 import greatreviews.grw.controllers.views.CompanyViewModel;
@@ -44,6 +41,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -276,7 +274,6 @@ public class UserController {
 
     }
 
-
     @GetMapping("/admin/panel")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView getAdminPanelPage(Model model) {
@@ -340,6 +337,22 @@ public class UserController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/admin/flagged/dismiss")
+    public ResponseEntity<?> dismissReviewReports(Model model,@RequestParam(name="id")Long id){
+        CurrentUserDTO currentUser = ((CurrentUserDTO)model.getAttribute("currentUser"));
+
+        if (currentUser.getRoles().contains("ROLE_ADMIN")) {
+            ReviewReportsDismissResponseDTO responseDTO = reviewService.dismissReportsByReviewId(id);
+            return new ResponseEntity<ReviewReportsDismissResponseDTO>(
+                    responseDTO,HttpStatus.OK
+            );
+        }
+
+        return new ResponseEntity<ReviewReportsDismissResponseDTO>(new ReviewReportsDismissResponseDTO(null)
+        ,HttpStatus.OK);
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/admin/censor")
     public ResponseEntity<?> toggleCensoredReview(Model model, @RequestParam(name = "id") Long reviewId) {
         CensorResponseDTO response = reviewService.toggleReviewCensorById(reviewId);
@@ -357,7 +370,7 @@ public class UserController {
         if (currentUser.getRoles().contains("ROLE_ADMIN")) {
 
             List<UserServiceModel> usersResult = userService.getUserBySearchString(searchString);
-
+           usersResult = usersResult.stream().filter(u -> !u.getId().equals(currentUser.getId())).collect(Collectors.toList());
             var mappedResults = modelMapper.map(usersResult,
                     new TypeToken<List<UserViewModel>>() {
                     }.getType());
@@ -376,7 +389,7 @@ public class UserController {
         CurrentUserDTO currentUser = ((CurrentUserDTO) model.getAttribute("currentUser"));
         UserDisableResponseDTO userDisableResponse = new UserDisableResponseDTO(false);
 
-        if (currentUser.getRoles().contains("ROLE_ADMIN")) {
+        if (currentUser.getRoles().contains("ROLE_ADMIN") && !currentUser.getId().equals(id)) {
             userDisableResponse = userService.toggleUserDisabled(id);
 
         }

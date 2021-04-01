@@ -17,7 +17,7 @@
 
 
 <div class="container mt-5 min-vh-100">
-    <!--       write a review or login section -->
+
 
 
     <!--company reviews section-->
@@ -51,7 +51,14 @@
                 >
                     Censor review
                 </button>
-<!--               todo add dismiss button-->
+
+                <button class="btn badge badge-primary text-dark m-3 dismiss-button"
+                        th:data-review-id="${r.id}"
+                >
+                    Dismiss reports
+                </button>
+
+<!--            todo add dismiss button -->
             </div>
 
         </div>
@@ -77,7 +84,7 @@
     let unpublishedReviewsH3 = document.getElementById("unpublishedReviewsH3");
     // let noUnpublishedReviewsH3 = document.getElementById("noUnpublishedReviewsH3");
 
-    const publishHandler = async (evt) => {
+    const censorHandler = async (evt) => {
         evt.stopPropagation();
 
         const reviewId = evt.currentTarget.dataset["reviewId"];
@@ -107,10 +114,35 @@
 
     }
 
-
     Array.from(censorBtns).forEach(pb => {
-        pb.addEventListener("click", publishHandler);
+        pb.addEventListener("click", censorHandler);
     })
+
+
+    //dismiss btn logic
+    const dismissButtons = Array.from(document.getElementsByClassName("dismiss-button"));
+
+    const dismissHandler = async function (evt){
+        const reviewId = evt.currentTarget.dataset["reviewId"];
+
+        let response = await (await fetch(`/users/admin/flagged/dismiss?id=${reviewId}`)).json();
+        console.log(response);
+
+        if (response.isDismissed === true) {
+            const review = evt.target.parentElement.parentElement;
+            reviewsContainer.removeChild(review);
+            reviewsCount -= 1;
+            unpublishedReviewsH3.textContent = reviewsCount === 0 ? 'No flagged reviews ...' : `${reviewsCount} flagged reviews`
+
+        }
+
+    }
+
+    dismissButtons.forEach(btn => {
+       btn.addEventListener("click",dismissHandler);
+    });
+
+
 
     /*]]>*/
 </script>

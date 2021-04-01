@@ -3,6 +3,7 @@ package greatreviews.grw.services.interfaces;
 import greatreviews.grw.controllers.DTO.CensorResponseDTO;
 import greatreviews.grw.controllers.DTO.FlagReviewResponseDTO;
 import greatreviews.grw.controllers.DTO.PublishReviewResponseDTO;
+import greatreviews.grw.controllers.DTO.ReviewReportsDismissResponseDTO;
 import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.ReviewEntity;
 import greatreviews.grw.services.models.ReviewServiceModel;
@@ -39,4 +40,6 @@ public interface ReviewService {
     List<ReviewServiceModel> getFlaggedReviews();
 
     CensorResponseDTO toggleReviewCensorById(Long reviewId);
+
+    ReviewReportsDismissResponseDTO dismissReportsByReviewId(Long id);
 }
