@@ -1,6 +1,7 @@
 package greatreviews.grw.init;
 
 import com.google.gson.Gson;
+import de.svenjacobs.loremipsum.LoremIpsum;
 import greatreviews.grw.entities.*;
 import greatreviews.grw.enums.LocationEnum;
 import greatreviews.grw.init.dto.CategoryDTO;
@@ -54,7 +55,8 @@ public class DbInit implements CommandLineRunner {
     CompanyRepository companyRepository;
     UserRepository userRepository;
     PasswordEncoder passwordEncoder;
-
+    BlogRepository blogRepository;
+    LoremIpsum loremIpsum;
 
     TextFileParser textFileParser;
     Gson gson;
@@ -69,15 +71,36 @@ public class DbInit implements CommandLineRunner {
         initCategories();
         initDefaultUser();
         initTestCompany();
+        initBLogs();
 
 
 
-//        calculateConfidenceBasedOnVotes();
+//      calculateConfidenceBasedOnVotes();
         testMessageDigestApi();
 
 
 //======================================================================================================================
 
+    }
+
+    private void initBLogs() {
+        var dummyImageUrl = "https://picsum.photos/id/%d/1024/1024";
+        var numberOfBlogs = 5;
+        var author = userRepository.findByEmail("admin@mail.com").get();
+
+        for (int i = 0; i < numberOfBlogs; i++) {
+            var rand = Math.round(Math.random() * 10);
+            blogRepository.save(
+              new BlogpostEntity(
+                      loremIpsum.getWords(3),
+                      String.format(dummyImageUrl,rand),
+                      loremIpsum.getWords(500),
+                      author
+              )
+            );
+        }
+
+        blogRepository.flush();
     }
 
     private void initTestCompany() {

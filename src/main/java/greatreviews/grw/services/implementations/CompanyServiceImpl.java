@@ -50,6 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
         SubcategoryService subcategoryService;
         CurrentUserDTO currentUser;
         Tika tika;
+        FileUploadService fileUploadService;
 
         Cloudinary cloudinary;
 
@@ -301,26 +302,15 @@ public class CompanyServiceImpl implements CompanyService {
             }));
 
 
-
-
         }
 
         @Override
         public ImageUploadResponseDTO uploadLogo(Long companyId, MultipartFile file) {
                 var responseObject = new ImageUploadResponseDTO("Something went wrong ... check your file again",false,"");
 
-            if(file != null && !file.isEmpty()  ) {
+                var resourceSecureURL = fileUploadService.uploadFile(file,TRANSFORMATION_PARAMS);
 
-
-                try {
-                    String detect = tika.detect(file.getInputStream());
-
-                    if(!detect.startsWith("image/")) return responseObject;
-
-                    //upload image
-                    var uploadResponse = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
-                    var resourceSecureURL = uploadResponse.get("secure_url").toString();
-
+            if(resourceSecureURL != null) {
 
                     Optional<CompanyEntity> companyEntityById = companyRepository.findCompanyEntityById(companyId);
                     companyEntityById.ifPresent(ce -> {
@@ -333,20 +323,20 @@ public class CompanyServiceImpl implements CompanyService {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        String transformedLogo = insertTransformation(TRANSFORMATION_PARAMS,resourceSecureURL);
-                        ce.setLogo(transformedLogo);
+
+                        ce.setLogo(resourceSecureURL);
                         companyRepository.saveAndFlush(ce);
                     });
 
+                    //set response values
                     responseObject.setUploadSuccessful(true);
                     responseObject.setMsg("Image upload successful");
                     responseObject.setNewUrl(insertTransformation(TRANSFORMATION_PARAMS,resourceSecureURL));
 
-
-                } catch (Exception e) {
+                } else {
                     responseObject=  new ImageUploadResponseDTO("Image not uploaded, an error occured", false,"");
                 }
-            }
+
 
             return responseObject;
 

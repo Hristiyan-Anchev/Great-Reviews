@@ -1,0 +1,82 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+>
+
+<th:block th:replace="head"
+></th:block>
+
+<body>
+<th:block th:replace="Header">
+
+</th:block>
+
+<div class=" container min-vh-100">
+    <h2 class="m-5 text-center">Add new blog post</h2>
+
+    <form class="d-flex flex-column justify-content-center align-items-center m-5"
+          method="POST" action="/blogs/add"
+          enctype="multipart/form-data"
+          th:object="${addBlogBinding}"
+        >
+
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+        <!--  img upload form -->
+        <h5 class="text-center">Upload image</h5>
+        <div class="container-fluid d-flex flex-column justify-content-center align-items-center w-50">
+
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" name="file" class="custom-file-input" id="imageUpload">
+                    <label class="custom-file-label " id="imageUploadLbl" for="imageUpload"></label>
+                </div>
+            </div>
+        </div>
+        <small th:if="${#fields.hasErrors('file')}" th:errors="*{file}"  class="text-danger">
+        </small>
+
+
+        <p id="uploadMessage" class="text-center"></p>
+        <div class="form-group">
+            <label for="blogTitle">Blog title</label>
+            <input type="text" class="form-control" name="title" id="blogTitle" aria-describedby="title" placeholder="Blog title">
+            <small class="text-danger"
+                   th:if="${#fields.hasErrors('title')}"
+                   th:errors="*{title}"
+            >
+            </small>
+        </div>
+
+
+        <div class="form-group">
+            <label for="blogContent">Blog content</label>
+            <textarea type="text" class="form-control" id="blogContent" name="content" placeholder="Blog content" rows="10">
+            </textarea>
+            <small class="text-danger"
+                    th:if="${#fields.hasErrors('content')}"
+                   th:errors="*{content}"
+            >
+            </small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+</div>
+
+<th:block th:replace="Footer">
+
+</th:block>
+
+<script>
+    const uploadInputField = document.getElementById("imageUpload");
+    const uploadInputLabel = document.getElementById("imageUploadLbl");
+    uploadInputField.addEventListener("change",function(evt){
+        uploadInputLabel.textContent = uploadInputField.files[0].name;
+    });
+
+</script>
+</body>
+</html>

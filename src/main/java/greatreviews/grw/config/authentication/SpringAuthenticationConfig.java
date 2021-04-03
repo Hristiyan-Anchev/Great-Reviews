@@ -33,12 +33,11 @@ public class SpringAuthenticationConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-//                    .csrf().disable()
-//                    .cors().disable()
                 .authorizeRequests()
-                    .antMatchers("/users/login").anonymous()
+                .antMatchers("/users/login").anonymous()
                 .antMatchers("/users/logout","/media/**").permitAll()
                 .antMatchers(
+                        //TODO secure your routes by using .hasRole()
                         "/",
                         "/bootstrap/**",
                         "/images/**",
@@ -52,7 +51,9 @@ public class SpringAuthenticationConfig extends WebSecurityConfigurerAdapter {
                         "/companies/show",
                         "/companies/search",
                         "/reviews/company",
-                        "/reviews/company/evaluate"
+                        "/reviews/company/evaluate",
+                        "/blogs/control",
+                        "/blogs/home"
 
                 )
                 .permitAll()

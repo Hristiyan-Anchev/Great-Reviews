@@ -4,15 +4,13 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.svenjacobs.loremipsum.LoremIpsum;
 import greatreviews.grw.config.authentication.CustomUser;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
-import greatreviews.grw.controllers.DTO.RoleDTO;
-import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.*;
 import greatreviews.grw.entities.basic.BaseEntity;
 import greatreviews.grw.services.models.CompanyServiceModel;
 import greatreviews.grw.services.models.ReviewServiceModel;
-
 import org.apache.tika.Tika;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -29,7 +27,6 @@ import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -54,11 +51,14 @@ public class BeansConfig {
         return modelMapper;
     }
 
-
+    @Bean
+    public LoremIpsum getLoremIpsum() {
+        return new LoremIpsum();
+    }
 
 
     @Bean
-    public Tika getMagic(){
+    public Tika getMagic() {
         var tika = new Tika();
         return tika;
     }
@@ -70,11 +70,11 @@ public class BeansConfig {
     }
 
     @Bean
-    public Cloudinary getCloudinaryInstance(){
-        var cloudinary =new Cloudinary(ObjectUtils.asMap(
-                "cloud_name",env.getProperty("cloud.name"),
-                "api_key",env.getProperty("api.key"),
-                "api_secret",env.getProperty("api.secret")
+    public Cloudinary getCloudinaryInstance() {
+        var cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", env.getProperty("cloud.name"),
+                "api_key", env.getProperty("api.key"),
+                "api_secret", env.getProperty("api.secret")
         ));
 
         return cloudinary;
@@ -105,7 +105,7 @@ public class BeansConfig {
                     }
                 });
 
-        Converter<Set<UserEntity>,Set<Long>> usersFlaggedConverter =
+        Converter<Set<UserEntity>, Set<Long>> usersFlaggedConverter =
                 new Converter<Set<UserEntity>, Set<Long>>() {
                     @Override
                     public Set<Long> convert(MappingContext<Set<UserEntity>, Set<Long>> context) {
@@ -113,7 +113,7 @@ public class BeansConfig {
                     }
                 };
 
-        modelMapper.typeMap(ReviewEntity.class,ReviewServiceModel.class).addMappings(
+        modelMapper.typeMap(ReviewEntity.class, ReviewServiceModel.class).addMappings(
                 new PropertyMap<ReviewEntity, ReviewServiceModel>() {
                     @Override
                     protected void configure() {
@@ -148,54 +148,54 @@ public class BeansConfig {
 
     private void companyEntToCompServModelVotesMap(ModelMapper modelMapper) {
         //converting upvotes
-       Converter<Set<ReviewEntity>,Long> mapUpvotesCount =
-               new Converter<Set<ReviewEntity>, Long>() {
-                   @Override
-                   public Long convert(MappingContext<Set<ReviewEntity>, Long> context) {
-                       Long upvotesCount = context.getSource().stream().filter(r->r.getVote().equals("1"))
-                               .count();
-                       return upvotesCount;
-                   }
-               };
-
-        //converting downvotes
-        Converter<Set<ReviewEntity>,Long> mapDownvotesCount =
+        Converter<Set<ReviewEntity>, Long> mapUpvotesCount =
                 new Converter<Set<ReviewEntity>, Long>() {
                     @Override
                     public Long convert(MappingContext<Set<ReviewEntity>, Long> context) {
-                        Long downvotesCount = context.getSource().stream().filter(r->r.getVote().equals("-1"))
+                        Long upvotesCount = context.getSource().stream().filter(r -> r.getVote().equals("1"))
+                                .count();
+                        return upvotesCount;
+                    }
+                };
+
+        //converting downvotes
+        Converter<Set<ReviewEntity>, Long> mapDownvotesCount =
+                new Converter<Set<ReviewEntity>, Long>() {
+                    @Override
+                    public Long convert(MappingContext<Set<ReviewEntity>, Long> context) {
+                        Long downvotesCount = context.getSource().stream().filter(r -> r.getVote().equals("-1"))
                                 .count();
                         return downvotesCount;
                     }
                 };
 
-        Converter<Set<SubcategoryEntity>,Long> firstSubcategoryConverter = new Converter<Set<SubcategoryEntity>, Long>() {
+        Converter<Set<SubcategoryEntity>, Long> firstSubcategoryConverter = new Converter<Set<SubcategoryEntity>, Long>() {
             @Override
             public Long convert(MappingContext<Set<SubcategoryEntity>, Long> context) {
                 var sourceSubcategories = context.getSource();
-                if(sourceSubcategories.size() >= 1){
+                if (sourceSubcategories.size() >= 1) {
                     return new ArrayList<>(sourceSubcategories).get(0).getId();
                 }
                 return null;
             }
         };
 
-        Converter<Set<SubcategoryEntity>,Long> secondSubcategoryConverter = new Converter<Set<SubcategoryEntity>, Long>() {
+        Converter<Set<SubcategoryEntity>, Long> secondSubcategoryConverter = new Converter<Set<SubcategoryEntity>, Long>() {
             @Override
             public Long convert(MappingContext<Set<SubcategoryEntity>, Long> context) {
                 var sourceSubcategories = context.getSource();
-                if(sourceSubcategories.size() >= 2){
+                if (sourceSubcategories.size() >= 2) {
                     return new ArrayList<>(sourceSubcategories).get(1).getId();
                 }
                 return null;
             }
         };
 
-        Converter<Set<SubcategoryEntity>,Long> thirdSubcategoryConverter = new Converter<Set<SubcategoryEntity>, Long>() {
+        Converter<Set<SubcategoryEntity>, Long> thirdSubcategoryConverter = new Converter<Set<SubcategoryEntity>, Long>() {
             @Override
             public Long convert(MappingContext<Set<SubcategoryEntity>, Long> context) {
                 var sourceSubcategories = context.getSource();
-                if(sourceSubcategories.size() >= 3){
+                if (sourceSubcategories.size() >= 3) {
                     return new ArrayList<>(sourceSubcategories).get(2).getId();
                 }
                 return null;
@@ -204,7 +204,7 @@ public class BeansConfig {
 
 
         //property maps for CompanyEntity to CompanyServiceModel properties
-        PropertyMap<CompanyEntity,CompanyServiceModel> companyEntUpvotesMap =
+        PropertyMap<CompanyEntity, CompanyServiceModel> companyEntUpvotesMap =
                 new PropertyMap<CompanyEntity, CompanyServiceModel>() {
                     @Override
                     protected void configure() {
@@ -212,7 +212,7 @@ public class BeansConfig {
                     }
                 };
 
-        PropertyMap<CompanyEntity,CompanyServiceModel> companyEntDownvotesMap =
+        PropertyMap<CompanyEntity, CompanyServiceModel> companyEntDownvotesMap =
                 new PropertyMap<CompanyEntity, CompanyServiceModel>() {
                     @Override
                     protected void configure() {
@@ -220,14 +220,14 @@ public class BeansConfig {
                     }
                 };
 
-        PropertyMap<CompanyEntity,CompanyServiceModel> mainCatMap = new PropertyMap<CompanyEntity, CompanyServiceModel>() {
+        PropertyMap<CompanyEntity, CompanyServiceModel> mainCatMap = new PropertyMap<CompanyEntity, CompanyServiceModel>() {
             @Override
             protected void configure() {
                 map(source.getCategory().getId()).setMainCategory(null);
             }
         };
 
-        PropertyMap<CompanyEntity,CompanyServiceModel> subcategoriesMapping = new PropertyMap<CompanyEntity, CompanyServiceModel>() {
+        PropertyMap<CompanyEntity, CompanyServiceModel> subcategoriesMapping = new PropertyMap<CompanyEntity, CompanyServiceModel>() {
             @Override
             protected void configure() {
                 using(firstSubcategoryConverter).map(source.getSubcategories()).setFirstSubcategory(null);
@@ -245,7 +245,7 @@ public class BeansConfig {
     }
 
     private void configReviewServiceModelToReviewEntity(ModelMapper modelMapper) {
-        PropertyMap<ReviewServiceModel,ReviewEntity> serviceModelToEntityMap =
+        PropertyMap<ReviewServiceModel, ReviewEntity> serviceModelToEntityMap =
                 new PropertyMap<ReviewServiceModel, ReviewEntity>() {
                     @Override
                     protected void configure() {
@@ -271,22 +271,22 @@ public class BeansConfig {
 
         //map user entity company id's to custom user
 
-       Converter<Set<CompanyEntity>,List<Long>> companyEntityToCompanyIdListMapping =
-               new Converter<Set<CompanyEntity>, List<Long>>() {
-                   @Override
-                   public List<Long> convert(MappingContext<Set<CompanyEntity>, List<Long>> context) {
-                       return context.getSource().stream().map(BaseEntity::getId).collect(Collectors.toUnmodifiableList());
-                   }
-               };
+        Converter<Set<CompanyEntity>, List<Long>> companyEntityToCompanyIdListMapping =
+                new Converter<Set<CompanyEntity>, List<Long>>() {
+                    @Override
+                    public List<Long> convert(MappingContext<Set<CompanyEntity>, List<Long>> context) {
+                        return context.getSource().stream().map(BaseEntity::getId).collect(Collectors.toUnmodifiableList());
+                    }
+                };
 
-       modelMapper.typeMap(UserEntity.class,CustomUser.class).addMappings(
-               new PropertyMap<UserEntity, CustomUser>() {
-                   @Override
-                   protected void configure() {
-                       using(companyEntityToCompanyIdListMapping).map(source.getCompanies()).setOwnedCompanies(null);
-                   }
-               }
-       );
+        modelMapper.typeMap(UserEntity.class, CustomUser.class).addMappings(
+                new PropertyMap<UserEntity, CustomUser>() {
+                    @Override
+                    protected void configure() {
+                        using(companyEntityToCompanyIdListMapping).map(source.getCompanies()).setOwnedCompanies(null);
+                    }
+                }
+        );
 
     }
 
@@ -302,7 +302,7 @@ public class BeansConfig {
                 new PropertyMap<CustomUser, CurrentUserDTO>() {
                     @Override
                     protected void configure() {
-                       using(roleEntityRoleDTOConverter).map(source.getRoles()).setRoles(null);
+                        using(roleEntityRoleDTOConverter).map(source.getRoles()).setRoles(null);
                     }
                 }
         );
