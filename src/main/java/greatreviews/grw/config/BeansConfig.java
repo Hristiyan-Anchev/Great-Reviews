@@ -9,6 +9,7 @@ import greatreviews.grw.config.authentication.CustomUser;
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.entities.*;
 import greatreviews.grw.entities.basic.BaseEntity;
+import greatreviews.grw.services.models.BlogServiceModel;
 import greatreviews.grw.services.models.CompanyServiceModel;
 import greatreviews.grw.services.models.ReviewServiceModel;
 import org.apache.tika.Tika;
@@ -47,6 +48,7 @@ public class BeansConfig {
         companyEntToCompServModelVotesMap(modelMapper);
         mapUserEntityToCustomUser(modelMapper);
         customUserRolesToCurrentUserDTORoles(modelMapper);
+
 
         return modelMapper;
     }
@@ -143,6 +145,15 @@ public class BeansConfig {
                     }
                 };
 
+        PropertyMap<BlogpostEntity,BlogServiceModel> blogToBlogServiceModelMap =
+                new PropertyMap<BlogpostEntity, BlogServiceModel>() {
+                    @Override
+                    protected void configure() {
+                        using(formatDateToString).map(source.getCreated()).setCreated(null);
+                    }
+                };
+
+        modelMapper.addMappings(blogToBlogServiceModelMap);
         modelMapper.addMappings(reviewToServiceModelMap);
     }
 

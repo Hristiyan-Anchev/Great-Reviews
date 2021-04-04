@@ -11,23 +11,33 @@
     <div class="container">
         <h1 class="display-4">We share our experience</h1>
         <p class="lead">Great Reviews's blog</p>
-        <p><a href="/blog" class="text-primary">&lt; Go back</a></p>
+        <p><a href="/blogs/home" class="text-primary">&lt; Go back</a></p>
     </div>
 </div>
 
 
-<div class="d-flex flex-column  align-items-center">
-    <div class="container  flex-column align-items-center justify-content-around" >
-        <h1 class="m-5 text-center display-4"> Post title goes here </h1>
-        <p class="text-muted text-center" style="font-size: .8rem">01/01/2021</p>
+<div th:object="${currentBlogPost}" class="d-flex flex-column  align-items-center justify-content-center">
+    <div class="container">
+        <h1 class="m-5 text-center display-4"
+            th:text="*{title}"
+        > Post title goes here </h1>
 
-        <p class="m-5 p-5 text-center font-weight-lighter " style="line-height: 2rem; font-size: 1.3rem">
+        <p class="text-muted text-center m-5" style="font-size: .8rem"
+           th:text="*{created}"
+        >01/01/2021</p>
 
+        <div class="text-center">
+        <img  th:src="*{imageURL}" alt="Blog image" style="max-width: 500px; height:auto">
+<!--            asd-->
+        </div>
+
+        <p class="m-5 p-5 text-center font-weight-lighter" style="line-height: 2rem; font-size: 1.3rem"
+            th:text="*{content}"
+        >
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab animi asperiores atque commodi consectetur consequatur culpa cumque doloribus eligendi esse expedita facilis ipsam ipsum iure libero minima mollitia nostrum obcaecati optio praesentium quod ratione repellat repudiandae rerum sequi sint tenetur velit veritatis vero, voluptatibus! Accusamus animi architecto atque aut autem deleniti, facilis fuga maiores necessitatibus nihil numquam odio pariatur praesentium provident quaerat quis quo sequi soluta sunt tempora. A aperiam architecto at corporis cumque doloremque eveniet ex expedita facere facilis fugit harum hic iusto laborum magnam molestias officia perferendis porro repellat rerum similique ut, velit, veritatis, voluptate voluptatem. Error, repellendus!
-
         </p>
 
-        <p class="text-muted m-5 text-right">By: John Doe</p>
+<!--        <p class="text-muted m-5 text-right">By: John Doe</p>-->
 
 
 
@@ -40,7 +50,29 @@
 </div>
 
 
-<th:block th:replace="blog::moreposts"></th:block>
+<div th:fragment="moreposts" class="container mt-5 mb-5">
+
+    <h3 class="m-5">More from our blog</h3>
+    <div class="row">
+
+
+        <div class="col-sm d-flex justify-content-around flex-wrap">
+
+            <div th:each="blg : ${moreFromBlog}" class="card m-2" style="width: 18rem;">
+                <img class="card-img-top" th:src="${blg.imageURL}" alt="Card image cap">
+                <div class="card-body">
+                    <h5 th:text="${blg.title}" class="card-title">Card title</h5>
+                    <p th:text="${blg.content.length() >= 100 ? blg.content.substring(0,100) : blg.content}" class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <a th:href="@{/blogs/post(id=${blg.id})}" class="btn btn-primary">Read more</a>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+</div>
 
 
 <th:block th:replace="Footer"></th:block>

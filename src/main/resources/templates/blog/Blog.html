@@ -24,7 +24,7 @@
             <div class="col-sm-5 d-flex flex-column justify-content-center">
                 <div class="p-5">
                     <h2 th:text="${latestBlog.title}">Article heading...</h2>
-                    <p th:text="${latestBlog.content.substring(0,100)}" class="m-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, id?</p>
+                    <p th:text="${latestBlog.content.length() >= 100 ? latestBlog.content.substring(0,100) : latestBlog.content}" class="m-2">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab, id?</p>
                 </div>
                 <a th:href="@{/blogs/post(id=${latestBlog.id})}" class="btn btn-primary btn-lg active m-5" role="button" aria-pressed="true">Read more</a>
             </div>
@@ -58,7 +58,7 @@
                 <img class="card-img-top" th:src="${blg.imageURL}" alt="Card image cap">
                 <div class="card-body">
                     <h5 th:text="${blg.title}" class="card-title">Card title</h5>
-                    <p th:text="${blg.content.substring(0,100)}" class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                    <p th:text="${blg.content.length() >= 100 ? blg.content.substring(0,100) : blg.content}" class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                     <a th:href="@{/blogs/post(id=${blg.id})}" class="btn btn-primary">Read more</a>
                 </div>
             </div>

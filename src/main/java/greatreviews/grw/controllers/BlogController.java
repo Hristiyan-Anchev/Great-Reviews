@@ -2,12 +2,14 @@ package greatreviews.grw.controllers;
 
 import greatreviews.grw.controllers.DTO.CurrentUserDTO;
 import greatreviews.grw.controllers.bindings.AddBlogBinding;
+import greatreviews.grw.controllers.views.BlogViewModel;
 import greatreviews.grw.services.interfaces.BlogService;
 import greatreviews.grw.services.interfaces.FileUploadService;
 import greatreviews.grw.services.models.BlogServiceModel;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -41,7 +43,7 @@ public class BlogController {
         var modelAndView = new ModelAndView("/blog/Blog");
 
         //get the four latest blogs
-        List<BlogServiceModel> latestBlogs = blogService.getLatestBlogs(4);
+        List<BlogViewModel> latestBlogs = modelMapper.map(blogService.getLatestBlogs(4),new TypeToken<List<BlogViewModel>>(){}.getType());
         modelAndView.addObject("latestBlog",latestBlogs.get(0));
         modelAndView.addObject("moreFromBlog", latestBlogs.stream().skip(1).collect(Collectors.toList()));
 
@@ -51,8 +53,19 @@ public class BlogController {
 
 
     @GetMapping("/post")
-    public ModelAndView getBlogPost(Model model){
+    public ModelAndView getBlogPost(Model model,@RequestParam(name = "id") Long postId){
         var modelAndView = new ModelAndView("redirect:/");
+        BlogServiceModel targetBlogPost =
+                blogService.findPostById(postId);
+
+        if(targetBlogPost != null) {
+            var mappedTargetBlogPost = modelMapper.map(targetBlogPost, BlogViewModel.class);
+            var moreFromBlog = modelMapper.map(blogService.getLatestBlogs(3), new TypeToken<List<BlogViewModel>>(){}.getType());
+
+            modelAndView.setViewName("/blog/BlogPost");
+            modelAndView.addObject("currentBlogPost", mappedTargetBlogPost);
+            modelAndView.addObject("moreFromBlog",moreFromBlog);
+        }
 
         return modelAndView;
     }
@@ -74,7 +87,6 @@ public class BlogController {
 
         return modelAndView;
     }
-
     @PostMapping("/add")
     @PreAuthorize("isAuthenticated()")
     public ModelAndView addBlog(@ModelAttribute @Valid AddBlogBinding addBlogBinding,

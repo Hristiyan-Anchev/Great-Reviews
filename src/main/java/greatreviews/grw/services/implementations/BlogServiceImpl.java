@@ -1,5 +1,6 @@
 package greatreviews.grw.services.implementations;
 
+import greatreviews.grw.controllers.views.BlogViewModel;
 import greatreviews.grw.entities.BlogpostEntity;
 import greatreviews.grw.entities.UserEntity;
 import greatreviews.grw.repositories.BlogRepository;
@@ -54,5 +55,18 @@ public class BlogServiceImpl implements BlogService {
 
 
         return blogs;
+    }
+
+    @Override
+    public BlogServiceModel findPostById(Long postId) {
+        Optional<BlogpostEntity> targetPostOpt = blogRepository.findById(postId);
+
+        if (targetPostOpt.isPresent()) {
+            var targetPost = targetPostOpt.get();
+            var mappedPost = modelMapper.map(targetPost,BlogServiceModel.class);
+            return mappedPost;
+        }
+
+        return null;
     }
 }

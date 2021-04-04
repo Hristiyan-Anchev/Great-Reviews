@@ -41,7 +41,7 @@
         <p id="uploadMessage" class="text-center"></p>
         <div class="form-group">
             <label for="blogTitle">Blog title</label>
-            <input type="text" class="form-control" name="title" id="blogTitle" aria-describedby="title" placeholder="Blog title">
+            <input type="text" class="form-control" name="title" id="blogTitle" aria-describedby="title" placeholder="Enter blogpost title">
             <small class="text-danger"
                    th:if="${#fields.hasErrors('title')}"
                    th:errors="*{title}"
@@ -52,7 +52,7 @@
 
         <div class="form-group">
             <label for="blogContent">Blog content</label>
-            <textarea type="text" class="form-control" id="blogContent" name="content" placeholder="Blog content" rows="10">
+            <textarea type="text" class="form-control" id="blogContent" name="content" placeholder="Enter " rows="10">
             </textarea>
             <small class="text-danger"
                     th:if="${#fields.hasErrors('content')}"

@@ -84,23 +84,25 @@ public class DbInit implements CommandLineRunner {
     }
 
     private void initBLogs() {
-        var dummyImageUrl = "https://picsum.photos/id/%d/1024/1024";
-        var numberOfBlogs = 5;
-        var author = userRepository.findByEmail("admin@mail.com").get();
+        if(blogRepository.count() == 0) {
+            var dummyImageUrl = "https://picsum.photos/id/%d/1024/1024";
+            var numberOfBlogs = 5;
+            var author = userRepository.findByEmail("admin@mail.com").get();
 
-        for (int i = 0; i < numberOfBlogs; i++) {
-            var rand = Math.round(Math.random() * 10);
-            blogRepository.save(
-              new BlogpostEntity(
-                      loremIpsum.getWords(3),
-                      String.format(dummyImageUrl,rand),
-                      loremIpsum.getWords(500),
-                      author
-              )
-            );
+            for (int i = 0; i < numberOfBlogs; i++) {
+                var rand = Math.round(Math.random() * 10);
+                blogRepository.save(
+                        new BlogpostEntity(
+                                loremIpsum.getWords(3),
+                                String.format(dummyImageUrl, rand),
+                                loremIpsum.getWords(500),
+                                author
+                        )
+                );
+            }
+
+            blogRepository.flush();
         }
-
-        blogRepository.flush();
     }
 
     private void initTestCompany() {

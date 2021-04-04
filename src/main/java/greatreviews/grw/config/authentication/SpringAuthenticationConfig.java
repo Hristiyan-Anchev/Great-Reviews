@@ -53,7 +53,8 @@ public class SpringAuthenticationConfig extends WebSecurityConfigurerAdapter {
                         "/reviews/company",
                         "/reviews/company/evaluate",
                         "/blogs/control",
-                        "/blogs/home"
+                        "/blogs/home",
+                        "/blogs/post"
 
                 )
                 .permitAll()
