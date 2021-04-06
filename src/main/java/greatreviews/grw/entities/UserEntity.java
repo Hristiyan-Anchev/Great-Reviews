@@ -66,47 +66,11 @@ public class UserEntity extends BaseUser
             )
     Set<ReviewEntity> flaggedReviews;
 
+    @OneToOne(fetch = FetchType.EAGER)
+            @JoinColumn(name = "meta_data_id",referencedColumnName = "id")
+    UserMetaData metaData;
 
 
-//    @Override
-//    public String getEmail() {
-//        return super.getEmail();
-//    }
-//
-//    @Override
-//    public String getPassword() {
-//        return super.getPassword();
-//    }
-//
-//    @Override
-//    public Boolean getEnabled() {
-//        return super.getEnabled();
-//    }
-//
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return super.getRoles();
-//    }
-//
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean isEnabled() {
-//        return super.getEnabled();
-//    }
 
 
 }

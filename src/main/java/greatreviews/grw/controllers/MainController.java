@@ -53,4 +53,10 @@ public class MainController {
 
         return modelAndView;
     }
+
+
+    @GetMapping("/restricted")
+    public ModelAndView getRestrictedPage(Model model){
+        return new ModelAndView("RestrictedHostPage");
+    }
 }

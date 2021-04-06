@@ -19,5 +19,6 @@ public class UserServiceModel {
     String password;
     String imageURL;
     Boolean enabled;
+    String remoteHost;
 
 }

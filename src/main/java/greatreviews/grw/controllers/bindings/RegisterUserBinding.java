@@ -34,6 +34,6 @@ public class RegisterUserBinding {
     @Pattern(regexp = PatternEnum.Constants.PASSWORD_PATTERN,message = "Password is in the wrong format")
     String confirmPassword;
 
-
+    String remoteHost;
 
 }

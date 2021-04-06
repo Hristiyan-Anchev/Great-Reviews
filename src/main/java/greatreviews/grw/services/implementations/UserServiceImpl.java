@@ -11,10 +11,12 @@ import greatreviews.grw.controllers.views.ReviewViewModel;
 import greatreviews.grw.entities.CompanyEntity;
 import greatreviews.grw.entities.ReviewEntity;
 import greatreviews.grw.entities.UserEntity;
+import greatreviews.grw.entities.UserMetaData;
 import greatreviews.grw.repositories.RoleRepository;
 import greatreviews.grw.repositories.UserRepository;
 import greatreviews.grw.services.interfaces.CompanyService;
 import greatreviews.grw.services.interfaces.ReviewService;
+import greatreviews.grw.services.interfaces.UserMetaDataService;
 import greatreviews.grw.services.interfaces.UserService;
 import greatreviews.grw.services.models.UserServiceModel;
 import lombok.*;
@@ -48,10 +50,10 @@ public class UserServiceImpl implements UserService {
     RoleRepository roleRepository;
     UserRepository userRepository;
     ReviewService reviewService;
-
     ModelMapper modelMapper;
     Tika tika;
     Cloudinary cloudinary;
+    UserMetaDataService metadataService;
 
 
     @Override
@@ -76,13 +78,17 @@ public class UserServiceImpl implements UserService {
 
         newUser.setRoles(Set.of(roleRepository.findByName("ROLE_USER").get()));
         newUser.setImageURL("/images/haisenberg.png");
+
+        UserMetaData userMetaData = new UserMetaData();
+        userMetaData.setRemoteHost(userServiceModel.getRemoteHost());
+        metadataService.saveMetadata(userMetaData);
+        newUser.setMetaData(userMetaData);
+        newUser.setEnabled(true);
+
         UserEntity save = userRepository.saveAndFlush(newUser);
-
     }
-
     @Override
     public UserEntity getUserEntityById(Long id) {
-
         return userRepository.findById(id).orElse(null);
     }
 

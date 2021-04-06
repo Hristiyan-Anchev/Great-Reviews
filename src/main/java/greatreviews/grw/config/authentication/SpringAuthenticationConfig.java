@@ -39,6 +39,7 @@ public class SpringAuthenticationConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         //TODO secure your routes by using .hasRole()
                         "/",
+                        "/restricted",
                         "/bootstrap/**",
                         "/images/**",
                         "/images/*",
@@ -76,6 +77,8 @@ public class SpringAuthenticationConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")
                 .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/error")
                 .and()
                 .httpBasic()
         ;

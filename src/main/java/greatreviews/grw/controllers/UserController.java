@@ -32,6 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -71,9 +72,10 @@ public class UserController {
 
     @GetMapping("/register")
     public ModelAndView getRegisterPage(Model model) {
+
         var modelAndView = new ModelAndView("RegisterUser");
         if (!model.containsAttribute("userBinding")) {
-            model.addAttribute("userBinding", new RegisterUserBinding("", "", LocalDate.now(), "", ""));
+            model.addAttribute("userBinding", new RegisterUserBinding("", "", LocalDate.now(), "", "",""));
         }
 
         return modelAndView;
@@ -81,7 +83,9 @@ public class UserController {
 
     @PostMapping("/register")
     public ModelAndView registerUser(@Valid @ModelAttribute RegisterUserBinding userBinding,
-                                     BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+                                     BindingResult bindingResult, RedirectAttributes redirectAttributes,
+                                     HttpServletRequest request
+                                     ) {
 
         if (!passwordsMatch(userBinding)) {
             bindingResult.rejectValue("", "passwords.no.match", "Passwords do not match");
@@ -104,6 +108,7 @@ public class UserController {
 
         encodeUserBindingPasswords(userBinding);
 
+        userBinding.setRemoteHost(request.getRemoteHost());
         userService.registerUser(
                 modelMapper.map(userBinding, UserServiceModel.class)
         );
