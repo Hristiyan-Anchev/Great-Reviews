@@ -39,13 +39,14 @@
             <!--            footer section-->
 <!--            todo: implement mark as useful and flag review functions-->
             <div class="container-fluid d-flex flex-wrap justify-content-center">
-                <button class="btn badge  text-white m-3 flag-button"
-                        th:if="${!r.userId.equals(currentUser.id)}"
+                <button class="btn badge  text-success m-3 flag-button"
+                        th:if="${!r.userId.equals(currentUser.id) && !r.isCensored}"
                         sec:authorize="isAuthenticated()"  id="flagBtn"
                          th:data-review-id="${r.id}"
                          th:disabled="${r.usersFlagged.contains(currentUser.id)}"
                          th:classappend="${r.usersFlagged.contains(currentUser.id)} ? 'badge-warning disabled' : 'badge-info' "
                          th:inline="text"
+
                 >
                         [[${r.usersFlagged.contains(currentUser.id)} ? 'Awaiting admin response' : 'Flag review']]
 

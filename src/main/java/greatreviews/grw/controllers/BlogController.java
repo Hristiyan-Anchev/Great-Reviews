@@ -126,6 +126,16 @@ public class BlogController {
         return modelAndView;
     }
 
+    @GetMapping("/all")
+    public ModelAndView getAllBlogs(){
+       List<BlogServiceModel> allBlogs = blogService.getAllBlogs();
+
+        ModelAndView modelAndView = new ModelAndView("/blog/AllBlogs");
+        modelAndView.addObject("blogs",allBlogs);
+
+        return modelAndView;
+    }
+
 //======================================================================================================================
 
 private Boolean isCurrentUserAdmin(Model model){

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -20,17 +22,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 @Component
-@ControllerAdvice
+@ControllerAdvice()
 public class BaseController {
 
-    @Autowired
+
     ModelMapper modelMapper;
     CurrentUserDTO currentUser;
     UserService userService;
-
-
     @ModelAttribute(value = "currentUser")
     public CurrentUserDTO fetchPrincipal(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -40,6 +39,15 @@ public class BaseController {
         return currentUser;
     }
 
+
+    @ExceptionHandler(Throwable.class)
+    public ModelAndView globalExceptionHandler(Exception ex){
+        System.out.println("** An exception was caught by global exception handler **");
+        System.out.println(ex.getMessage());
+        System.out.println("---------------------------------------------------------");
+
+        return new ModelAndView("redirect:/");
+    }
 
 
 }

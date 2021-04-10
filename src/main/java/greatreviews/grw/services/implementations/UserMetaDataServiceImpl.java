@@ -35,7 +35,6 @@ public class UserMetaDataServiceImpl implements UserMetaDataService {
                 return true;
             }
         }
-
         return false;
     }
 

@@ -34,7 +34,7 @@ public class BlogServiceImpl implements BlogService {
 
 
     @Override
-    public void addBlogPost(BlogServiceModel blogPost) {
+    public BlogServiceModel addBlogPost(BlogServiceModel blogPost) {
         BlogpostEntity newBlog = modelMapper.map(blogPost,BlogpostEntity.class);
         Optional<UserEntity> authorOpt = userRepository.findById(blogPost.getAuthorId());
 
@@ -42,8 +42,12 @@ public class BlogServiceImpl implements BlogService {
             var author = authorOpt.get();
             newBlog.setAuthor(author);
 
-            blogRepository.saveAndFlush(newBlog);
+           newBlog =  blogRepository.saveAndFlush(newBlog);
+
+            return modelMapper.map(newBlog,BlogServiceModel.class);
         }
+
+        return null;
 
     }
 
@@ -68,5 +72,13 @@ public class BlogServiceImpl implements BlogService {
         }
 
         return null;
+    }
+
+    @Override
+    public List<BlogServiceModel> getAllBlogs() {
+        List<BlogServiceModel> allBlogs =
+                modelMapper.map(blogRepository.findAll(),new TypeToken<List<BlogServiceModel>>(){}.getType());
+
+        return allBlogs;
     }
 }
